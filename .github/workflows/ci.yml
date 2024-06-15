@@ -30,9 +30,6 @@ jobs:
         include:
           - os: ubuntu-latest
             cpp_compiler: g++
-          - os: ubuntu-latest
-            cpp_compiler: clang++
-          - os : ubuntu-latest
             run: >
               sudo apt-get update
               sudo apt-get install -y libopenal-dev libfreetype6-dev libpng-dev libsndfile1
@@ -50,7 +47,7 @@ jobs:
           - os: manjaro-latest
             run: >
               sudo pacman -Syu --noconfirm
-              sudo pacman -S --noconfirm OpenAL Freetype2 libpng sndfile
+              sudo pacman -S --noconfirm openal freetype2 libpng sndfile
         exclude:
           - os: ubuntu-latest
             c_compiler: cl
