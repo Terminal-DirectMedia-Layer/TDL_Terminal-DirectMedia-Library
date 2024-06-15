@@ -32,14 +32,25 @@ jobs:
             cpp_compiler: g++
           - os: ubuntu-latest
             cpp_compiler: clang++
+          - os : ubuntu-latest
+            run: >
+              sudo apt-get update
+              sudo apt-get install -y libopenal-dev libfreetype6-dev libpng-dev libsndfile1
           - os: fedora-latest
             cpp_compiler: g++
           - os: fedora-latest
             cpp_compiler: clang++
+          - os: fedora-latest
+            run: >
+              sudo dnf install -y openal-soft-devel freetype-devel libpng-devel libsndfile-devel
           - os: manjaro-latest
             cpp_compiler: g++
           - os: manjaro-latest
             cpp_compiler: clang++
+          - os: manjaro-latest
+            run: >
+              sudo pacman -Syu --noconfirm
+              sudo pacman -S --noconfirm OpenAL Freetype2 libpng sndfile
         exclude:
           - os: ubuntu-latest
             c_compiler: cl
