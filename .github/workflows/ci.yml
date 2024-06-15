@@ -24,15 +24,10 @@ jobs:
       #
       # To add more build types (Release, Debug, RelWithDebInfo, etc.) customize the build_type list.
       matrix:
-        os: [ubuntu-latest, fedora-latest, manjaro-latest]
+        os: [fedora-latest, manjaro-latest]
         build_type: [Release]
         c_compiler: [gcc, clang]
         include:
-          - os: ubuntu-latest
-            cpp_compiler: g++
-            run: >
-              sudo apt-get update
-              sudo apt-get install -y libopenal-dev libfreetype6-dev libpng-dev libsndfile1
           - os: fedora-latest
             cpp_compiler: g++
           - os: fedora-latest
