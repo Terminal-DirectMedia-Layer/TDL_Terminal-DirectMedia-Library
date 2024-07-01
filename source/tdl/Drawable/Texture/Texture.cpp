@@ -48,12 +48,7 @@ namespace tdl {
 
     Texture *Texture::createTextureFromVector(Pixel *pixelData, Vector2u &size, Vector2f &scale, bool repeat)
     {
-        try {
-            return new Texture(pixelData, size, scale, repeat);
-        } catch (const std::exception &e) {
-            std::cerr << e.what() << std::endl;
-        }
-        return nullptr;
+        return new Texture(pixelData, size, scale, repeat);
     }
 
     Texture::Texture(Pixel *pixelData, Vector2u &size, tdl::Vector2f &scale, bool repeat) : TextureLoader("")

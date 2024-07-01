@@ -27,7 +27,6 @@ tdl::Window::Window(std::string  title, std::string const& ttyPath) :WindowBase(
     SignalHandler::getInstance().registerWindow(this);
     start = std::chrono::system_clock::now();
 }
-
 /**
  * @brief Destroy the tdl::Window::Window object and unregister the window from the signal manager
  * 
@@ -50,11 +49,11 @@ tdl::Window::~Window()
 tdl::Window* tdl::Window::CreateWindow(std::string const& title, std::string const& ttyPath) {
     try {
         auto * win = new Window(title, ttyPath);
+        win->alternateScreenBuffer();
         win->disableEcho();
         win->removeMouseCursor();
-        win->alternateScreenBuffer();
-        //win->update(true);
-        //win->draw();
+        win->enableMouseClick();
+        win->enableMouseMove();
         return win;
     } catch (std::runtime_error& e) {
         std::cerr << e.what();
@@ -66,6 +65,8 @@ void tdl::Window::disableEcho()
 {
     tcgetattr(_fd, &_tty);
     _tty.c_lflag &=(~ICANON & ~ECHO);
+    _tty.c_cc[VMIN] = 1;
+    _tty.c_cc[VTIME] = 0;
     tcsetattr(STDIN_FILENO,TCSANOW,&_tty);
 }
 
@@ -73,9 +74,9 @@ void tdl::Window::disableEcho()
 void tdl::Window::draw()
 {
     if (!_content.empty()) {
+        moveCursor(Vector2u(0, 0));
         write(_fd, _content.c_str(), _content.size());
         _content = "";
-        moveCursor(Vector2u(0, 0));
     }
 }
 

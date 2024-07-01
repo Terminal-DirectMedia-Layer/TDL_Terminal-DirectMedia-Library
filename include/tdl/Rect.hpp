@@ -128,9 +128,13 @@ namespace tdl {
      * @param v the rect to add
      * @return Rect the new rect
      */
-        Rect operator +=(const Rect &v)
+        Rect &operator +=(const Rect &v)
         {
-            return this + v;
+            this->x() += v.x();
+            this->y() += v.y();
+            this->width() += v.width();
+            this->height() += v.height();
+            return *this;
         }
 
     /**
@@ -139,9 +143,13 @@ namespace tdl {
      * @param v the rect to substract
      * @return Rect the new rect
      */
-        Rect operator -=(const Rect &v)
+        Rect &operator -=(const Rect &v)
         {
-            return this - v;
+            this->x() -= v.x();
+            this->y() -= v.y();
+            this->width() -= v.width();
+            this->height() -= v.height();
+            return *this;
         }
 
     /**
@@ -150,9 +158,13 @@ namespace tdl {
      * @param v the rect to multiply
      * @return Rect the new rect
      */
-        Rect operator *=(const Rect &v)
+        Rect &operator *=(const Rect &v)
         {
-            return this * v;
+            this->x() *= v.x();
+            this->y() *= v.y();
+            this->width() *= v.width();
+            this->height() *= v.height();
+            return *this;
         }
 
     /**
@@ -161,9 +173,13 @@ namespace tdl {
      * @param v the rect to divide
      * @return Rect the new rect
      */
-        Rect operator /=(const Rect &v)
+        Rect &operator /=(const Rect &v)
         {
-            return this / v;
+            this->x() /= v.x();
+            this->y() /= v.y();
+            this->width() /= v.width();
+            this->height() /= v.height();
+            return *this;
         }
 
     /**

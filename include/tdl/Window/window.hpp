@@ -66,6 +66,14 @@ namespace tdl {
             void draw();
 
         /**
+         * @brief get the content of the window
+         * 
+         * @return std::string the content of the window
+         */
+            [[nodiscard]] std::string getContent() const { return _content; }
+
+
+        /**
          * @brief Get the Height object
          * 
          * @return u_int32_t the height of the window
@@ -105,13 +113,6 @@ namespace tdl {
          * 
          */
             void printFrameRate();
-
-        /**
-         * @brief register the update of the pixel at the position pos
-         * 
-         * @param pos the position of the pixel to update
-         */
-            void registerUpdate(Vector2u pos);
 
         private:
 
@@ -174,6 +175,31 @@ namespace tdl {
          * 
          */
             void removeMouseCursor();
+
+        /**
+         * @brief ansii enable mouse move code
+         * 
+         */
+            void enableMouseMove();
+
+        /**
+         * @brief ansii disable mouse move code
+         * 
+         */
+            void disableMouseMove();
+
+        /**
+         * @brief ansii enable mouse click code
+         * 
+         */
+            void enableMouseClick();
+
+        /**
+         * @brief ansii disable mouse click code
+         * 
+         */
+            void disableMouseClick();
+
 
             void draw(Drawable *drawable) { return; }
 

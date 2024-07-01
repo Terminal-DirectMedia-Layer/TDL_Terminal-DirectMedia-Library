@@ -3,8 +3,10 @@
 
 #include <iostream>
 #include <queue>
+#include <regex>
 #include "tdl/Event/Event.hpp"
 #include "tdl/Input/inputKeyboard.hpp"
+#include "tdl/Input/inputMouse.hpp"
 
 namespace tdl {
 
@@ -13,7 +15,8 @@ namespace tdl {
      * @brief WindowBase class
      * 
      */
-    class WindowBase : public InputKeyboard {
+    class WindowBase : public InputKeyboard , inputMouse
+    {
         public:
 
     /**
@@ -36,7 +39,7 @@ namespace tdl {
      * @return true if event is left in the queue
      * @return false if no event is left in the queue
      */
-            bool pollEvent(Event &event);
+            bool pollEvent(Event &event, std::regex *custom = nullptr);
 
     /**
      * @brief push an event in the queue
@@ -56,6 +59,7 @@ namespace tdl {
             
             std::queue<Event> _events; /*!< the event queue */
             InputKeyboard _input; /*!< the input keyboard */
+            inputMouse _mouse; /*!< the input mouse */
             int _fd{}; /*!< the fd of the window */
             std::string _fdPath; /*!< the path to the fd */
     };

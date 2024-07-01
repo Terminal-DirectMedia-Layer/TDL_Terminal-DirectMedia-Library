@@ -37,3 +37,25 @@ void tdl::Window::removeMouseCursor()
 {
     _content += "\033[?25l";
 }
+
+void tdl::Window::enableMouseMove()
+{
+    _content += "\033[?1003h";
+    _content += "\033[?1006h";
+}
+
+void tdl::Window::disableMouseMove()
+{
+    _content += "\033[?1003l";
+    _content += "\033[?1006l";
+}
+
+void tdl::Window::enableMouseClick()
+{
+    _content += "\033[?1000h";
+}
+
+void tdl::Window::disableMouseClick()
+{
+    _content += "\033[?1000l";
+}

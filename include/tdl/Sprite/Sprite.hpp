@@ -97,6 +97,13 @@ namespace tdl {
              */
             static Pixel lerp(Pixel a, Pixel b, double t);
 
+        /**
+         * @brief check if the sprite is intersecting with a point
+         * 
+         * @param point the point to check
+         */
+            bool isIntersect(const Vector2i &point);
+
         private : 
 
         /**

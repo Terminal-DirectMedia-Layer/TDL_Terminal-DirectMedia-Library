@@ -16,11 +16,8 @@ tdl::InputKeyboard::InputKeyboard(): _shared_data(KeyCodes::KEY_END)
 
 tdl::InputKeyboard::~InputKeyboard() = default;
 
-void tdl::InputKeyboard::readInputKeyboard(WindowBase *win) {
-    int _nread = 0;
-    ioctl(win->getFd(), FIONREAD, &_nread);
-    char buffer[_nread];
-    read(win->getFd(), buffer, _nread);
+int tdl::InputKeyboard::readInputKeyboard(WindowBase *win, char *buffer, int _nread) {
+    int consumed = 0;
     if (_nread != 0) {
         if (buffer[0] == 27 && buffer[1] == 91) {
             switch (buffer[2]) {
@@ -37,11 +34,12 @@ void tdl::InputKeyboard::readInputKeyboard(WindowBase *win) {
                     _shared_data = KEY_LEFT;
                     break;
                 default:
-                    _shared_data = charToKeyCodes(buffer[2]);
-                    break;
+                    return 3;
             }
+            consumed += 3;
         } else {
             _shared_data = charToKeyCodes(buffer[0]);
+            consumed += 1;
         }
         _key_states[_shared_data] = true;
         Event event;
@@ -62,6 +60,7 @@ void tdl::InputKeyboard::readInputKeyboard(WindowBase *win) {
             }
         }
     }
+    return consumed;
 }
 
 

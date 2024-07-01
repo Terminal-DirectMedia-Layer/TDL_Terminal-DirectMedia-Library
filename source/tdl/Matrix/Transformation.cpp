@@ -26,8 +26,8 @@ namespace tdl
 
     void Transformable::setPosition(u_int32_t x, u_int32_t y)
     {
-        m_position.x() = x;
-        m_position.y() = y;
+        m_position.x() = x <= 1 ? 1 : x;
+        m_position.y() = y <= 1 ? 1 : y;
         TransformNeedUpdate = true;
     }
 

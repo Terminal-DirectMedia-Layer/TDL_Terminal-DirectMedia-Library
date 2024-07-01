@@ -12,6 +12,7 @@ namespace tdl {
      */
     struct Event
     {
+
         /**
          * @brief The key event structure
          * it permited to register the key that is pressed or released
@@ -33,9 +34,25 @@ namespace tdl {
          * @brief The mouse event structure
          * it permited to register the position of the mouse
          */
-        struct mouseEvent {
+        struct mouseMoveEvent {
             int x;
             int y;
+        };
+
+        struct mouseButtonEvent {
+            MouseButton button;
+            int x;
+            int y;
+        };
+
+        struct mouseScrollEvent {
+            MouseButton direction;
+            int x;
+            int y;
+        };
+
+        struct customEvent {
+            char *data;
         };
 
         /**
@@ -48,11 +65,11 @@ namespace tdl {
             KeyPressed, /* KeyPressed event */
             KeyReleased, /* KeyReleased event */
             MouseMoved, /* MouseMoved event */
-            MousePressed, /* MousePressed event */
-            MouseReleased, /* MouseReleased event */
+            MouseButtonPressed, /* MousePressed event */
+            MouseButtonReleased, /* MouseReleased event */
             MouseScrolled, /* MouseScrolled event */
             WindowResized, /* WindowResized event */
-
+            Custom, /* Custom event */
             count // This is not an event, it's just a marker keep it last
         };
 
@@ -65,7 +82,10 @@ namespace tdl {
         union {
             keyEvent key; /* !< the key event */
             sizeEvent size; /* !< the size event */
-            mouseEvent mouse; /* !< the mouse event */
+            mouseMoveEvent mouseMove; /* !< the mouse Move event */
+            mouseButtonEvent mouseButton; /* !< the mouse button event */ 
+            mouseScrollEvent mouseScroll; /* !< the mouse scroll event */
+            customEvent custom; /* !< the custom event */
         };
     };
 }

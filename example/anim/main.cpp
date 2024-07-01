@@ -21,6 +21,7 @@
 #include "tdl/Matrix/Transform.hpp"
 #include <chrono>
 #include <fstream>
+#include <regex>
 
 int main()
 {
@@ -29,15 +30,22 @@ int main()
     tdl::Texture *tex = tdl::Texture::createTexture("../example/assets/Spinner.png");
     tdl::Vector2u pos(10, 10);
     tdl::Sprite *sprite = tdl::Sprite::createSprite(tex, tdl::Vector2u(0, 0));
+
+    std::vector<std::tuple<tdl::Sprite *, bool>> sprites;
     tdl::RectU rect(0, 0, 32, 32);
-    tex->setRect(rect);
+    tdl::Vector2u mouse(0, 0);
+    std::regex pngRegex("^(.*\\/)?(.+\\.png )$");
+    bool isIntersect = false;
+    sprite->setRect(rect);
     while (true)
     {
         win->clearPixel();
+        for (auto &s : sprites)
+            std::get<0>(s)->draw(win);
         sprite->draw(win);
         win->update();
         win->draw();
-        for(tdl::Event event; win->pollEvent(event);) {
+        for(tdl::Event event; win->pollEvent(event, &pngRegex);) {
             if (event.type == tdl::Event::EventType::KeyPressed) {
                 if (event.key.code == tdl::KeyCodes::KEY_ESC)
                     return 0;
@@ -54,6 +62,40 @@ int main()
                     pos += tdl::Vector2u(0, 1);
                 }
             }
+            if (event.type == tdl::Event::EventType::MouseButtonPressed && event.mouseButton.button == tdl::MouseButton::LEFT) {
+
+                for (auto &s : sprites) {
+                    if (std::get<0>(s)->isIntersect(tdl::Vector2i(event.mouseButton.x, event.mouseButton.y))) {
+                        std::get<1>(s) = true;
+                    }
+                }
+                if (sprite->isIntersect(tdl::Vector2i(event.mouseButton.x, event.mouseButton.y))) {
+                    isIntersect = true;
+                }
+            }
+            if (event.type == tdl::Event::EventType::MouseButtonReleased) {
+                for (auto &s : sprites) {
+                    std::get<1>(s) = false;
+                }
+                isIntersect = false;
+            }
+            if (event.type == tdl::Event::EventType::MouseMoved) {
+                mouse = tdl::Vector2u(event.mouseMove.x, event.mouseMove.y);
+            }
+            if (event.type == tdl::Event::EventType::Custom) {
+                std::string path(event.custom.data);
+                tdl::Texture *tex = tdl::Texture::createTexture(path.erase(path.size() - 1));
+                tdl::Sprite *sprite = tdl::Sprite::createSprite(tex, tdl::Vector2u(0, 0));
+                sprites.push_back(std::tuple<tdl::Sprite *, bool>(sprite, false));
+            }
+        }
+        for (auto &s : sprites) {
+            if (std::get<1>(s)) {
+                std::get<0>(s)->setPosition(mouse);
+            }
+        }
+        if (isIntersect) {
+            pos = mouse;
         }
         sprite->setPosition(pos);
         if (rect.x() >= 32) {

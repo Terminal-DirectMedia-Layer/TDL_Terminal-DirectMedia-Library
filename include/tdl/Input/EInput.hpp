@@ -63,4 +63,12 @@ namespace tdl
         KEY_END = 360,
     };
 
+    enum MouseButton {
+        LEFT = 0,
+        MIDDLE = 1,
+        RIGHT = 2,
+        UP = 3,
+        DOWN = 4,
+    };
+
 } // namespace tdl

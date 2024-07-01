@@ -10,20 +10,7 @@
 #include <algorithm>
 #include <cmath>
 
-/**
- * @brief Create a Sprite object
- * 
- * @param texture the texture of the sprite to create
- * @param pos the position of the sprite
- * @return tdl::Sprite* the sprite created
- */
-tdl::Sprite *tdl::Sprite::createSprite(tdl::Texture *texture, tdl::Vector2u &pos)
-{
-    return new tdl::Sprite(texture, pos);
-}
-
-/**
- * @brief Create a Sprite object with an pos and a rect
+/**Vector2u pos and a rect
  * 
  * @param texture the texture of the sprite to create
  * @param pos the position of the sprite
@@ -131,3 +118,13 @@ tdl::Pixel tdl::Sprite::lerp(tdl::Pixel a, tdl::Pixel b, double t) {
          }  
      }
  }
+
+
+bool tdl::Sprite::isIntersect(const Vector2i &point)
+{
+    Vector2f pos = getPosition();
+    RectU rect = _rect;
+    if (point.x() >= pos.x() && point.x() <= pos.x() + rect.width() && point.y() >= pos.y() && point.y() <= pos.y() + rect.height())
+        return true;
+    return false;
+}

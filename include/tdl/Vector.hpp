@@ -120,7 +120,7 @@ namespace tdl
      */
         Vector2 operator/(const Vector2 &v) const
         {
-            return {this->x / v.x(), this->y / v.y()};
+            return {this->x() / v.x(), this->y() / v.y()};
         }
 
     /**

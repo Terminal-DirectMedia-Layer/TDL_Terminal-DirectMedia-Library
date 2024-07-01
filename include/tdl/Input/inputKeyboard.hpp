@@ -1,12 +1,6 @@
-/*
-** EPITECH PROJECT, 2024
-** libncurse
-** File description:
-** input.hpp
-*/
 
-#ifndef LIBNCURSE_INPUT_HPP
-    #define LIBNCURSE_INPUT_HPP
+#ifndef LIBNCURSE_INPUT_KEYBOARD_HPP
+    #define LIBNCURSE_INPUT_KEYBOARD_HPP
 
 #include <thread>
 #include <mutex>
@@ -44,7 +38,7 @@ namespace tdl {
  *
  * @param window the window where the event will be pushed and read
  */
-        void readInputKeyboard(WindowBase *window);
+        int readInputKeyboard(WindowBase *window, char *buffer, int _nread);
 
 /**
  * @brief return a cast between a char and a TDLKeyCodes
@@ -57,8 +51,8 @@ namespace tdl {
     protected:
         KeyCodes _shared_data;
         std::map<char, bool> _key_states;
-        std::map<char, bool> _prev_key_states;
+        std::map<char, bool> _prev_key_states;  
     };
 } // namespace tdl
 
-#endif //LIBNCURSE_INPUT_HPP
+#endif //LIBNCURSE_INPUT_KEYBOARD_HPP

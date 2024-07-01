@@ -2,7 +2,7 @@
 #ifndef TDL_UNITCONVERTER_HPP
     #define TDL_UNITCONVERTER_HPP
 
-#include <numbers>
+    #include <numbers>
 
 namespace tdl
 {
@@ -31,7 +31,7 @@ namespace tdl
      */
         constexpr static T toRadians(T degrees)
         {
-            return degrees * std::numbers::pi / 180.0;
+            return degrees * pi / 180.0;
         }
 
     /**
@@ -42,8 +42,13 @@ namespace tdl
      */
         constexpr static T toDegrees(T radians)
         {
-            return radians * 180.0 / std::numbers::pi;
+            return radians * 180.0 / pi;
         }
+        #if __cplusplus >= 202002L
+            constexpr static double pi = std::numbers::pi;
+        #else
+            constexpr static double pi = 3.14159265358979323846;
+        #endif
     };
 }
 
