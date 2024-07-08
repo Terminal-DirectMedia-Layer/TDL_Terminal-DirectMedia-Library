@@ -1,9 +1,7 @@
 
 #pragma once
 
-#include "tdl/Window/windowBase.hpp"
 #include "tdl/Event/Mouse/Imouse.hpp"
-#include <linux/input.h>
 #include <iostream>
 #include <string>
 
@@ -14,9 +12,9 @@ namespace tdl {
             mouse();
             ~mouse() = default;
 
-            bool mouseMove(WindowBase  *window, EventMouseData data) override;
-            bool mousePessed(WindowBase  *window, EventMouseData data) override;
-            bool mouseReleased(WindowBase  *window, EventMouseData data) override;
-            bool mouseScroll(WindowBase  *window, EventMouseData data) override;
+            bool mouseMove(Window  *window, EventMouseData data) override;
+            bool mousePessed(Window  *window, EventMouseData data) override;
+            bool mouseReleased(Window  *window, EventMouseData data) override;
+            bool mouseScroll(Window  *window, EventMouseData data) override;
     };
 }

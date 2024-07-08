@@ -14,20 +14,30 @@
 #include <array>
 #include <vector>
 #include <termios.h>
+#include <iostream>
+#include <queue>
+#include <regex>
 #include "tdl/Pixel/Pixel.hpp"
 #include "tdl/Vector.hpp"
-#include "tdl/Window/windowBase.hpp"
 #include "tdl/Matrix/PixelMatrix.hpp"
 #include "tdl/Drawable/Drawable.hpp"
+#include "tdl/Event/Event.hpp"
+#include "tdl/Input/inputKeyboard.hpp"
+#include "tdl/Event/Mouse/Imouse.hpp"
 
 namespace tdl {
     /**
      * @class Window
      * @brief Window class
      */
-    class Window : public WindowBase , public Drawable {
+    class Window : public Drawable, public Event {
         
         public:
+
+/**
+ * \section Constructor / Destructor
+ * 
+ */
 
         /**
          * @brief Create a Window object
@@ -43,6 +53,12 @@ namespace tdl {
          * 
          */
             ~Window();
+
+/**
+ * \section Public Methods
+ * 
+ * \subsection Drawing
+ */
 
         /**
          * @brief clear the pixel matrix
@@ -64,6 +80,11 @@ namespace tdl {
          * @note the copy of the pixel in the oldpixel is make two at a time because 1 charactere = 2 pixel
          */
             void draw();
+
+/**
+ * \subsection Getters / Setters
+ * 
+ */
 
         /**
          * @brief get the content of the window
@@ -95,11 +116,32 @@ namespace tdl {
             [[nodiscard]] u_int8_t getFrameRate() const { return _frameRate; }
 
         /**
+         * @brief Get the Fd object
+         * 
+         * @return int the fd of the window
+         */
+            [[nodiscard]] int getFd() const { return _fd; }
+
+        /**
          * @brief Set the Frame Rate object
          * 
          * @param frameRate the new frame rate
          */
             void setFrameRate(u_int8_t frameRate) { _frameRate = frameRate; }
+
+/**
+ * \subsection Input and event
+ * 
+ */
+
+        /**
+         * @brief poll the event
+         * 
+         * @param event the event to poll
+         * @return true if event is left in the queue
+         * @return false if no event is left in the queue
+         */
+            bool pollEvent(Event &event, std::regex *custom = nullptr);
 
         /**
          * @brief update the terminal size
@@ -116,6 +158,11 @@ namespace tdl {
 
         private:
 
+/**
+ * \section Private Methods
+ * 
+ */
+
         /**
          * @brief Construct a new tdl::Window::Window object
          * 
@@ -124,6 +171,11 @@ namespace tdl {
          * @note the SignalHandler.getInstance is used to register the window on the signal manager it permited to automatically resize the window when the terminal is resized
          */
             Window(std::string  title, std::string const& ttyPath);
+
+/**
+ * \section Ansii Escape Code
+ * 
+ */
 
         /**
          * @brief disable the echo of the terminal
@@ -201,8 +253,12 @@ namespace tdl {
             void disableMouseClick();
 
 
-            void draw(Drawable *drawable) { return; }
+            void draw(Drawable *drawable) { return; } /* actualy does nothing an ti does any vocation to be call*/
 
+/**
+ * \section Attributes
+ * 
+ */
             std::string _title; /* !< the title of the window */
             u_int8_t _frameRate = 60; /* !< the frame rate of the window */
             std::string _content; /* !< the content of the window */
@@ -212,6 +268,10 @@ namespace tdl {
 
             int framecounter = 0; /* !< the frame counter */
             std::chrono::time_point<std::chrono::system_clock> start; /* !< the start time of the frame */
+
+            InputKeyboard _input; /*!< the input keyboard */
+            Imouse *_mouse; /*!< the input mouse */
+            int _fd{}; /*!< the fd of the window */
     };
 }
 
