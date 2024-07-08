@@ -7,6 +7,9 @@
 #include "tdl/Window/windowBase.hpp"
 #include "tdl/Input/inputKeyboard.hpp"
 #include "tdl/Input/inputMouse.hpp"
+#include "tdl/Event/Mouse/Imouse.hpp"
+#include "tdl/Event/Mouse/linux/mouse.hpp"
+#include "tdl/Event/Mouse/EventMouseData.hpp"
 #include <regex>
 #include <functional>
 #include <cstring>
@@ -15,10 +18,13 @@ tdl::WindowBase::WindowBase( std::string fdPath)
     : _fdPath(std::move(fdPath))
 {
     _input = InputKeyboard();
-    _mouse = inputMouse();
+    _mouse = new tdl::mouse();
 }
 
-tdl::WindowBase::~WindowBase() = default;
+tdl::WindowBase::~WindowBase()
+{
+    delete _mouse;
+}
 
 /**
  * @brief Polls the event
@@ -50,10 +56,12 @@ bool tdl::WindowBase::pollEvent(tdl::Event &event, std::regex *custom)
                 return c == 'm' || c == 'M';
             });
             std::string str(buffer + index, it + 1);
-            if (std::regex_match(str, e))
-            {
-                index += _mouse.readInputMouse(this, str, _nread);
-                continue;
+            if (std::regex_match(str, e)) {
+                EventMouseData data(str);
+                if (_mouse->mouseMove(this, data) || _mouse->mousePessed(this, data) || _mouse->mouseReleased(this, data) || _mouse->mouseScroll(this, data)) {
+                    index += str.size();
+                    continue;
+                }
             }
             if (custom != nullptr && std::regex_match(buffer + index, *custom))
             {
@@ -79,15 +87,4 @@ bool tdl::WindowBase::pollEvent(tdl::Event &event, std::regex *custom)
         return true;
     }
     return false;
-}
-
-/**
- * @brief push an event into the queue
- * that permited to register an event when you want to
- * 
- * @param event the event to push in the queue
- */
-void tdl::WindowBase::pushEvent(const tdl::Event &event)
-{
-    _events.push(event);
 }

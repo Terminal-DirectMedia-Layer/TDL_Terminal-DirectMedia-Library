@@ -1,3 +1,4 @@
+
 file(
         GLOB SRC_DIRS ${TDL_EXAMPLES_DIR}/*/
         LIST_DIRECTORIES true
@@ -12,6 +13,8 @@ foreach(dir ${SRC_DIRS})
             GLOB_RECURSE SRC_FILES ${dir}/*.cpp
             LIST_DIRECTORIES false
             EXCLUDE ${dir}/assets/*
+            EXCLUDE ${dir}/build/*
+            EXCLUDE ${dir}/cmake-build-debug/*
     )
     if(SRC_FILES)
         add_executable(${dir_name} ${TDL_SOURCE} ${SRC_FILES})

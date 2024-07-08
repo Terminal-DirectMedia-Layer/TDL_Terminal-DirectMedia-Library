@@ -6,7 +6,7 @@
 #include <regex>
 #include "tdl/Event/Event.hpp"
 #include "tdl/Input/inputKeyboard.hpp"
-#include "tdl/Input/inputMouse.hpp"
+#include "tdl/Event/Mouse/Imouse.hpp"
 
 namespace tdl {
 
@@ -15,7 +15,7 @@ namespace tdl {
      * @brief WindowBase class
      * 
      */
-    class WindowBase : public InputKeyboard , inputMouse
+    class WindowBase : public Event
     {
         public:
 
@@ -24,7 +24,7 @@ namespace tdl {
      * 
      * @param fdPath the path to the fd
      */
-            explicit WindowBase(std::string fdPath);
+        explicit WindowBase(std::string fdPath);
 
     /**
      * @brief Destroy the Window Base object
@@ -42,13 +42,6 @@ namespace tdl {
             bool pollEvent(Event &event, std::regex *custom = nullptr);
 
     /**
-     * @brief push an event in the queue
-     * 
-     * @param event the event to push
-     */
-            void pushEvent(const Event &event);
-
-    /**
      * @brief Get the Fd object
      * 
      * @return int the fd of the window
@@ -57,9 +50,8 @@ namespace tdl {
 
         protected:
             
-            std::queue<Event> _events; /*!< the event queue */
             InputKeyboard _input; /*!< the input keyboard */
-            inputMouse _mouse; /*!< the input mouse */
+            Imouse *_mouse; /*!< the input mouse */
             int _fd{}; /*!< the fd of the window */
             std::string _fdPath; /*!< the path to the fd */
     };

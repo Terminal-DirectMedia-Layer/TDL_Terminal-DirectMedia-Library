@@ -43,7 +43,7 @@ int main()
                 
             }
         }
-        win->printFrameRate();
+        //win->printFrameRate();
     }
 
     auto end = std::chrono::high_resolution_clock::now();

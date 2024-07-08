@@ -19,7 +19,6 @@ namespace tdl {
  * @brief Class to handle the mouse input
  * 
  */
-
     class inputMouse {
     public:
 

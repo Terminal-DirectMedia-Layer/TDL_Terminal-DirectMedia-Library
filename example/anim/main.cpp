@@ -108,7 +108,7 @@ int main()
         } else {
             rect.x() += 32;
         }
-        win->printFrameRate();
+        //win->printFrameRate();
         tex->setRect(rect);
     }
 

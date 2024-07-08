@@ -74,7 +74,7 @@ void tdl::Window::disableEcho()
 void tdl::Window::draw()
 {
     if (!_content.empty()) {
-        moveCursor(Vector2u(0, 0));
+        //moveCursor(Vector2u(0, 0));
         write(_fd, _content.c_str(), _content.size());
         _content = "";
     }

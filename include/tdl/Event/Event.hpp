@@ -3,6 +3,10 @@
 
 #include <iostream>
 #include "tdl/Input/EInput.hpp"
+#include <regex>
+#include <queue>
+#include "tdl/Input/inputKeyboard.hpp"
+#include "tdl/Event/Mouse/Imouse.hpp"
 
 namespace tdl {
     /**
@@ -10,8 +14,32 @@ namespace tdl {
      * @brief The event structure. It's used to handle the event in the window
      * @note if you want to add a new event, you have to add it in the union and in the enum EventType if you want to store data for the event you can add it in the struct
      */
-    struct Event
+    class Event : public InputKeyboard
     {
+    public:
+
+    /**
+     * @brief Construct a new Event object
+     * 
+     */
+    Event() = default;
+
+    Event(const Event &event) = default;
+
+    Event &operator=(const Event &event) = default;
+
+
+    bool pollEvent(Event &event, std::regex *custom = nullptr);
+
+    /**
+     * @brief push an event in the queue
+     * 
+     * @param event the event to push
+     */
+            void pushEvent(const Event &event);
+
+        
+            std::queue<Event> _events; /*!< the event queue */
 
         /**
          * @brief The key event structure

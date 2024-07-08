@@ -10,7 +10,7 @@
 
 tdl::inputMouse::inputMouse()
 {
-
+    
 }
 
 tdl::inputMouse::~inputMouse() = default;
