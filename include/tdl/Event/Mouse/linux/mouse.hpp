@@ -12,9 +12,9 @@ namespace tdl {
             mouse();
             ~mouse() = default;
 
-            bool mouseMove(Window  *window, EventMouseData data) override;
-            bool mousePessed(Window  *window, EventMouseData data) override;
-            bool mouseReleased(Window  *window, EventMouseData data) override;
-            bool mouseScroll(Window  *window, EventMouseData data) override;
+            bool mouseMove(AWindow  *window, EventMouseData data) override;
+            bool mousePessed(AWindow  *window, EventMouseData data) override;
+            bool mouseReleased(AWindow  *window, EventMouseData data) override;
+            bool mouseScroll(AWindow  *window, EventMouseData data) override;
     };
 }

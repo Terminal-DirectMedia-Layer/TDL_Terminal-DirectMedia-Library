@@ -12,7 +12,7 @@
 
 namespace tdl {
 
-    class Window;
+    class AWindow;
 
 /**
  * @class InputKeyboard
@@ -38,7 +38,7 @@ namespace tdl {
  *
  * @param window the window where the event will be pushed and read
  */
-        int readInputKeyboard(Window *window, char *buffer, int _nread);
+        int readInputKeyboard(AWindow *window, char *buffer, int _nread);
 
 /**
  * @brief return a cast between a char and a TDLKeyCodes

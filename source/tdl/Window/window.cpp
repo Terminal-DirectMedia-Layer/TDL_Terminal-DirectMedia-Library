@@ -15,9 +15,11 @@
 
 
 
-tdl::Window::Window(std::string  title, std::string const& ttyPath) : _title(std::move(title)), _frameRate(60), Drawable() {
+tdl::Window::Window(std::string  title, std::string const& ttyPath) {
     struct winsize w{};
     int param;
+    _title = std::move(title);
+    _frameRate = 60;
     _fd = open(ttyPath.c_str(), O_RDWR);
     if (_fd == -1)
         throw std::runtime_error("Can't open tty");
@@ -41,7 +43,9 @@ tdl::Window::Window(std::string  title, std::string const& ttyPath) : _title(std
 tdl::Window::~Window()
 {
     SignalHandler::getInstance().unRegisterWindow(this);
+    delete _mouse;
     close(_fd);
+
 }
 
 /**
@@ -68,37 +72,6 @@ tdl::Window* tdl::Window::CreateWindow(std::string const& title, std::string con
     }
 }
 
-void tdl::Window::disableEcho()
-{
-    tcgetattr(_fd, &_tty);
-    _tty.c_lflag &=(~ICANON & ~ECHO);
-    _tty.c_cc[VMIN] = 1;
-    _tty.c_cc[VTIME] = 0;
-    tcsetattr(STDIN_FILENO,TCSANOW,&_tty);
-}
-
-
-void tdl::Window::draw()
-{
-    if (!_content.empty()) {
-        //moveCursor(Vector2u(0, 0));
-        write(_fd, _content.c_str(), _content.size());
-        _content = "";
-    }
-}
-
-void tdl::Window::printFrameRate() {
-    auto end = std::chrono::system_clock::now();
-    std::chrono::duration<double> elapsed_seconds = end-start;
-    if (elapsed_seconds.count() >= 1) {
-        std::cerr << "Frame rate : " << framecounter << std::endl;
-        framecounter = 0;
-        start = std::chrono::system_clock::now();
-    }
-    framecounter++;
-}
-
-
 /**
  * @brief Polls the event
  * this function will return the event and pop it from the queue
@@ -116,10 +89,12 @@ bool tdl::Window::pollEvent(tdl::Event &event, std::regex *custom)
 
         std::regex e("\\d+;\\d+;\\d+[mM]");
         ioctl(getFd(), FIONREAD, &_nread);
-        char buffer[_nread];
-        read(getFd(), buffer, _nread);
+        char buffer[_nread + 1];
+        int ret = read(getFd(), buffer, _nread);
+        if (ret == -1) {
+            return false;
+        }
         buffer[_nread] = 0;
-
         if (_nread == 0) {
             index =+ _input.readInputKeyboard(this, buffer, _nread);
             return false;
@@ -138,10 +113,8 @@ bool tdl::Window::pollEvent(tdl::Event &event, std::regex *custom)
             }
             if (custom != nullptr && std::regex_match(buffer + index, *custom))
             {
-                std::cerr << "custom event" << std::endl;
                 Event ev;
                 ev.type = Event::EventType::Custom;
-                std::cerr << "buffer at index" << buffer + index << std::endl;
                 int length = strlen(buffer + index);
 
                 ev.custom.data = new char[length + 1];
@@ -162,18 +135,6 @@ bool tdl::Window::pollEvent(tdl::Event &event, std::regex *custom)
     return false;
 }
 
-/**
- * @brief reset the pixel table of the window with black pixel
- * 
- */
-void tdl::Window::clearPixel()
-{
-    if (getUpdate()) {
-        getMatrix().clear();
-        setUpdate(false);
-    }
-}
-
 void tdl::Window::updateTermSize()
 {
     struct winsize w{};
@@ -188,105 +149,4 @@ void tdl::Window::updateTermSize()
     getMatrix().resize(_size);
     getOldMatrix().resize(_size);
     update(true);
-}
-
-void tdl::Window::update(bool all) {
-    CharColor charColor;
-    Vector2u pos = Vector2u(0, 0);
-    Vector2u oldPos = Vector2u(0, 0);
-    Pixel pixels[6] = {Pixel(0, 0, 0, 0)};
-    Pixel oldForeColor = Pixel(0, 0, 0, 0);
-    Pixel oldBackColor = Pixel(0, 0, 0, 0);
-
-    if (_update)
-        _update = false;
-    setUpdate(true);
-    for (u_int32_t i = 0; i < _size.y(); i += 3) {
-        for (u_int32_t j = 0; j < _size.x(); j += 2) {
-            try {
-                getMatrix().getPixelChar(Vector2u(j, i), pixels);
-            } catch (std::out_of_range &e) {
-                continue;
-            }
-            getOldMatrix().setPixelChar(Vector2u(j, i), pixels);
-            charColor = getMatrix().computeCharColor(Vector2u(j, i), pixels);
-            if (!charColor.shape)
-                continue;
-            if (pos.x() != oldPos.x() + 2) {
-                moveCursor(pos);
-            }
-            if (charColor.ForeGround != oldForeColor) {
-                setRGBFrontGround(charColor.ForeGround);
-                oldForeColor = charColor.ForeGround;
-            }
-            if ((charColor.BackGround != oldBackColor)) {
-                setRGBBackGround(charColor.BackGround);
-                oldBackColor = charColor.BackGround;
-            }
-            printPixel(charColor.shape);
-            oldPos = pos;
-            pos.x() += 2;
-        }
-        pos.x() = 0;
-        pos.y() += 2;
-    }
-}
-
-void tdl::Window::setRGBFrontGround(Pixel pixel)
-{
-    _content += "\033[38;2;" + std::to_string(GET_R(pixel.color)) + ";" + std::to_string(GET_G(pixel.color)) + ";" + std::to_string(GET_B(pixel.color)) + "m";
-}
-
-void tdl::Window::setRGBBackGround(Pixel pixel)
-{
-    _content += "\033[48;2;" + std::to_string(GET_R(pixel.color)) + ";" + std::to_string(GET_G(pixel.color)) + ";" + std::to_string(GET_B(pixel.color)) + "m";
-}
-
-void tdl::Window::clearScreen()
-{
-    _content += "\033[2J";
-}
-
-void tdl::Window::moveCursor(Vector2u pos)
-{
-    _content += "\033[" + std::to_string(pos.y() / 2) + ";" + std::to_string(pos.x()) + "H";
-}
-
-void tdl::Window::printPixel(const char *shape)
-{
-    if (shape == nullptr)
-        return;
-    _content += std::string(reinterpret_cast<const char*>(shape));
-}
-
-void tdl::Window::alternateScreenBuffer()
-{
-    _content += "\033[?1049h";
-}
-
-void tdl::Window::removeMouseCursor()
-{
-    _content += "\033[?25l";
-}
-
-void tdl::Window::enableMouseMove()
-{
-    _content += "\033[?1003h";
-    _content += "\033[?1006h";
-}
-
-void tdl::Window::disableMouseMove()
-{
-    _content += "\033[?1003l";
-    _content += "\033[?1006l";
-}
-
-void tdl::Window::enableMouseClick()
-{
-    _content += "\033[?1000h";
-}
-
-void tdl::Window::disableMouseClick()
-{
-    _content += "\033[?1000l";
 }

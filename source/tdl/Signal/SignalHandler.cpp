@@ -10,12 +10,12 @@ tdl::SignalHandler &tdl::SignalHandler::getInstance()
     return instance;
 }
 
-void tdl::SignalHandler::registerWindow(Window *win)
+void tdl::SignalHandler::registerWindow(AWindow *win)
 {
     _windows.push_back(win);
 }
 
-void tdl::SignalHandler::unRegisterWindow(Window *win)
+void tdl::SignalHandler::unRegisterWindow(AWindow *win)
 {
     _windows.erase(std::remove(_windows.begin(), _windows.end(), win), _windows.end());
 }

@@ -1,19 +1,31 @@
 #include <string>
 #include <sstream>
+#include <regex>
 
 namespace tdl {
     class EventMouseData {
         public:
             EventMouseData(std::string buffer) {
                 _buffer = buffer;
-                std::stringstream ss(std::string(buffer.begin(), buffer.end()- 1));
-                std::string temp;
-                std::getline(ss, temp, ';');
-                _button = std::stoi(temp);
-                std::getline(ss, temp, ';');
-                _x = std::stoi(temp);
-                std::getline(ss, temp, ';');
-                _y = std::stoi(temp);
+                std::regex re("(\\d+)");
+                std::sregex_iterator begin(buffer.begin(), buffer.end(), re);
+                std::sregex_iterator end;
+                std::smatch match;
+                int i = 0;
+                for (std::sregex_iterator it = begin; it != end; ++it) {
+                    match = *it;
+                    if (i == 0) {
+                        std::stringstream ss(match.str());
+                        ss >> _button;
+                    } else if (i == 1) {
+                        std::stringstream ss(match.str());
+                        ss >> _x;
+                    } else if (i == 2) {
+                        std::stringstream ss(match.str());
+                        ss >> _y;
+                    }
+                    i++;
+                }
             }
             ~EventMouseData() = default;
 

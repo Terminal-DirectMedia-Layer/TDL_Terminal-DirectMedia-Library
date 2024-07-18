@@ -16,6 +16,7 @@ namespace tdl {
 
     Text::~Text()
     {
+        
     }
 
     void Text::setFont(Font &font)

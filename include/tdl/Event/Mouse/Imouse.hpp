@@ -4,16 +4,16 @@
 
 namespace tdl {
 
-    class Window;
+    class AWindow;
     class EventMouseData;
 
     class Imouse {
         public:
             virtual ~Imouse() = default;
 
-            virtual bool mouseMove(Window  *window, EventMouseData data) = 0;
-            virtual bool mousePessed(Window  *window, EventMouseData data) = 0;
-            virtual bool mouseReleased(Window  *window, EventMouseData data) = 0;
-            virtual bool mouseScroll(Window  *window, EventMouseData data) = 0;
+            virtual bool mouseMove(AWindow  *window, EventMouseData data) = 0;
+            virtual bool mousePessed(AWindow  *window, EventMouseData data) = 0;
+            virtual bool mouseReleased(AWindow  *window, EventMouseData data) = 0;
+            virtual bool mouseScroll(AWindow  *window, EventMouseData data) = 0;
     };
 }

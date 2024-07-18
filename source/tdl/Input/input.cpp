@@ -8,7 +8,7 @@
 #include "tdl/Input/inputKeyboard.hpp"
 #include <unistd.h>
 #include <sys/ioctl.h>
-#include "tdl/Window/window.hpp"
+#include "tdl/Window/AWindow.hpp"
 
 tdl::InputKeyboard::InputKeyboard(): _shared_data(KeyCodes::KEY_END)
 {
@@ -16,7 +16,7 @@ tdl::InputKeyboard::InputKeyboard(): _shared_data(KeyCodes::KEY_END)
 
 tdl::InputKeyboard::~InputKeyboard() = default;
 
-int tdl::InputKeyboard::readInputKeyboard(Window *win, char *buffer, int _nread) {
+int tdl::InputKeyboard::readInputKeyboard(AWindow *win, char *buffer, int _nread) {
     int consumed = 0;
     if (_nread != 0) {
         if (buffer[0] == 27 && buffer[1] == 91) {

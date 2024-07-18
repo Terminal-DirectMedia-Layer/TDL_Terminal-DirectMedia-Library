@@ -14,10 +14,7 @@ tdl::TextureLoader::TextureLoader(std::string path) : _path(path), _info_ptr(nul
 
 tdl::TextureLoader::~TextureLoader()
 {
-    if (_info_ptr != nullptr)
-        png_destroy_read_struct(&_png_ptr, &_info_ptr, nullptr);
-    if (_row_pointers != nullptr)
-        delete[] _row_pointers;
+    png_destroy_read_struct(&_png_ptr, &_info_ptr, nullptr);
 }
 
 bool tdl::TextureLoader::isPng(std::string path)
@@ -50,7 +47,6 @@ void tdl::TextureLoader::loadTexture(std::string path)
     _channels = png_get_channels(_png_ptr, _info_ptr);
     _bit_depth = png_get_bit_depth(_png_ptr, _info_ptr);
     _row_pointers = png_get_rows(_png_ptr, _info_ptr);
-    
     fclose(fp);
 }
 

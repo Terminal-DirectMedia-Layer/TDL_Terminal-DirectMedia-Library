@@ -63,7 +63,7 @@ namespace tdl {
     }
 
     Texture::~Texture() = default;
-
+    
     void Texture::loadPixels()
     {
         Pixel color;

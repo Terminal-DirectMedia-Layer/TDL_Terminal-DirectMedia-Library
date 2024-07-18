@@ -1,6 +1,3 @@
-#ifndef LIBNCURSE_WINDOW_HPP
-    #define LIBNCURSE_WINDOW_HPP
-
 #include <string>
 #include <list>
 #include <iostream>
@@ -18,40 +15,33 @@
 #include "tdl/Input/inputKeyboard.hpp"
 #include "tdl/Event/Mouse/Imouse.hpp"
 #include "tdl/Window/AWindow.hpp"
+#include "tdl/Utils/SubShell.hpp"
 
-namespace tdl {
-    /**
-     * @class Window
-     * @brief Window class
-     */
-    class Window : public AWindow {
-        
-        public:
 
-/**
- * \section Constructor / Destructor
- * 
- */
+#ifndef TDL_TERMINALDISPLAY_HPP
+    #define TDL_TERMINALDISPLAY_HPP
+
+namespace tdl
+{
+    class TerminalDisplay: public AWindow
+    {
+    public:
 
         /**
-         * @brief Create a Window object
+         * @brief Create a TerminalDisplay object
          * 
          * @param title the title of the window
          * @param ttyPath the path to the tty by default it's /dev/tty
-         * @return Window* a pointer to the window
+         * @param height the height of the window region that you can draw on
+         * @return TerminalDisplay* a pointer to the window
          */
-            static Window* CreateWindow(std::string const& title, std::string const& ttyPath = "/dev/tty");
+        static TerminalDisplay *CreateTerminalDisplay(std::string const &title, std::string const &ttyPath = "/dev/tty", u_int32_t height = 0);
 
         /**
-         * @brief Destroy the Window object
+         * @brief Destroy the TerminalDisplay object
          * 
          */
-            ~Window();
-
-/**
- * \subsection Input and event
- * 
- */
+        ~TerminalDisplay();
 
         /**
          * @brief poll the event
@@ -62,28 +52,15 @@ namespace tdl {
          */
             bool pollEvent(Event &event, std::regex *custom = nullptr);
 
+
         /**
          * @brief update the terminal size
          * @warning this function is called at the creation of the window and when the terminal size change
          * by the signale handler 
          */
-            void updateTermSize() override;
+            void updateTermSize();
 
         private:
-
-/**
- * \section Private Methods
- * 
- */
-
-        /**
-         * @brief Construct a new tdl::Window::Window object
-         * 
-         * @param title The title of the window
-         * @param tty_path The path to the tty to lauch the window, the available tty are /dev/tty or /dev/pts/0.../dev/pts/x
-         * @note the SignalHandler.getInstance is used to register the window on the signal manager it permited to automatically resize the window when the terminal is resized
-         */
-            Window(std::string  title, std::string const& ttyPath);
 
 /**
  * \section Attributes
@@ -91,8 +68,14 @@ namespace tdl {
  */
             InputKeyboard _input; /*!< the input keyboard */
             Imouse *_mouse; /*!< the input mouse */
+            subShell _subShell; /*!< the subshell for command line execution*/
+            tdl::Vector2u _cursorPos; /*!< the cursor position */
+            TerminalDisplay(std::string const& title, std::string const& ttyPath = "/dev/tty", u_int32_t height = 20);
+
+            void printAtCursorPos(std::string const& str);
 
     };
-}
+    
+} // namespace 
 
-#endif //LIBNCURSE_WINDOW_HPP
+#endif // TDL_TERMINALDISPLAY_HPP

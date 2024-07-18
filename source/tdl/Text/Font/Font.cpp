@@ -15,10 +15,8 @@ namespace tdl {
     }
 
     Font::~Font() {
-        if (_face) {
-            //FT_Done_Face(_face);
-        }
-        //FT_Done_FreeType(_library);
+        FT_Done_Face(_face);
+        FT_Done_FreeType(_library);
     }
 
     void Font::loadFromFile(const std::string &filename) {

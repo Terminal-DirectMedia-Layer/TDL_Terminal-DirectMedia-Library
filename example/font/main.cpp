@@ -31,8 +31,10 @@ int main()
         win->draw();
         for(tdl::Event event; win->pollEvent(event);) {
             if (event.type == tdl::Event::EventType::KeyPressed) {
-                if (event.key.code == tdl::KeyCodes::KEY_ESC)
+                if (event.key.code == tdl::KeyCodes::KEY_ESC) {
+                    delete win;
                     return 0;
+                }
                 if (event.key.code == tdl::KeyCodes::KEY_TAB && !s.empty())
                     s.pop_back();
                 else

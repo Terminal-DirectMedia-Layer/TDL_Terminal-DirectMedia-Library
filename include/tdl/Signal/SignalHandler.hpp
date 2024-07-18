@@ -3,7 +3,7 @@
 #ifndef LIBNCURSE_SIGNALHANDLER_HPP
 #define LIBNCURSE_SIGNALHANDLER_HPP
 
-#include "tdl/Window.hpp"
+#include "tdl/Window/AWindow.hpp"
 #include <csignal>
 
 namespace tdl {
@@ -30,14 +30,14 @@ namespace tdl {
  *
  * @param win the window to register
  */
-        void registerWindow(Window *win);
+        void registerWindow(AWindow *win);
 
 /**
  * @brief unregister a window from the signal handler
  *
  * @param win the window to unregister
  */
-        void unRegisterWindow(Window *win);
+        void unRegisterWindow(AWindow *win);
 
 /**
  * @brief the function called when a signal is received
@@ -62,7 +62,7 @@ namespace tdl {
  */
         void handleSignalInstance();
 
-        std::vector<Window*> _windows; /**< the list of windows registered to the signal handler */
+        std::vector<AWindow*> _windows; /**< the list of windows registered to the signal handler */
     };
 }
 

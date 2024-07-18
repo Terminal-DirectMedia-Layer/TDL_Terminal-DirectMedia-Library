@@ -39,6 +39,8 @@ int main()
         for(tdl::Event event; win->pollEvent(event);) {
             if (event.type == tdl::Event::EventType::KeyPressed) {
                 if (event.key.code == tdl::KeyCodes::KEY_ESC)
+                    delete win;
+                    delete sprite;
                     return 0;
                 
             }
@@ -52,6 +54,10 @@ int main()
     std::ofstream time_file("execution_time.txt", std::ios::app);
     time_file << elapsed.count() << std::endl;
     time_file.close();
+
+    delete win;
+    delete sprite;
+    delete tex;
 
     return 0;
 }
