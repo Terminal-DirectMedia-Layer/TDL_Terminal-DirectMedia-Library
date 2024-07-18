@@ -87,7 +87,8 @@ bool tdl::Window::pollEvent(tdl::Event &event, std::regex *custom)
         int _nread = 0;
         int index = 0;
 
-        std::regex e("\\d+;\\d+;\\d+[mM]");
+        std::regex e("\\x1b\\[<\\d+;\\d+;\\d+[mM]");
+
         ioctl(getFd(), FIONREAD, &_nread);
         char buffer[_nread + 1];
         int ret = read(getFd(), buffer, _nread);

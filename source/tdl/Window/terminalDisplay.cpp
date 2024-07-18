@@ -44,6 +44,7 @@ namespace tdl {
     {
         SignalHandler::getInstance().unRegisterWindow(this);
         _subShell.closeSubShell();
+        delete _mouse;
         close(_fd);
     }
 
@@ -104,7 +105,6 @@ namespace tdl {
                             return c == 'm' || c == 'M';
                         });
                         std::string str(buffer + index, it + 1);
-                        std::cerr << "str : " << str << " index: " << index << "buffer: " << buffer << std::endl;
                         if (std::regex_match(str, e)) {
                             EventMouseData data(str);
                             if (_mouse->mouseMove(this, data) || _mouse->mousePessed(this, data) || _mouse->mouseReleased(this, data) || _mouse->mouseScroll(this, data)) {
@@ -133,11 +133,10 @@ namespace tdl {
                             _cursorPos.x() = 0;
                             _cursorPos.y() += 1;
                         }
-                        if (buffer[index] == '\b') {
+                        if (buffer[index] == 127) {
                             if (_cursorPos.x() > 0) {
                                 _cursorPos.x() -= 1;
-                                printAtCursorPos(" ");
-                                _cursorPos.x() -= 1;
+                                printAtCursorPos("  "); // two space for remove the cursor and the char at the same time
                             }
                         }
                         if (std::isprint(buffer[index])) {
@@ -153,19 +152,19 @@ namespace tdl {
         }
         std::string res;
         res = _subShell.readOnSubShell();
-        std::cerr<< "res : " << res << "res size: " << res.size() << std::endl;
         if (res.size() > 0) {
             printAtCursorPos(res);
             if (res.find('\n') != std::string::npos) {
                 int count = std::count(res.begin(), res.end(), '\n');
                 int rest = res.size() - res.find_last_of('\n') - 1;
-                std::cerr << "count: " << count << " rest: " << rest << std::endl;
                 _cursorPos.y() += count;
                 _cursorPos.x() = rest;
             } else {
                 _cursorPos.x() = res.size();
             }
         }
+        printAtCursorPos("\033[7m \033[0m"); // print the cursor
+
         if (!_events.empty()) {
             event = _events.front();
             _events.pop();
