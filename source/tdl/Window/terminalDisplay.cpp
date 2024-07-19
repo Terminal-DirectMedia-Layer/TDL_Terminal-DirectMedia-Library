@@ -75,6 +75,10 @@ namespace tdl {
         _size.x() = (w.ws_col + 1) * 2;
         getMatrix().resize(_size);
         getOldMatrix().resize(_size);
+        if (_cursorPos.y() < _size.y() / 3 - 1 ) {
+            _cursorPos.y() = _size.y() / 3;
+            _subShell.writeOnSubShell("\n");
+        }
         update(true);
     }
 
@@ -125,13 +129,40 @@ namespace tdl {
                             index += _nread;
                             continue;
                         }
-                        _subShell.writeOnSubShell(buffer + index);
-
                         //index += _input.readInputKeyboard(this, buffer + index, _nread);
 
                         if (buffer[index] == '\n') {
+                            printAtCursorPos(" ");
                             _cursorPos.x() = 0;
                             _cursorPos.y() += 1;
+                            if (_commandMap.find(_cmd) != _commandMap.end()) {
+                                std::vector<std::string> args;
+                                std::string arg;
+                                for (char c : _cmd) {
+                                    if (c == ' ') {
+                                        args.push_back(arg);
+                                        arg = "";
+                                    } else {
+                                        arg += c;
+                                    }
+                                }
+                                args.push_back(arg);
+                                char **argv = new char*[args.size() + 1];
+                                for (int i = 0; i < args.size(); i++) {
+                                    argv[i] = new char[args[i].size() + 1];
+                                    strcpy(argv[i], args[i].c_str());
+                                }
+                                argv[args.size()] = nullptr;
+                                _commandMap[_cmd](this, args.size(), argv);
+                                for (int i = 0; i < args.size(); i++) {
+                                    delete[] argv[i];
+                                }
+                                delete[] argv;
+                            } else {
+                                _subShell.writeOnSubShell(_cmd + "\n");
+                            }
+                            _cmd = "";
+
                         }
                         if (buffer[index] == 127) {
                             if (_cursorPos.x() > 0) {
@@ -141,6 +172,7 @@ namespace tdl {
                         }
                         if (std::isprint(buffer[index])) {
                             printAtCursorPos(buffer + index);
+                            _cmd += buffer[index];
                             _cursorPos.x() += 1;
                         }
                         index++;
@@ -171,5 +203,13 @@ namespace tdl {
             return true;
         }
         return false;
+    }
+
+    void TerminalDisplay::registerCommand(std::string const& cmd, CommandFunction func) {
+        _commandMap[cmd] = func;
+    }
+
+    void TerminalDisplay::unregisterCommand(std::string const& cmd) {
+        _commandMap.erase(cmd);
     }
 }

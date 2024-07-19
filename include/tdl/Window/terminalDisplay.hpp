@@ -7,6 +7,8 @@
 #include <iostream>
 #include <queue>
 #include <regex>
+#include <functional>
+#include <map>
 #include "tdl/Pixel/Pixel.hpp"
 #include "tdl/Vector.hpp"
 #include "tdl/Matrix/PixelMatrix.hpp"
@@ -52,6 +54,13 @@ namespace tdl
          */
             bool pollEvent(Event &event, std::regex *custom = nullptr);
 
+            void setHeight(u_int32_t height) 
+            {
+                _size.y() = height;
+                updateTermSize();
+            }
+
+            u_int32_t getHeight() const { return _size.y(); }
 
         /**
          * @brief update the terminal size
@@ -59,6 +68,21 @@ namespace tdl
          * by the signale handler 
          */
             void updateTermSize();
+
+
+        using CommandFunction = std::function<void(TerminalDisplay*, int, char**)>;
+
+        /**
+         * @brief register an new command
+         * 
+         */
+            void registerCommand(std::string const& cmd, CommandFunction func);
+
+        /**
+         * @brief unregister a command
+         * 
+         */
+            void unregisterCommand(std::string const& cmd);
 
         private:
 
@@ -70,6 +94,8 @@ namespace tdl
             Imouse *_mouse; /*!< the input mouse */
             subShell _subShell; /*!< the subshell for command line execution*/
             tdl::Vector2u _cursorPos; /*!< the cursor position */
+            std::string _cmd = ""; /*!< the command line */
+            std::map<std::string, CommandFunction> _commandMap;
             TerminalDisplay(std::string const& title, std::string const& ttyPath = "/dev/tty", u_int32_t height = 20);
 
             void printAtCursorPos(std::string const& str);
