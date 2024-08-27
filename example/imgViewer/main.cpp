@@ -32,7 +32,7 @@ void testcustomCommand(tdl::TerminalDisplay *win, int argc, char **argv)
     if (argc == 2) {
         if (std::string(argv[1]).find("png") != std::string::npos) {
 			std::cerr << "active path: " << win->getActivePath() << std::endl;
-            tdl::Texture *tex = tdl::Texture::CreateTexture(win->getActivePath() + "/" +argv[1]);
+            tdl::Texture *tex = tdl::Texture::createTexture(win->getActivePath() + "/" +argv[1]);
             tdl::Sprite *sprite = tdl::Sprite::createSprite(tex, tdl::Vector2u(0, 0));
             sprites.push_back(sprite);
         }
@@ -44,7 +44,7 @@ int main()
 {
     auto start = std::chrono::high_resolution_clock::now();
     tdl::TerminalDisplay *win = tdl::TerminalDisplay::CreateTerminalDisplay("test", "/dev/tty", 30, "/bin/bash");
-    tdl::Texture *tex = tdl::Texture::CreateTexture("../example/assets/Spinner.png");
+    tdl::Texture *tex = tdl::Texture::createTexture("../example/assets/Spinner.png");
     tdl::Vector2u pos(10, 10);
     tdl::Sprite *sprite = tdl::Sprite::createSprite(tex, tdl::Vector2u(0, 0));
     win->registerCommand("see", testcustomCommand);

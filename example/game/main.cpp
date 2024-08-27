@@ -27,13 +27,13 @@
 int main()
 {
     tdl::Window *win = tdl::Window::CreateWindow("pong");
-    tdl::Texture *board = tdl::Texture::CreateTexture("../example/assets/arts/Board.png");
+    tdl::Texture *board = tdl::Texture::createTexture("../example/assets/arts/Board.png");
     tdl::Sprite *sprite = tdl::Sprite::createSprite(board, tdl::Vector2u(0, 0));
 
-    tdl::Texture *player = tdl::Texture::CreateTexture("../example/assets/arts/Player.png");
+    tdl::Texture *player = tdl::Texture::createTexture("../example/assets/arts/Player.png");
     tdl::Sprite *playerSprite = tdl::Sprite::createSprite(player, tdl::Vector2u(0, 0));
 
-    tdl::Texture *ball = tdl::Texture::CreateTexture("../example/assets/arts/Ball.png");
+    tdl::Texture *ball = tdl::Texture::createTexture("../example/assets/arts/Ball.png");
     tdl::Sprite *ballSprite = tdl::Sprite::createSprite(ball, tdl::Vector2u(win->getWidth(), win->getHeight()));
     tdl::Vector2u ballPos = tdl::Vector2u(win->getWidth() / 2, win->getHeight() / 2);
     ballSprite->setPosition(ballPos);

@@ -9,7 +9,7 @@
 #include <cstring>
 #include "TDL/Signal/SignalHandler.hpp"
 #include "TDL/Matrix/PixelMatrix.hpp"
-#include "TDL/Event/Mouse/linux/mouse.hpp"
+#include "TDL/Event/Mouse/linux/Mouse.hpp"
 #include "TDL/Event/Mouse/EventMouseData.hpp"
 #include "TDL/Event/Event.hpp"
 #include <unistd.h>
@@ -38,7 +38,7 @@ namespace tdl {
         SignalHandler::getInstance().registerWindow(this);
         start = std::chrono::system_clock::now();
         _input = InputKeyboard();
-        _mouse = new tdl::mouse();
+        _mouse = new tdl::Mouse();
         _cursorPos = Vector2u(0, height);
         _subShell.openSubShell(shellPath);
     }

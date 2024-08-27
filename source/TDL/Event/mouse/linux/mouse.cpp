@@ -1,5 +1,5 @@
 
-#include "TDL/Event/Mouse/linux/mouse.hpp"
+#include "TDL/Event/Mouse/linux/Mouse.hpp"
 #include "TDL/Event/Mouse/EventMouseData.hpp"
 #include <iostream>
 #include <fcntl.h>
@@ -7,11 +7,11 @@
 #include <gpm.h>
 #include "TDL/Window/AWindow.hpp"
 
-tdl::mouse::mouse()
+tdl::Mouse::Mouse()
 {
 }
 
-bool tdl::mouse::mouseMove(AWindow *window, EventMouseData data)
+bool tdl::Mouse::mouseMove(AWindow *window, EventMouseData data)
 {
     if (data._button == 32 || data._button == 35) {
         Event event;
@@ -24,7 +24,7 @@ bool tdl::mouse::mouseMove(AWindow *window, EventMouseData data)
     return false;
 }
 
-bool tdl::mouse::mousePessed(AWindow *window, EventMouseData data)
+bool tdl::Mouse::mousePessed(AWindow *window, EventMouseData data)
 {
     Event event;
     if (data._buffer.find("M") == std::string::npos) {
@@ -55,7 +55,7 @@ bool tdl::mouse::mousePessed(AWindow *window, EventMouseData data)
     return false;
 }
 
-bool tdl::mouse::mouseReleased(AWindow *window, EventMouseData data)
+bool tdl::Mouse::mouseReleased(AWindow *window, EventMouseData data)
 {
     Event event;
     if (data._buffer.find("m") == std::string::npos) {
@@ -86,7 +86,7 @@ bool tdl::mouse::mouseReleased(AWindow *window, EventMouseData data)
     return false;
 }
 
-bool tdl::mouse::mouseScroll(AWindow *window, EventMouseData data)
+bool tdl::Mouse::mouseScroll(AWindow *window, EventMouseData data)
 {
     Event event;
     if (data._button == 64) {

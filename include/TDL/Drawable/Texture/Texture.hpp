@@ -37,7 +37,7 @@ class Texture : public TextureLoader, public Transformable {
      * @return Texture* the texture created
      * @overload
      */
-            static Texture *CreateTexture(std::string path);
+            static Texture *createTexture(std::string path);
 
     /**
      * @brief function to create a texture
@@ -47,7 +47,7 @@ class Texture : public TextureLoader, public Transformable {
      * @return Texture* the texture created
      * @overload
      */
-            static Texture *CreateTexture(std::string &path, bool repeat);
+            static Texture *createTexture(std::string &path, bool repeat);
 
     /**
      * @brief function to create a texture from a vector of pixel
@@ -56,7 +56,7 @@ class Texture : public TextureLoader, public Transformable {
      * @return Texture* the texture created
      * @overload
      */
-            static Texture *CreateTextureFromVector(Pixel *pixelData, Vector2u &size);
+            static Texture *createTextureFromVector(Pixel *pixelData, Vector2u &size);
 
     /**
      * @brief function to create a texture from a vector of pixel
@@ -66,7 +66,7 @@ class Texture : public TextureLoader, public Transformable {
      * @return Texture* the texture created
      * @overload
      */
-            static Texture *CreateTextureFromVector(Pixel *pixelData, Vector2u &size, Vector2f &scale);
+            static Texture *createTextureFromVector(Pixel *pixelData, Vector2u &size, Vector2f &scale);
 
     /**
      * @brief function to create a texture from a vector of pixel
@@ -75,7 +75,7 @@ class Texture : public TextureLoader, public Transformable {
      * @param repeat the repeat of the texture
      * @return Texture* the texture created
      */
-            static Texture *CreateTextureFromVector(Pixel *pixelData, Vector2u &size, bool repeat);
+            static Texture *createTextureFromVector(Pixel *pixelData, Vector2u &size, bool repeat);
 
     /**
      * @brief function to create a texture from a vector of pixel
@@ -85,7 +85,7 @@ class Texture : public TextureLoader, public Transformable {
      * @param repeat the repeat of the texture
      * @return Texture* the texture created
      */
-            static Texture *CreateTextureFromVector(Pixel *pixelData, Vector2u &size, Vector2f &scale, bool repeat);
+            static Texture *createTextureFromVector(Pixel *pixelData, Vector2u &size, Vector2f &scale, bool repeat);
 
     /**
      * @brief get the pixel at the position pos

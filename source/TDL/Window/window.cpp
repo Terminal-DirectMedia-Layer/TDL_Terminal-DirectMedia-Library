@@ -9,7 +9,7 @@
 #include <cstring>
 #include "TDL/Signal/SignalHandler.hpp"
 #include "TDL/Matrix/PixelMatrix.hpp"
-#include "TDL/Event/Mouse/linux/mouse.hpp"
+#include "TDL/Event/Mouse/linux/Mouse.hpp"
 #include "TDL/Event/Mouse/EventMouseData.hpp"
 #include "TDL/Event/Event.hpp"
 
@@ -34,7 +34,7 @@ tdl::Window::Window(std::string  title, std::string const& ttyPath) {
     SignalHandler::getInstance().registerWindow(this);
     start = std::chrono::system_clock::now();
     _input = InputKeyboard();
-    _mouse = new tdl::mouse();
+    _mouse = new tdl::Mouse();
 }
 /**
  * @brief Destroy the tdl::Window::Window object and unregister the window from the signal manager

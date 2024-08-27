@@ -8,7 +8,7 @@
 #include <cstring>
 #include "TDL/Signal/SignalHandler.hpp"
 #include "TDL/Matrix/PixelMatrix.hpp"
-#include "TDL/Event/Mouse/linux/mouse.hpp"
+#include "TDL/Event/Mouse/linux/Mouse.hpp"
 #include "TDL/Event/Mouse/EventMouseData.hpp"
 #include "TDL/Event/Event.hpp"
 #include "TDL/Window/AWindow.hpp"

@@ -1,3 +1,6 @@
+
+#ifndef TDL_EVENTMOUSEDATA_HPP
+    #define TDL_EVENTMOUSEDATA_HPP
 #include <string>
 #include <sstream>
 #include <regex>
@@ -35,3 +38,5 @@ namespace tdl {
             std::string _buffer;
     };
 }
+
+#endif // TDL_EVENTMOUSEDATA_HPP

@@ -29,7 +29,7 @@ int main()
     bool run = true;
     auto start = std::chrono::high_resolution_clock::now();
     tdl::Window *win = tdl::Window::CreateWindow("bird");
-    tdl::Texture *tex = tdl::Texture::CreateTexture("../example/assets/rick.png");
+    tdl::Texture *tex = tdl::Texture::createTexture("../example/assets/rick.png");
     tdl::Vector2u pos(10, 10);
     tdl::Sprite *sprite = tdl::Sprite::createSprite(tex, tdl::Vector2u(0, 0));
     double rotation = 45.0;

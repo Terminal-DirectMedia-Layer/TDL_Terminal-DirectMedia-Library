@@ -16,7 +16,7 @@ int main()
     std::vector<tdl::Pixel> p;
     p.resize(1000000, tdl::Pixel(0, 0, 0, 255));
     tdl::Vector2u pos = tdl::Vector2u(1000, 1000);
-    tdl::Texture *tex = tdl::Texture::CreateTextureFromVector(p.data(), pos);
+    tdl::Texture *tex = tdl::Texture::createTextureFromVector(p.data(), pos);
     tdl::Sprite *sprite = tdl::Sprite::createSprite(tex, tdl::Vector2u(0, 0));
     while (true)
     {

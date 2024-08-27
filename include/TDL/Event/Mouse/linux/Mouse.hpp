@@ -1,16 +1,16 @@
 
-#pragma once
-
+#ifndef MOUSE_HPP
+    #define MOUSE_HPP
 #include "TDL/Event/Mouse/Imouse.hpp"
 #include <iostream>
 #include <string>
 
 namespace tdl {
-    class mouse : public Imouse {
+    class Mouse : public Imouse {
 
         public:
-            mouse();
-            ~mouse() = default;
+            Mouse();
+            ~Mouse() = default;
 
             bool mouseMove(AWindow  *window, EventMouseData data) override;
             bool mousePessed(AWindow  *window, EventMouseData data) override;
@@ -18,3 +18,5 @@ namespace tdl {
             bool mouseScroll(AWindow  *window, EventMouseData data) override;
     };
 }
+
+#endif // MOUSE_HPP

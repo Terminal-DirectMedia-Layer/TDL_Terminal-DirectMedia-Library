@@ -28,7 +28,7 @@ int main()
 {
     auto start = std::chrono::high_resolution_clock::now();
     tdl::TerminalDisplay *win = tdl::TerminalDisplay::CreateTerminalDisplay("test", "/dev/tty", 20);
-    tdl::Texture *tex = tdl::Texture::CreateTexture("../example/assets/Spinner.png");
+    tdl::Texture *tex = tdl::Texture::createTexture("../example/assets/Spinner.png");
     tdl::Vector2u pos(10, 10);
     tdl::Sprite *sprite = tdl::Sprite::createSprite(tex, tdl::Vector2u(0, 0));
 
@@ -91,7 +91,7 @@ int main()
             }
             if (event.type == tdl::Event::EventType::Custom) {
                 std::string path(event.custom.data);
-                tdl::Texture *tex = tdl::Texture::CreateTexture(path.erase(path.size() - 1));
+                tdl::Texture *tex = tdl::Texture::createTexture(path.erase(path.size() - 1));
                 tdl::Sprite *sprite = tdl::Sprite::createSprite(tex, tdl::Vector2u(0, 0));
                 sprites.push_back(std::tuple<tdl::Sprite *, bool>(sprite, false));
             }

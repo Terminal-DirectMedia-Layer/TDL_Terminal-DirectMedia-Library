@@ -9,12 +9,12 @@
 
 namespace tdl {
 
-    Texture *Texture::CreateTexture(std::string path)
+    Texture *Texture::createTexture(std::string path)
     {
-        return CreateTexture(path, false);
+        return createTexture(path, false);
     }
 
-    Texture *Texture::CreateTexture(std::string &path, bool repeat)
+    Texture *Texture::createTexture(std::string &path, bool repeat)
     {
         try {
             return new Texture(path, repeat);
@@ -29,24 +29,24 @@ namespace tdl {
         loadPixels();
     }
 
-    Texture *Texture::CreateTextureFromVector(Pixel *pixelData, Vector2u &size)
+    Texture *Texture::createTextureFromVector(Pixel *pixelData, Vector2u &size)
     {
         Vector2f scale = Vector2f(1.0, 1.0);
-        return CreateTextureFromVector(pixelData, size, scale, false);
+        return createTextureFromVector(pixelData, size, scale, false);
     }
 
-    Texture *Texture::CreateTextureFromVector(Pixel *pixelData, Vector2u &size, Vector2f &scale)
+    Texture *Texture::createTextureFromVector(Pixel *pixelData, Vector2u &size, Vector2f &scale)
     {
-        return CreateTextureFromVector(pixelData, size, scale, false);
+        return createTextureFromVector(pixelData, size, scale, false);
     }
 
-    Texture *Texture::CreateTextureFromVector(Pixel *pixelData, Vector2u &size, bool repeat)
+    Texture *Texture::createTextureFromVector(Pixel *pixelData, Vector2u &size, bool repeat)
     {
         Vector2f scale = Vector2f(1.0, 1.0);
-        return CreateTextureFromVector(pixelData, size, scale, repeat);
+        return createTextureFromVector(pixelData, size, scale, repeat);
     }
 
-    Texture *Texture::CreateTextureFromVector(Pixel *pixelData, Vector2u &size, Vector2f &scale, bool repeat)
+    Texture *Texture::createTextureFromVector(Pixel *pixelData, Vector2u &size, Vector2f &scale, bool repeat)
     {
         return new Texture(pixelData, size, scale, repeat);
     }

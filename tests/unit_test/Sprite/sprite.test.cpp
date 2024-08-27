@@ -11,7 +11,7 @@ TEST_CASE("Sprite test", "[Sprite]")
 {
     SECTION("createSprite")
     {
-        tdl::Texture *texture = tdl::Texture::CreateTexture("../example/assets/bird.png");
+        tdl::Texture *texture = tdl::Texture::createTexture("../example/assets/bird.png");
         tdl::Sprite *sprite = tdl::Sprite::createSprite(texture, tdl::Vector2u(0, 0));
         CHECK(sprite != nullptr);
         //delete sprite;
@@ -19,7 +19,7 @@ TEST_CASE("Sprite test", "[Sprite]")
 
     SECTION("createSprite")
     {
-        tdl::Texture *texture = tdl::Texture::CreateTexture("../example/assets/bird.png");
+        tdl::Texture *texture = tdl::Texture::createTexture("../example/assets/bird.png");
         tdl::RectU rect(0, 0, 10, 10);
         tdl::Vector2u pos(0, 0);
         tdl::Sprite *sprite = tdl::Sprite::createSprite(texture, pos, rect);
@@ -29,7 +29,7 @@ TEST_CASE("Sprite test", "[Sprite]")
 
     SECTION("createSprite")
     {
-        tdl::Texture *texture = tdl::Texture::CreateTexture("../example/assets/bird.png");
+        tdl::Texture *texture = tdl::Texture::createTexture("../example/assets/bird.png");
         tdl::Sprite *sprite = tdl::Sprite::createSprite(texture, tdl::Vector2u(0, 0));
         tdl::Sprite *sprite2 = tdl::Sprite::createSprite(texture, tdl::Vector2u(0, 0));
         CHECK(sprite != sprite2);
@@ -39,9 +39,9 @@ TEST_CASE("Sprite test", "[Sprite]")
 
     SECTION("setTexture")
     {
-        tdl::Texture *texture = tdl::Texture::CreateTexture("../example/assets/bird.png");
+        tdl::Texture *texture = tdl::Texture::createTexture("../example/assets/bird.png");
         tdl::Sprite *sprite = tdl::Sprite::createSprite(texture, tdl::Vector2u(0, 0));
-        tdl::Texture *texture2 = tdl::Texture::CreateTexture("../example/assets/bird.png");
+        tdl::Texture *texture2 = tdl::Texture::createTexture("../example/assets/bird.png");
         sprite->setTexture(texture2);
         CHECK(sprite->getTexture() == texture2);
         //delete sprite;
@@ -49,7 +49,7 @@ TEST_CASE("Sprite test", "[Sprite]")
 
     SECTION("setTint")
     {
-        tdl::Texture *texture = tdl::Texture::CreateTexture("../example/assets/bird.png");
+        tdl::Texture *texture = tdl::Texture::createTexture("../example/assets/bird.png");
         tdl::Sprite *sprite = tdl::Sprite::createSprite(texture, tdl::Vector2u(0, 0));
         sprite->setTint(tdl::Pixel(255, 255, 255, 255));
         CHECK(sprite->getTint() == tdl::Pixel(255, 255, 255, 255));
@@ -58,7 +58,7 @@ TEST_CASE("Sprite test", "[Sprite]")
 
     SECTION("draw")
     {
-        tdl::Texture *texture = tdl::Texture::CreateTexture("../example/assets/bird.png");
+        tdl::Texture *texture = tdl::Texture::createTexture("../example/assets/bird.png");
         tdl::Sprite *sprite = tdl::Sprite::createSprite(texture, tdl::Vector2u(0, 0));
         tdl::Window *window = tdl::Window::CreateWindow("Test");
         CHECK(window);
