@@ -1,6 +1,6 @@
 
-
-#pragma once
+#ifndef TDL_PIXEL_HPP
+  #define TDL_PIXEL_HPP
 
 #include <cstdint>
 #include <iostream>
@@ -100,3 +100,4 @@ namespace tdl {
     };
 
 }
+#endif //TDL_PIXEL_HPP
