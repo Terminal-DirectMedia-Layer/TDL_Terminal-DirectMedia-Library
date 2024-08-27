@@ -5,7 +5,7 @@
 ** input.cpp
 */
 
-#include "TDL/Input/inputKeyboard.hpp"
+#include "TDL/Input/InputKeyboard.hpp"
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include "TDL/Window/AWindow.hpp"

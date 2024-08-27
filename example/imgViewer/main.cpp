@@ -11,7 +11,7 @@
 #include <TDL/Utils/SubShell.hpp>
 #include <TDL/Window/terminalDisplay.hpp>
 #include "TDL/Event/Event.hpp"
-#include "TDL/Input/inputKeyboard.hpp"
+#include "TDL/Input/InputKeyboard.hpp"
 #include "TDL/Sprite/Sprite.hpp"
 #include "TDL/Pixel/Pixel.hpp"
 #include "TDL/Vector.hpp"

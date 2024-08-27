@@ -1,12 +1,6 @@
-/*
-** EPITECH PROJECT, 2024
-** libncurse
-** File description:
-** EInputKeyboard.cpp
-*/
 
-#pragma once
-
+#ifndef __EINPUT_HPP__
+    #define __EINPUT_HPP__
 namespace tdl
 {
     /**
@@ -72,3 +66,5 @@ namespace tdl
     };
 
 } // namespace tdl
+
+#endif // __EINPUT_HPP__

@@ -1,14 +1,17 @@
 
-#ifndef LIBNCURSE_INPUT_KEYBOARD_HPP
-    #define LIBNCURSE_INPUT_KEYBOARD_HPP
+#ifndef TDL_INPUTKEYBOARD_HPP
+    #define TDL_INPUTKEYBOARD_HPP
 
-#include <thread>
-#include <mutex>
 #include <unistd.h>
 #include <fcntl.h>
 #include <termios.h>
-#include "EInput.hpp"
+
+#include <thread>
+#include <mutex>
 #include <map>
+
+#include "EInput.hpp"
+
 
 namespace tdl {
 
@@ -55,4 +58,4 @@ namespace tdl {
     };
 } // namespace tdl
 
-#endif //LIBNCURSE_INPUT_KEYBOARD_HPP
+#endif //TDL_INPUTKEYBOARD_HPP

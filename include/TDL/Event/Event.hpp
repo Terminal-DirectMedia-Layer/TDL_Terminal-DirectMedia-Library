@@ -7,7 +7,7 @@
 #include <queue>
 
 #include "TDL/Input/EInput.hpp"
-#include "TDL/Input/inputKeyboard.hpp"
+#include "TDL/Input/InputKeyboard.hpp"
 #include "TDL/Event/Mouse/IMouse.hpp"
 
 namespace tdl {
