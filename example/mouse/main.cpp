@@ -1,13 +1,13 @@
 
 
-#include <TDL/Utils/SubShell.hpp>
+#include <TDL/Shell/SubShell.hpp>
 
 #include <iostream>
 
 
 int main()
 {
-    tdl::subShell shell;
+    tdl::SubShell shell;
     shell.openSubShell();
     shell.writeOnSubShell("ls\n");
     while (1) {

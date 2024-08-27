@@ -17,7 +17,7 @@
 #include "TDL/Input/InputKeyboard.hpp"
 #include "TDL/Event/Mouse/IMouse.hpp"
 #include "TDL/Window/AWindow.hpp"
-#include "TDL/Utils/SubShell.hpp"
+#include "TDL/Shell/SubShell.hpp"
 
 
 #ifndef TDL_TERMINALDISPLAY_HPP
@@ -25,7 +25,7 @@
 
 namespace tdl
 {
-    class TerminalDisplay: public AWindow, subShell
+    class TerminalDisplay: public AWindow, SubShell
     {
     public:
 
@@ -98,7 +98,7 @@ namespace tdl
  */
             InputKeyboard _input; /*!< the input keyboard */
             IMouse *_mouse; /*!< the input mouse */
-            subShell _subShell; /*!< the subshell for command line execution*/
+            SubShell _subShell; /*!< the subshell for command line execution*/
             tdl::Vector2u _cursorPos; /*!< the cursor position */
             std::string _cmd = ""; /*!< the command line */
             std::map<std::string, CommandFunction> _commandMap;

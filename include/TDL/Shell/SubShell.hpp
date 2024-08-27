@@ -1,12 +1,14 @@
 
-#pragma once
+#ifndef TDL_SUBSHELL_HPP
+    #define TDL_SUBSHELL_HPP
 
 #include <string>
+
 #include <termios.h>
 
 namespace tdl {
 
-    enum shellType {
+    enum ShellType {
         BASH,
         SH,
         ZSH,
@@ -17,10 +19,10 @@ namespace tdl {
         end /*this is the end of the enum*/
     };
 
-    class subShell {
+    class SubShell {
         public:
-            subShell();
-            ~subShell() = default;
+            SubShell();
+            ~SubShell() = default;
 
             void openSubShell(std::string const &path = "/bin/bash");
             void closeSubShell();
@@ -32,7 +34,7 @@ namespace tdl {
 			bool _ispwd = false;
         private:
             std::string _path; /*!< the path to the shell */
-            shellType _type; /*!< the type of the shell */
+            ShellType _type; /*!< the type of the shell */
             termios raw_mode; /*!< the raw mode of the terminal */
             int _slave_pty{}; /*!< the slave pty */
             int _master_pty{}; /*!< the master pty */
@@ -41,3 +43,4 @@ namespace tdl {
 
     };
 }
+#endif //TDL_SUBSHELL_HPP

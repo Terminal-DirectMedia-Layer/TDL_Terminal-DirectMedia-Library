@@ -1,4 +1,4 @@
-#include "TDL/Utils/SubShell.hpp"
+#include "TDL/Shell/SubShell.hpp"
 #include <iostream>
 #include <unistd.h>
 #include <sys/ioctl.h>
@@ -27,13 +27,13 @@
 
 namespace tdl {
 
-    subShell::subShell() {
+    SubShell::SubShell() {
         _path = "/bin/zsh";
-        _type = shellType::BASH;
+        _type = ShellType::BASH;
         _activePath = getcwd(NULL, 0);
     }
 
-    void subShell::openSubShell(std::string const &path) {
+    void SubShell::openSubShell(std::string const &path) {
     
         int rc;
         _path = path;
@@ -109,16 +109,16 @@ namespace tdl {
         }
     }
 
-    void subShell::closeSubShell() {
+    void SubShell::closeSubShell() {
         close(_master_pty);
         close(_slave_pty);
     }
 
-    void subShell::writeOnSubShell(const std::string &command) {
+    void SubShell::writeOnSubShell(const std::string &command) {
         write(_master_pty, command.c_str(), command.size());
     }
 
-    std::string subShell::readOnSubShell() {
+    std::string SubShell::readOnSubShell() {
         char buffer[4096];
         int rc;
 
@@ -152,7 +152,7 @@ namespace tdl {
         return "";
     }
 
-    void subShell::updateActivePath(std::string cmd) {
+    void SubShell::updateActivePath(std::string cmd) {
         if (cmd.find("cd") != std::string::npos) {
             if (cmd == "cd" || cmd == "cd ") {
                 _activePath = getenv("HOME");

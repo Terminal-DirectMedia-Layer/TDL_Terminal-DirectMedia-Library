@@ -8,7 +8,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <sys/ioctl.h>
-#include <TDL/Utils/SubShell.hpp>
+#include <TDL/Shell/SubShell.hpp>
 #include <TDL/Window/terminalDisplay.hpp>
 #include "TDL/Event/Event.hpp"
 #include "TDL/Input/InputKeyboard.hpp"
