@@ -8,39 +8,46 @@
 #include <iostream>
 #include <unistd.h>
 #include <sys/ioctl.h>
-#include <tdl/Utils/SubShell.hpp>
-#include <tdl/Window/terminalDisplay.hpp>
-#include "tdl/Event/Event.hpp"
-#include "tdl/Input/inputKeyboard.hpp"
-#include "tdl/Sprite/Sprite.hpp"
-#include "tdl/Pixel/Pixel.hpp"
-#include "tdl/Vector.hpp"
-#include "tdl/Text/Font/Font.hpp"
-#include "tdl/Text/Text.hpp"
+#include <TDL/Utils/SubShell.hpp>
+#include <TDL/Window/terminalDisplay.hpp>
+#include "TDL/Event/Event.hpp"
+#include "TDL/Input/inputKeyboard.hpp"
+#include "TDL/Sprite/Sprite.hpp"
+#include "TDL/Pixel/Pixel.hpp"
+#include "TDL/Vector.hpp"
+#include "TDL/Text/Font/Font.hpp"
+#include "TDL/Text/Text.hpp"
 #include <tuple>
 #include <queue>
-#include "tdl/Matrix/Transform.hpp"
+#include "TDL/Matrix/Transform.hpp"
 #include <chrono>
 #include <fstream>
 #include <regex>
 
+
+std::list<tdl::Sprite *> sprites;
+
 void testcustomCommand(tdl::TerminalDisplay *win, int argc, char **argv)
 {
-    for (int i = 0; i < argc; i++) {
-        std::cerr << argv[i] << std::endl;
+    if (argc == 2) {
+        if (std::string(argv[1]).find("png") != std::string::npos) {
+			std::cerr << "active path: " << win->getActivePath() << std::endl;
+            tdl::Texture *tex = tdl::Texture::CreateTexture(win->getActivePath() + "/" +argv[1]);
+            tdl::Sprite *sprite = tdl::Sprite::createSprite(tex, tdl::Vector2u(0, 0));
+            sprites.push_back(sprite);
+        }
+        return;
     }
 }
-
 
 int main()
 {
     auto start = std::chrono::high_resolution_clock::now();
-    tdl::TerminalDisplay *win = tdl::TerminalDisplay::CreateTerminalDisplay("test", "/dev/tty", 20);
-    tdl::Texture *tex = tdl::Texture::createTexture("../example/assets/Spinner.png");
+    tdl::TerminalDisplay *win = tdl::TerminalDisplay::CreateTerminalDisplay("test", "/dev/tty", 30, "/bin/bash");
+    tdl::Texture *tex = tdl::Texture::CreateTexture("../example/assets/Spinner.png");
     tdl::Vector2u pos(10, 10);
     tdl::Sprite *sprite = tdl::Sprite::createSprite(tex, tdl::Vector2u(0, 0));
-    win->registerCommand("test", testcustomCommand);
-    std::vector<std::tuple<tdl::Sprite *, bool>> sprites;
+    win->registerCommand("see", testcustomCommand);
     tdl::RectU rect(0, 0, 32, 32);
     tdl::Vector2u mouse(0, 0);
     std::regex pngRegex("^(.*\\/)?(.+\\.png )$");
@@ -50,9 +57,9 @@ int main()
     while (true)
     {
         win->clearPixel();
-        for (auto &s : sprites)
-            std::get<0>(s)->draw(win);
         sprite->draw(win);
+        for (auto &s : sprites)
+            s->draw(win);
         win->update();
         win->draw();
         for(tdl::Event event; win->pollEvent(event, &pngRegex);) {
@@ -79,11 +86,6 @@ int main()
             }
             if (event.type == tdl::Event::EventType::MouseButtonPressed && event.mouseButton.button == tdl::MouseButton::LEFT) {
 
-                for (auto &s : sprites) {
-                    if (std::get<0>(s)->isIntersect(tdl::Vector2i(event.mouseButton.x, event.mouseButton.y))) {
-                        std::get<1>(s) = true;
-                    } 
-                }
                 if (sprite->isIntersect(tdl::Vector2i(event.mouseButton.x, event.mouseButton.y))) {
                     isIntersect = true;
                 } else {
@@ -91,18 +93,10 @@ int main()
                 }
             }
             if (event.type == tdl::Event::EventType::MouseButtonReleased) {
-                for (auto &s : sprites) {
-                    std::get<1>(s) = false;
-                }
                 isIntersect = false;
             }
             if (event.type == tdl::Event::EventType::MouseMoved) {
                 mouse = tdl::Vector2u(event.mouseMove.x, event.mouseMove.y);
-            }
-        }
-        for (auto &s : sprites) {
-            if (std::get<1>(s)) {
-                std::get<0>(s)->setPosition(mouse);
             }
         }
         if (isIntersect) {

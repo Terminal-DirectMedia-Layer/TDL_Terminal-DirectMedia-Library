@@ -4,7 +4,7 @@
 #include <ostream>
 #include <sstream>
 
-#include "tdl/Pixel/Pixel.hpp"
+#include "TDL/Pixel/Pixel.hpp"
 
 TEST_CASE("Pixel test", "[Pixel]")
 {

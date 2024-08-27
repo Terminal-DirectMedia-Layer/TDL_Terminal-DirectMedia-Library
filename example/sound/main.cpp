@@ -8,18 +8,18 @@
 #include <iostream>
 #include <unistd.h>
 #include <sys/ioctl.h>
-#include <tdl/Window/window.hpp>
-#include "tdl/Event/Event.hpp"
-#include "tdl/Input/inputKeyboard.hpp"
-#include "tdl/Sprite/Sprite.hpp"
-#include "tdl/Pixel/Pixel.hpp"
-#include "tdl/Vector.hpp"
-#include "tdl/Text/Font/Font.hpp"
-#include "tdl/Text/Text.hpp"
+#include <TDL/Window/window.hpp>
+#include "TDL/Event/Event.hpp"
+#include "TDL/Input/inputKeyboard.hpp"
+#include "TDL/Sprite/Sprite.hpp"
+#include "TDL/Pixel/Pixel.hpp"
+#include "TDL/Vector.hpp"
+#include "TDL/Text/Font/Font.hpp"
+#include "TDL/Text/Text.hpp"
 #include <tuple>
 #include <queue>
-#include "tdl/Matrix/Transform.hpp"
-#include "tdl/sound/Sound.hpp"
+#include "TDL/Matrix/Transform.hpp"
+#include "TDL/sound/Sound.hpp"
 #include <chrono>
 #include <fstream>
 
@@ -29,7 +29,7 @@ int main()
     bool run = true;
     auto start = std::chrono::high_resolution_clock::now();
     tdl::Window *win = tdl::Window::CreateWindow("bird");
-    tdl::Texture *tex = tdl::Texture::createTexture("../example/assets/rick.png");
+    tdl::Texture *tex = tdl::Texture::CreateTexture("../example/assets/rick.png");
     tdl::Vector2u pos(10, 10);
     tdl::Sprite *sprite = tdl::Sprite::createSprite(tex, tdl::Vector2u(0, 0));
     double rotation = 45.0;

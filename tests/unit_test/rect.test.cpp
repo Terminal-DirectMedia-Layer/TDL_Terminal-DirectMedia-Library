@@ -4,7 +4,7 @@
 #include <ostream>
 #include <sstream>
 
-#include "tdl/Rect.hpp"
+#include "TDL/Rect.hpp"
 
 TEST_CASE("Rect test", "[Rect]")
 {

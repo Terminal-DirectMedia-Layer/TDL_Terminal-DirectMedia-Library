@@ -5,7 +5,7 @@
 #include <ostream>
 #include <sstream>
 
-#include "tdl/Matrix/PixelMatrix.hpp"
+#include "TDL/Matrix/PixelMatrix.hpp"
 
 TEST_CASE("PixelMatrix: Constructor with size", "[Matrix][PixelMatrix]") {
   tdl::PixelMatrix matrix(tdl::Vector2u(10, 10));

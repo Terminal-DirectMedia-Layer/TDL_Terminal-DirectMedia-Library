@@ -1,10 +1,10 @@
 
 
-#include <tdl/Window/window.hpp>
-#include "tdl/Text/Font/Font.hpp"
-#include "tdl/Text/Text.hpp"
-#include "tdl/Matrix/Transformation.hpp"
-#include "tdl/sound/Sound.hpp"
+#include <TDL/Window/window.hpp>
+#include "TDL/Text/Font/Font.hpp"
+#include "TDL/Text/Text.hpp"
+#include "TDL/Matrix/Transformation.hpp"
+#include "TDL/sound/Sound.hpp"
 
 
 

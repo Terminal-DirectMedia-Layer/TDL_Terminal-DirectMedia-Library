@@ -4,8 +4,8 @@
 #include <ostream>
 #include <sstream>
 
-#include "tdl/Window/windowBase.hpp"
-#include "tdl/Event/Event.hpp"
+#include "TDL/Window/windowBase.hpp"
+#include "TDL/Event/Event.hpp"
 
 TEST_CASE("windowBase test", "[windowBase]")
 {

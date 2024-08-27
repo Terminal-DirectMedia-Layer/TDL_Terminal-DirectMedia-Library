@@ -15,7 +15,6 @@ find_package(Freetype REQUIRED)
 find_package(PNG REQUIRED)
 find_package(OpenAL REQUIRED)
 find_package(PkgConfig REQUIRED)
-find_package(X11 REQUIRED)
 pkg_check_modules(SNDFILE REQUIRED sndfile)
 
 file(GLOB_RECURSE TDL_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp")
@@ -48,10 +47,10 @@ if (DOXYGEN_FOUND)
     configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
 
     add_custom_target(doc
-        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Generating API documentation with Doxygen"
-        VERBATIM)
+            COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            COMMENT "Generating API documentation with Doxygen"
+            VERBATIM)
 else (DOXYGEN_FOUND)
     message("Doxygen need to be installed to generate the doxygen documentation")
 endif (DOXYGEN_FOUND)
@@ -59,13 +58,39 @@ endif (DOXYGEN_FOUND)
 if (BUILD_SHARED_LIBS)
     add_library(TDL SHARED ${TDL_SOURCE})
 
-    target_link_libraries(TDL ${PNG_LIBRARIES} ${FREETYPE_LIBRARIES} ${OPENAL_LIBRARY} ${SNDFILE_LIBRARIES} ${X11_LIBRARIES})
+    target_link_libraries(TDL ${PNG_LIBRARIES} ${FREETYPE_LIBRARIES} ${OPENAL_LIBRARY} ${SNDFILE_LIBRARIES})
 
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/tdl
-    DESTINATION include
-    FILES_MATCHING PATTERN "*.hpp")
+            DESTINATION include
+            FILES_MATCHING PATTERN "*.hpp")
 
     install(TARGETS TDL
-        LIBRARY DESTINATION lib
-        PUBLIC_HEADER DESTINATION include)
+            EXPORT TDLTargets
+            LIBRARY DESTINATION lib
+            PUBLIC_HEADER DESTINATION include)
 endif()
+
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+        "${CMAKE_CURRENT_BINARY_DIR}/TDLConfigVersion.cmake"
+        VERSION ${PROJECT_VERSION}
+        COMPATIBILITY AnyNewerVersion
+)
+
+configure_package_config_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/TDLConfig.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/TDLConfig.cmake"
+        INSTALL_DESTINATION lib/cmake/TDL
+)
+
+install(FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/TDLConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/TDLConfigVersion.cmake"
+        DESTINATION lib/cmake/TDL
+)
+
+install(EXPORT TDLTargets
+        FILE TDLTargets.cmake
+        NAMESPACE TDL::
+        DESTINATION lib/cmake/TDL
+)

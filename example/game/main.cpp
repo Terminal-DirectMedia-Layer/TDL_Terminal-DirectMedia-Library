@@ -8,17 +8,17 @@
 #include <iostream>
 #include <unistd.h>
 #include <sys/ioctl.h>
-#include <tdl/Window/window.hpp>
-#include "tdl/Event/Event.hpp"
-#include "tdl/Input/inputKeyboard.hpp"
-#include "tdl/Sprite/Sprite.hpp"
-#include "tdl/Pixel/Pixel.hpp"
-#include "tdl/Vector.hpp"
-#include "tdl/Text/Font/Font.hpp"
-#include "tdl/Text/Text.hpp"
+#include <TDL/Window/window.hpp>
+#include "TDL/Event/Event.hpp"
+#include "TDL/Input/inputKeyboard.hpp"
+#include "TDL/Sprite/Sprite.hpp"
+#include "TDL/Pixel/Pixel.hpp"
+#include "TDL/Vector.hpp"
+#include "TDL/Text/Font/Font.hpp"
+#include "TDL/Text/Text.hpp"
 #include <tuple>
 #include <queue>
-#include "tdl/Matrix/Transform.hpp"
+#include "TDL/Matrix/Transform.hpp"
 #include <chrono>
 #include <fstream>
 #include <iostream>
@@ -27,13 +27,13 @@
 int main()
 {
     tdl::Window *win = tdl::Window::CreateWindow("pong");
-    tdl::Texture *board = tdl::Texture::createTexture("../example/assets/arts/Board.png");
+    tdl::Texture *board = tdl::Texture::CreateTexture("../example/assets/arts/Board.png");
     tdl::Sprite *sprite = tdl::Sprite::createSprite(board, tdl::Vector2u(0, 0));
 
-    tdl::Texture *player = tdl::Texture::createTexture("../example/assets/arts/Player.png");
+    tdl::Texture *player = tdl::Texture::CreateTexture("../example/assets/arts/Player.png");
     tdl::Sprite *playerSprite = tdl::Sprite::createSprite(player, tdl::Vector2u(0, 0));
 
-    tdl::Texture *ball = tdl::Texture::createTexture("../example/assets/arts/Ball.png");
+    tdl::Texture *ball = tdl::Texture::CreateTexture("../example/assets/arts/Ball.png");
     tdl::Sprite *ballSprite = tdl::Sprite::createSprite(ball, tdl::Vector2u(win->getWidth(), win->getHeight()));
     tdl::Vector2u ballPos = tdl::Vector2u(win->getWidth() / 2, win->getHeight() / 2);
     ballSprite->setPosition(ballPos);
