@@ -1,21 +1,18 @@
 
-#pragma once
-
-    #include "TDL/Pixel/Pixel.hpp"
-    #include "TDL/Vector.hpp"
-
-    #include "TDL/Rect.hpp"
-    #include <vector>
-    #include <iostream>
-    #include <optional>
-    #include <queue>
-    #include <map>
-
+#ifndef TDLPixelMatrix_HPP
+    #define TDLPixelMatrix_HPP
+#include <vector>
+#include <iostream>
+#include <optional>
+#include <queue>
+#include <map>
 #include <algorithm>
 
+#include "TDL/Pixel/Pixel.hpp"
+#include "TDL/Vector.hpp"
+#include "TDL/Rect.hpp"
 
 namespace tdl {
-
 
 /**
  * @struct CharColor
@@ -209,3 +206,5 @@ namespace tdl {
             std::queue<Vector2u> _toUpdate; /*!< the queue of the pixel to update */
     };
 }
+
+#endif //TDLPixelMatrix_HPP

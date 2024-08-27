@@ -2,8 +2,8 @@
 #ifndef TDL_TRANSFORMATION_HPP
     #define TDL_TRANSFORMATION_HPP
 
-    #include "TDL/Vector.hpp"
-    #include "TDL/Matrix/Transform.hpp"
+#include "TDL/Vector.hpp"
+#include "TDL/Matrix/Transform.hpp"
 
     namespace tdl
     {
