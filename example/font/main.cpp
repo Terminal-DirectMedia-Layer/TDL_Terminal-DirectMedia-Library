@@ -4,7 +4,7 @@
 #include "TDL/Text/Font/Font.hpp"
 #include "TDL/Text/Text.hpp"
 #include "TDL/Matrix/Transformation.hpp"
-#include "TDL/sound/Sound.hpp"
+#include "TDL/Sound/Sound.hpp"
 
 
 

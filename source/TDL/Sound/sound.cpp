@@ -1,10 +1,10 @@
 
-#include "TDL/sound/Sound.hpp"
+#include "TDL/Sound/Sound.hpp"
 #include <alsa/asoundlib.h>
 #include <sndfile.h>
 #include <vector>
 #include <vorbis/vorbisfile.h>
-#include <TDL/sound/openAlWrapper.hpp>
+#include <TDL/Sound/OpenAlWrapper.hpp>
 #include <iostream>
 #include <string>
 #include <thread>

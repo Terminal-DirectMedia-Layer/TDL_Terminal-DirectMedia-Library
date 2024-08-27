@@ -19,7 +19,7 @@
 #include <tuple>
 #include <queue>
 #include "TDL/Matrix/Transform.hpp"
-#include "TDL/sound/Sound.hpp"
+#include "TDL/Sound/Sound.hpp"
 #include <chrono>
 #include <fstream>
 

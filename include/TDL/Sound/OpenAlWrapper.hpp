@@ -1,9 +1,14 @@
-#include <AL/al.h>
-#include <AL/alc.h>
+
+#ifndef TDL_OPENAL_WRAPPER_HPP
+    #define TDL_OPENAL_WRAPPER_HPP
+
 #include <iostream>
 #include <string>
 #include <cstdint>
 #include <type_traits>
+
+#include <AL/al.h>
+#include <AL/alc.h>
 
 /**
  * @brief check if there is an error in the openAL context
@@ -13,7 +18,7 @@
  * @return true if there is not an error
  * @return false if there is an error
  */
-bool check_al_errors(const std::string& filename, const std::uint_fast32_t line)
+bool checkAlErrors(const std::string& filename, const std::uint_fast32_t line)
 {
     ALenum error = alGetError();
     if(error != AL_NO_ERROR)
@@ -65,7 +70,7 @@ auto alCallImpl(const char* filename,
     ->typename std::enable_if_t<!std::is_same_v<void, decltype(function(params...))>, decltype(function(params...))>
 {
     auto ret = function(std::forward<Params>(params)...);
-    check_al_errors(filename, line);
+    checkAlErrors(filename, line);
     return ret;
 }
 
@@ -88,7 +93,7 @@ auto alCallImpl(const char* filename,
     ->typename std::enable_if_t<std::is_same_v<void, decltype(function(params...))>, bool>
 {
     function(std::forward<Params>(params)...);
-    return check_al_errors(filename, line);
+    return checkAlErrors(filename, line);
 }
 
 #define alCall(function, ...) alCallImpl(__FILE__, __LINE__, function, __VA_ARGS__)
@@ -104,7 +109,7 @@ auto alCallImpl(const char* filename,
  * @return true if there is no error
  * @return false if there is an error
  */
-bool check_alc_errors(const std::string& filename, const std::uint_fast32_t line, ALCdevice* device)
+bool checkAlcErrors(const std::string& filename, const std::uint_fast32_t line, ALCdevice* device)
 {
     ALCenum error = alcGetError(device);
     if(error != ALC_NO_ERROR)
@@ -157,7 +162,7 @@ auto alcCallImpl(const char* filename,
 ->typename std::enable_if_t<std::is_same_v<void,decltype(function(params...))>,bool>
 {
     function(std::forward<Params>(params)...);
-    return check_alc_errors(filename,line,device);
+    return checkAlcErrors(filename,line,device);
 }
 
 /**
@@ -183,5 +188,7 @@ auto alcCallImpl(const char* filename,
 ->typename std::enable_if_t<!std::is_same_v<void,decltype(function(params...))>,bool>
 {
     returnValue = function(std::forward<Params>(params)...);
-    return check_alc_errors(filename,line,device);
+    return checkAlcErrors(filename,line,device);
 }
+
+#endif //TDL_OPENAL_WRAPPER_HPP
