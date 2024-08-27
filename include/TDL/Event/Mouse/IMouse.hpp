@@ -1,15 +1,16 @@
 
 #include <string>
-#pragma once
 
+#ifndef IMOUSE_HPP
+    #define IMOUSE_HPP
 namespace tdl {
 
     class AWindow;
     class EventMouseData;
 
-    class Imouse {
+    class IMouse {
         public:
-            virtual ~Imouse() = default;
+            virtual ~IMouse() = default;
 
             virtual bool mouseMove(AWindow  *window, EventMouseData data) = 0;
             virtual bool mousePessed(AWindow  *window, EventMouseData data) = 0;
@@ -17,3 +18,4 @@ namespace tdl {
             virtual bool mouseScroll(AWindow  *window, EventMouseData data) = 0;
     };
 }
+#endif // IMOUSE_HPP

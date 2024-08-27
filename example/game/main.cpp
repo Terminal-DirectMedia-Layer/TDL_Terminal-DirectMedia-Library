@@ -61,7 +61,7 @@ int main()
         win->update();
         win->draw();
         for(tdl::Event event; win->pollEvent(event);) {
-            if (event.type == tdl::Event::EventType::KeyPressed) {
+            if (event.type == tdl::Event::EventType::KEYPRESSED) {
                 if (event.key.code == tdl::KeyCodes::KEY_ESC)
                     return 0;
                 if (event.key.code == tdl::KeyCodes::KEY_UP) {

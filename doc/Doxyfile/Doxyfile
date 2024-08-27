@@ -1685,7 +1685,7 @@ QHP_NAMESPACE          = org.doxygen.Project
 QHP_VIRTUAL_FOLDER     = doc
 
 # If the QHP_CUST_FILTER_NAME tag is set, it specifies the name of a custom
-# filter to add. For more information please see Qt Help Project / Custom
+# filter to add. For more information please see Qt Help Project / CUSTOM
 # Filters (see:
 # https://doc.qt.io/archives/qt-4.8/qthelpproject.html#custom-filters).
 # This tag requires that the tag GENERATE_QHP is set to YES.
@@ -1693,7 +1693,7 @@ QHP_VIRTUAL_FOLDER     = doc
 QHP_CUST_FILTER_NAME   =
 
 # The QHP_CUST_FILTER_ATTRS tag specifies the list of the attributes of the
-# custom filter to add. For more information please see Qt Help Project / Custom
+# custom filter to add. For more information please see Qt Help Project / CUSTOM
 # Filters (see:
 # https://doc.qt.io/archives/qt-4.8/qthelpproject.html#custom-filters).
 # This tag requires that the tag GENERATE_QHP is set to YES.

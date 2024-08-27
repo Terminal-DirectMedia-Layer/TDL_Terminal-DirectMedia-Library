@@ -43,7 +43,7 @@ int tdl::InputKeyboard::readInputKeyboard(AWindow *win, char *buffer, int _nread
         }
         _key_states[_shared_data] = true;
         Event event;
-        event.type = Event::EventType::KeyPressed;
+        event.type = Event::EventType::KEYPRESSED;
         event.key.code = _shared_data;
         win->pushEvent(event);
     } else {
@@ -52,7 +52,7 @@ int tdl::InputKeyboard::readInputKeyboard(AWindow *win, char *buffer, int _nread
                 _prev_key_states[key.first] = true;
                 key.second = false;
                 Event event;
-                event.type = Event::EventType::KeyReleased;
+                event.type = Event::EventType::KEYRELEASED;
                 event.key.code = charToKeyCodes(key.first);
                 win->pushEvent(event);
             } else {

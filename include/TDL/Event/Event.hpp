@@ -1,5 +1,6 @@
 
-#pragma once
+#ifndef EVENT_HPP
+#define EVENT_HPP
 
 #include <iostream>
 #include <regex>
@@ -7,7 +8,7 @@
 
 #include "TDL/Input/EInput.hpp"
 #include "TDL/Input/inputKeyboard.hpp"
-#include "TDL/Event/Mouse/Imouse.hpp"
+#include "TDL/Event/Mouse/IMouse.hpp"
 
 namespace tdl {
     /**
@@ -19,28 +20,28 @@ namespace tdl {
     {
     public:
 
-    /**
-     * @brief Construct a new Event object
-     * 
-     */
-    Event() = default;
+        /**
+         * @brief Construct a new Event object
+         *
+         */
+        Event() = default;
 
-    Event(const Event &event) = default;
+        Event(const Event &event) = default;
 
-    Event &operator=(const Event &event) = default;
+        Event &operator=(const Event &event) = default;
 
 
-    bool pollEvent(Event &event, std::regex *custom = nullptr);
+        bool pollEvent(Event &event, std::regex *custom = nullptr);
 
-    /**
-     * @brief push an event in the queue
-     * 
-     * @param event the event to push
-     */
-            void pushEvent(const Event &event);
+        /**
+         * @brief push an event in the queue
+         *
+         * @param event the event to push
+         */
+        void pushEvent(const Event &event);
 
-        
-            std::queue<Event> _events; /*!< the event queue */
+
+        std::queue<Event> _events; /*!< the event queue */
 
         /**
          * @brief The key event structure
@@ -87,34 +88,36 @@ namespace tdl {
         /**
          * @brief The enum EventType
          * it permited to register the type of the event
-         * 
+         *
          * @note if you want to add a new event, just keep count at the last position
          */
         enum EventType {
-            KeyPressed, /* KeyPressed event */
-            KeyReleased, /* KeyReleased event */
-            MouseMoved, /* MouseMoved event */
-            MouseButtonPressed, /* MousePressed event */
-            MouseButtonReleased, /* MouseReleased event */
-            MouseScrolled, /* MouseScrolled event */
-            WindowResized, /* WindowResized event */
-            Custom, /* Custom event */
+            KEYPRESSED, /* KEYPRESSED event */
+            KEYRELEASED, /* KEYRELEASED event */
+            MOUSEMOVED, /* MOUSEMOVED event */
+            MOUSEBUTTONPRESSED, /* MousePressed event */
+            MOUSEBUTTONRELEASED, /* MouseReleased event */
+            MOUSESCROLLED, /* MOUSESCROLLED event */
+            WINDOWRESIZED, /* WINDOWRESIZED event */
+            CUSTOM, /* CUSTOM event */
             count // This is not an event, it's just a marker keep it last
         };
 
         EventType type{}; /* !< the type of the event */
 
-        /**
-         * @brief The union that contains all the event data
-         * 
-         */
+            /**
+             * @brief The union that contains all the event data
+             *
+             */
         union {
             keyEvent key; /* !< the key event */
             sizeEvent size; /* !< the size event */
             mouseMoveEvent mouseMove; /* !< the mouse Move event */
-            mouseButtonEvent mouseButton; /* !< the mouse button event */ 
+            mouseButtonEvent mouseButton; /* !< the mouse button event */
             mouseScrollEvent mouseScroll; /* !< the mouse scroll event */
             customEvent custom; /* !< the custom event */
         };
     };
 }
+
+#endif //EVENT_HPP

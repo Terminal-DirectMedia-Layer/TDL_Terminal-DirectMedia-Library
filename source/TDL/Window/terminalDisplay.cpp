@@ -132,7 +132,7 @@ namespace tdl {
                         if (custom != nullptr && std::regex_match(buffer + index, *custom))
                         {
                             Event ev;
-                            ev.type = Event::EventType::Custom;
+                            ev.type = Event::EventType::CUSTOM;
                             int length = strlen(buffer + index);
 
                             ev.custom.data = new char[length + 1];

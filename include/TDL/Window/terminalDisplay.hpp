@@ -15,7 +15,7 @@
 #include "TDL/Drawable/Drawable.hpp"
 #include "TDL/Event/Event.hpp"
 #include "TDL/Input/inputKeyboard.hpp"
-#include "TDL/Event/Mouse/Imouse.hpp"
+#include "TDL/Event/Mouse/IMouse.hpp"
 #include "TDL/Window/AWindow.hpp"
 #include "TDL/Utils/SubShell.hpp"
 
@@ -97,7 +97,7 @@ namespace tdl
  * 
  */
             InputKeyboard _input; /*!< the input keyboard */
-            Imouse *_mouse; /*!< the input mouse */
+            IMouse *_mouse; /*!< the input mouse */
             subShell _subShell; /*!< the subshell for command line execution*/
             tdl::Vector2u _cursorPos; /*!< the cursor position */
             std::string _cmd = ""; /*!< the command line */

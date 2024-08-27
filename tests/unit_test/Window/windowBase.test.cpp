@@ -28,11 +28,11 @@ TEST_CASE("windowBase test", "[windowBase]")
     {
         tdl::WindowBase *windowBase = new tdl::WindowBase("test");
         tdl::Event event;
-        event.type = tdl::Event::EventType::KeyPressed;
+        event.type = tdl::Event::EventType::KEYPRESSED;
         event.key.code = tdl::KeyCodes::KEY_A;
         windowBase->pushEvent(event);
         CHECK(windowBase->pollEvent(event) == true);
-        CHECK(event.type == tdl::Event::EventType::KeyPressed);
+        CHECK(event.type == tdl::Event::EventType::KEYPRESSED);
         CHECK(event.key.code == tdl::KeyCodes::KEY_A);
         delete windowBase;
     }

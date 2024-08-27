@@ -48,7 +48,7 @@ int main()
         win->update();
         win->draw();
         for(tdl::Event event; win->pollEvent(event, &pngRegex);) {
-            if (event.type == tdl::Event::EventType::KeyPressed) {
+            if (event.type == tdl::Event::EventType::KEYPRESSED) {
                 if (event.key.code == tdl::KeyCodes::KEY_ESC)
                     return 0;
                 if (event.key.code == tdl::KeyCodes::KEY_RIGHT) {
@@ -69,7 +69,7 @@ int main()
                 }
                     s.append(1, event.key.code);
             }
-            if (event.type == tdl::Event::EventType::MouseButtonPressed && event.mouseButton.button == tdl::MouseButton::LEFT) {
+            if (event.type == tdl::Event::EventType::MOUSEBUTTONPRESSED && event.mouseButton.button == tdl::MouseButton::LEFT) {
 
                 for (auto &s : sprites) {
                     if (std::get<0>(s)->isIntersect(tdl::Vector2i(event.mouseButton.x, event.mouseButton.y))) {
@@ -80,16 +80,16 @@ int main()
                     isIntersect = true;
                 }
             }
-            if (event.type == tdl::Event::EventType::MouseButtonReleased) {
+            if (event.type == tdl::Event::EventType::MOUSEBUTTONRELEASED) {
                 for (auto &s : sprites) {
                     std::get<1>(s) = false;
                 }
                 isIntersect = false;
             }
-            if (event.type == tdl::Event::EventType::MouseMoved) {
+            if (event.type == tdl::Event::EventType::MOUSEMOVED) {
                 mouse = tdl::Vector2u(event.mouseMove.x, event.mouseMove.y);
             }
-            if (event.type == tdl::Event::EventType::Custom) {
+            if (event.type == tdl::Event::EventType::CUSTOM) {
                 std::string path(event.custom.data);
                 tdl::Texture *tex = tdl::Texture::createTexture(path.erase(path.size() - 1));
                 tdl::Sprite *sprite = tdl::Sprite::createSprite(tex, tdl::Vector2u(0, 0));

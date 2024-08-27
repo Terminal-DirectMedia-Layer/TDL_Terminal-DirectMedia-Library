@@ -46,7 +46,7 @@ int main()
         win->draw();
         for(tdl::Event event; win->pollEvent(event);) {
             std::cerr << "Event type: " << event.type << std::endl;
-            if (event.type == tdl::Event::EventType::KeyPressed) {
+            if (event.type == tdl::Event::EventType::KEYPRESSED) {
                 std::cerr << "Key code: " << event.key.code << std::endl;
                 if (event.key.code == tdl::KeyCodes::KEY_A)
                     run = false;

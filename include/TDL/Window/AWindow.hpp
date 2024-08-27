@@ -16,7 +16,7 @@
 #include "TDL/Drawable/Drawable.hpp"
 #include "TDL/Event/Event.hpp"
 #include "TDL/Input/inputKeyboard.hpp"
-#include "TDL/Event/Mouse/Imouse.hpp"
+#include "TDL/Event/Mouse/IMouse.hpp"
 #include "TDL/Window/ansiiCode.hpp"
 
 namespace tdl {

@@ -1,12 +1,12 @@
 
 #ifndef MOUSE_HPP
     #define MOUSE_HPP
-#include "TDL/Event/Mouse/Imouse.hpp"
+#include "TDL/Event/Mouse/IMouse.hpp"
 #include <iostream>
 #include <string>
 
 namespace tdl {
-    class Mouse : public Imouse {
+    class Mouse : public IMouse {
 
         public:
             Mouse();

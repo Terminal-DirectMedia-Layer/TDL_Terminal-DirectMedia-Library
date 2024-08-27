@@ -31,7 +31,7 @@ void tdl::SignalHandler::handleSignalInstance()
     for (auto &win : _windows) {
         win->updateTermSize();
         Event event;
-        event.type = Event::EventType::WindowResized;
+        event.type = Event::EventType::WINDOWRESIZED;
         event.size.width = win->getWidth();
         event.size.height = win->getHeight();
         win->pushEvent(event);

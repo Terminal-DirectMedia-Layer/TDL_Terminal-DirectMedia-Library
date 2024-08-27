@@ -25,13 +25,13 @@ int main()
         win->update();
         win->draw();
         for(tdl::Event event; win->pollEvent(event);) {
-            if (event.type == tdl::Event::EventType::MouseButtonPressed) {
+            if (event.type == tdl::Event::EventType::MOUSEBUTTONPRESSED) {
                 isClicked = true;
             }
-            if (event.type == tdl::Event::EventType::MouseButtonReleased) {
+            if (event.type == tdl::Event::EventType::MOUSEBUTTONRELEASED) {
                 isClicked = false;
             }
-            if (event.type == tdl::Event::EventType::MouseMoved) {
+            if (event.type == tdl::Event::EventType::MOUSEMOVED) {
                 if (isClicked) {
                     tdl::Vector2u pos = tdl::Vector2u(event.mouseMove.x, event.mouseMove.y);
                     tdl::Pixel p = tdl::Pixel(255, 255, 255, 255);

@@ -90,7 +90,7 @@ TEST_CASE("Window test", "[window]")
         tdl::Window *window = tdl::Window::CreateWindow("test");
         write(window->getFd(), "A", 1);
         for(tdl::Event event; window->pollEvent(event);) {
-            if (event.type == tdl::Event::EventType::KeyPressed) {
+            if (event.type == tdl::Event::EventType::KEYPRESSED) {
                 CHECK(event.key.code == tdl::KeyCodes::KEY_A);
             }
         }
@@ -101,12 +101,12 @@ TEST_CASE("Window test", "[window]")
         tdl::Window *window = tdl::Window::CreateWindow("test");
         write(window->getFd(), "A", 1);
         for(tdl::Event event; window->pollEvent(event);) {
-            if (event.type == tdl::Event::EventType::KeyPressed) {
+            if (event.type == tdl::Event::EventType::KEYPRESSED) {
                 CHECK(event.key.code == tdl::KeyCodes::KEY_A);
             }
         }
         for(tdl::Event event; window->pollEvent(event);) {
-            if (event.type == tdl::Event::EventType::KeyReleased) {
+            if (event.type == tdl::Event::EventType::KEYRELEASED) {
                 CHECK(event.key.code == tdl::KeyCodes::KEY_A);
             }
         }
@@ -117,7 +117,7 @@ TEST_CASE("Window test", "[window]")
         tdl::Window *window = tdl::Window::CreateWindow("test");
         write(window->getFd(), "^[[A", 4);
         for(tdl::Event event; window->pollEvent(event);) {
-            if (event.type == tdl::Event::EventType::KeyPressed) {
+            if (event.type == tdl::Event::EventType::KEYPRESSED) {
                 CHECK(event.key.code == tdl::KeyCodes::KEY_UP);
             }
         }
