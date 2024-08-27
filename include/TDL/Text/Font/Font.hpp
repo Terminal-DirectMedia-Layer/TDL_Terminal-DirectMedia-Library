@@ -1,12 +1,12 @@
 
-
 #ifndef TDL_FONT_HPP
     #define TDL_FONT_HPP
+
+#include <string>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#include <string>
 namespace tdl {
     /**
      * @class Font
