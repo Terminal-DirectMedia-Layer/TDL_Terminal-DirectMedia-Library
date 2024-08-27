@@ -2,14 +2,10 @@
     #define AWINDOW_HPP
 
 #include <string>
-#include <list>
-#include <iostream>
-#include <array>
 #include <vector>
+
 #include <termios.h>
-#include <iostream>
-#include <queue>
-#include <regex>
+
 #include "TDL/Pixel/Pixel.hpp"
 #include "TDL/Vector.hpp"
 #include "TDL/Matrix/PixelMatrix.hpp"
@@ -17,7 +13,7 @@
 #include "TDL/Event/Event.hpp"
 #include "TDL/Input/InputKeyboard.hpp"
 #include "TDL/Event/Mouse/IMouse.hpp"
-#include "TDL/Window/ansiiCode.hpp"
+#include "TDL/Window/AnsiiCode.hpp"
 
 namespace tdl {
     /**
@@ -25,7 +21,7 @@ namespace tdl {
      * @brief AWindow anstract class
      */
 
-    class AWindow : public Drawable, public Event, public ansiiCode {
+    class AWindow : public Drawable, public Event, public AnsiiCode {
         
         public:
 
@@ -113,7 +109,7 @@ namespace tdl {
          */
             void disableEcho();
 
-        void draw(Drawable *drawable) { return; } /* actualy does nothing an ti does any vocation to be call*/
+        void draw(Drawable *drawable) override { return; } /* actualy does nothing an it does any vocation to be call*/
 
 
             int _fd{}; /*!< the fd of the window */

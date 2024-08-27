@@ -8,7 +8,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <sys/ioctl.h>
-#include <TDL/Window/window.hpp>
+#include <TDL/Window/Window.hpp>
 #include "TDL/Event/Event.hpp"
 #include "TDL/Input/InputKeyboard.hpp"
 #include "TDL/Sprite/Sprite.hpp"
@@ -26,7 +26,7 @@
 
 int main()
 {
-    tdl::Window *win = tdl::Window::CreateWindow("pong");
+    tdl::Window *win = tdl::Window::createWindow("pong");
     tdl::Texture *board = tdl::Texture::createTexture("../example/assets/arts/Board.png");
     tdl::Sprite *sprite = tdl::Sprite::createSprite(board, tdl::Vector2u(0, 0));
 

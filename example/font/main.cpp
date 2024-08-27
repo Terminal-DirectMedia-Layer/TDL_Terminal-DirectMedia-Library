@@ -1,6 +1,6 @@
 
 
-#include <TDL/Window/window.hpp>
+#include <TDL/Window/Window.hpp>
 #include "TDL/Text/Font/Font.hpp"
 #include "TDL/Text/Text.hpp"
 #include "TDL/Matrix/Transformation.hpp"
@@ -10,7 +10,7 @@
 
 int main()
 {
-    tdl::Window *win = tdl::Window::CreateWindow("font");
+    tdl::Window *win = tdl::Window::createWindow("font");
     tdl::Font font;
     font.loadFromFile("../example/assets/font.ttf");
     std::string s;

@@ -1,15 +1,18 @@
-#ifndef LIBNCURSE_WINDOW_HPP
-    #define LIBNCURSE_WINDOW_HPP
+
+#ifndef TDL_WINDOW_HPP
+    #define TDL_WINDOW_HPP
 
 #include <string>
 #include <list>
 #include <iostream>
 #include <array>
 #include <vector>
-#include <termios.h>
 #include <iostream>
 #include <queue>
 #include <regex>
+
+#include <termios.h>
+
 #include "TDL/Pixel/Pixel.hpp"
 #include "TDL/Vector.hpp"
 #include "TDL/Matrix/PixelMatrix.hpp"
@@ -40,7 +43,7 @@ namespace tdl {
          * @param ttyPath the path to the tty by default it's /dev/tty
          * @return Window* a pointer to the window
          */
-            static Window* CreateWindow(std::string const& title, std::string const& ttyPath = "/dev/tty");
+            static Window* createWindow(std::string const& title, std::string const& ttyPath = "/dev/tty");
 
         /**
          * @brief Destroy the Window object
@@ -60,7 +63,7 @@ namespace tdl {
          * @return true if event is left in the queue
          * @return false if no event is left in the queue
          */
-            bool pollEvent(Event &event, std::regex *custom = nullptr);
+            bool pollEvent(Event &event, std::regex *custom = nullptr) override;
 
         /**
          * @brief update the terminal size
@@ -95,4 +98,4 @@ namespace tdl {
     };
 }
 
-#endif //LIBNCURSE_WINDOW_HPP
+#endif //TDL_WINDOW_HPP

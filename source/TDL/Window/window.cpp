@@ -57,7 +57,7 @@ tdl::Window::~Window()
  * @note this is only herre where the window constructor is called because it throw an error if the tty can't be open
  * also we initialize the window here that means that the black background should be printed on the terminal
  */
-tdl::Window* tdl::Window::CreateWindow(std::string const& title, std::string const& ttyPath) {
+tdl::Window* tdl::Window::createWindow(std::string const& title, std::string const& ttyPath) {
     try {
         auto * win = new Window(title, ttyPath);
         win->alternateScreenBuffer();

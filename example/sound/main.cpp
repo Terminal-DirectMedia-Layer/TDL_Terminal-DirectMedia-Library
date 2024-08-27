@@ -8,7 +8,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <sys/ioctl.h>
-#include <TDL/Window/window.hpp>
+#include <TDL/Window/Window.hpp>
 #include "TDL/Event/Event.hpp"
 #include "TDL/Input/InputKeyboard.hpp"
 #include "TDL/Sprite/Sprite.hpp"
@@ -28,7 +28,7 @@ int main()
     bool play = true;
     bool run = true;
     auto start = std::chrono::high_resolution_clock::now();
-    tdl::Window *win = tdl::Window::CreateWindow("bird");
+    tdl::Window *win = tdl::Window::createWindow("bird");
     tdl::Texture *tex = tdl::Texture::createTexture("../example/assets/rick.png");
     tdl::Vector2u pos(10, 10);
     tdl::Sprite *sprite = tdl::Sprite::createSprite(tex, tdl::Vector2u(0, 0));

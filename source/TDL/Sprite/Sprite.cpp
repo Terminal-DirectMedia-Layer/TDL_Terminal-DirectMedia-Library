@@ -3,7 +3,7 @@
 #include "TDL/Vector.hpp"
 #include "TDL/Rect.hpp"
 #include "TDL/Pixel/Pixel.hpp"
-#include "TDL/Window/window.hpp"
+#include "TDL/Window/Window.hpp"
 #include "TDL/Drawable/Drawable.hpp"
 #include "TDL/Matrix/Transform.hpp"
 #include <optional>

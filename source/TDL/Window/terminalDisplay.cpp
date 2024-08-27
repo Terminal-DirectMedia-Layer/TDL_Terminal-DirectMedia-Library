@@ -1,4 +1,4 @@
-#include "TDL/Window/terminalDisplay.hpp"
+#include "TDL/Window/TerminalDisplay.hpp"
 #include <iostream>
 #include <unistd.h>
 #include <sys/ioctl.h>
@@ -51,7 +51,7 @@ namespace tdl {
         close(_fd);
     }
 
-    TerminalDisplay* TerminalDisplay::CreateTerminalDisplay(std::string const& title, std::string const& ttyPath, u_int32_t height, std::string const& shellPath) {
+    TerminalDisplay* TerminalDisplay::createTerminalDisplay(std::string const& title, std::string const& ttyPath, u_int32_t height, std::string const& shellPath) {
         try {
             auto * win = new TerminalDisplay(title, ttyPath, height, shellPath);
             win->alternateScreenBuffer();

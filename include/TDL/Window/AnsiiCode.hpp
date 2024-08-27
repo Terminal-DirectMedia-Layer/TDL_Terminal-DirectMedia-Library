@@ -1,17 +1,22 @@
+
+#ifndef TDL_ANSII_CODE_HPP
+    #define TDL_ANSII_CODE_HPP
+
 #include <string>
+
 #include "TDL/Pixel/Pixel.hpp"
 #include "TDL/Vector.hpp"
 
 namespace tdl {
     /**
-     * @class ansiiCode
-     * @brief ansiiCode class
+     * @class AnsiiCode
+     * @brief AnsiiCode class
      */
-    class ansiiCode {
+    class AnsiiCode {
         
         protected:
 
-               /**
+        /**
          * @brief ansii front color code
          * 
          * @param pixel the pixel to get the color
@@ -94,3 +99,5 @@ namespace tdl {
 
     };
 }
+
+#endif //TDL_ANSII_CODE_HPP

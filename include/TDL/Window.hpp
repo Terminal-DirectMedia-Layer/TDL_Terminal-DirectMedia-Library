@@ -2,5 +2,5 @@
 
 #pragma once
 
-#include "TDL/Window/window.hpp"
+#include "TDL/Window/Window.hpp"
 #include "TDL/Pixel/Pixel.hpp"

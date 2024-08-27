@@ -1,14 +1,14 @@
+
+#ifndef TDL_TERMINALDISPLAY_HPP
+    #define TDL_TERMINALDISPLAY_HPP
+
 #include <string>
-#include <list>
-#include <iostream>
-#include <array>
-#include <vector>
-#include <termios.h>
-#include <iostream>
-#include <queue>
 #include <regex>
 #include <functional>
 #include <map>
+
+#include <termios.h>
+
 #include "TDL/Pixel/Pixel.hpp"
 #include "TDL/Vector.hpp"
 #include "TDL/Matrix/PixelMatrix.hpp"
@@ -18,10 +18,6 @@
 #include "TDL/Event/Mouse/IMouse.hpp"
 #include "TDL/Window/AWindow.hpp"
 #include "TDL/Shell/SubShell.hpp"
-
-
-#ifndef TDL_TERMINALDISPLAY_HPP
-    #define TDL_TERMINALDISPLAY_HPP
 
 namespace tdl
 {
@@ -37,7 +33,7 @@ namespace tdl
          * @param height the height of the window region that you can draw on
          * @return TerminalDisplay* a pointer to the window
          */
-        static TerminalDisplay *CreateTerminalDisplay(std::string const &title, std::string const &ttyPath = "/dev/tty", u_int32_t height = 0, std::string const& shellPath = "/bin/bash");
+        static TerminalDisplay *createTerminalDisplay(std::string const &title, std::string const &ttyPath = "/dev/tty", u_int32_t height = 0, std::string const& shellPath = "/bin/bash");
 
         /**
          * @brief Destroy the TerminalDisplay object

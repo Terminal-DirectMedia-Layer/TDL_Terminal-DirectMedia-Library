@@ -5,7 +5,7 @@
 #include <sstream>
 
 #include "TDL/Sprite/Sprite.hpp"
-#include "TDL/Window/window.hpp"
+#include "TDL/Window/Window.hpp"
 
 TEST_CASE("Sprite test", "[Sprite]")
 {
@@ -60,7 +60,7 @@ TEST_CASE("Sprite test", "[Sprite]")
     {
         tdl::Texture *texture = tdl::Texture::createTexture("../example/assets/bird.png");
         tdl::Sprite *sprite = tdl::Sprite::createSprite(texture, tdl::Vector2u(0, 0));
-        tdl::Window *window = tdl::Window::CreateWindow("Test");
+        tdl::Window *window = tdl::Window::createWindow("Test");
         CHECK(window);
         CHECK(sprite);
         CHECK(texture);

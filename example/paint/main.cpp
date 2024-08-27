@@ -1,6 +1,6 @@
 
 
-#include <TDL/Window/window.hpp>
+#include <TDL/Window/Window.hpp>
 #include <TDL/Sprite/Sprite.hpp>
 
 #include "TDL/Matrix/Transformation.hpp"
@@ -10,7 +10,7 @@
 
 int main()
 {
-    tdl::Window *win = tdl::Window::CreateWindow("font");
+    tdl::Window *win = tdl::Window::createWindow("font");
     bool isClicked = false;
     float x = 0;
     std::vector<tdl::Pixel> p;

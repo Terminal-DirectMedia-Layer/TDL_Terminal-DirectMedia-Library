@@ -5,7 +5,7 @@
 
 #include <optional>
 
-#include "TDL/Window/window.hpp"
+#include "TDL/Window/Window.hpp"
 #include "TDL/Drawable/Texture/Texture.hpp"
 #include "TDL/Vector.hpp"
 #include "TDL/Rect.hpp"

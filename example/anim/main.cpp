@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <TDL/Shell/SubShell.hpp>
-#include <TDL/Window/terminalDisplay.hpp>
+#include <TDL/Window/TerminalDisplay.hpp>
 #include "TDL/Event/Event.hpp"
 #include "TDL/Input/InputKeyboard.hpp"
 #include "TDL/Sprite/Sprite.hpp"
@@ -27,7 +27,7 @@
 int main()
 {
     auto start = std::chrono::high_resolution_clock::now();
-    tdl::TerminalDisplay *win = tdl::TerminalDisplay::CreateTerminalDisplay("test", "/dev/tty", 20);
+    tdl::TerminalDisplay *win = tdl::TerminalDisplay::createTerminalDisplay("test", "/dev/tty", 20);
     tdl::Texture *tex = tdl::Texture::createTexture("../example/assets/Spinner.png");
     tdl::Vector2u pos(10, 10);
     tdl::Sprite *sprite = tdl::Sprite::createSprite(tex, tdl::Vector2u(0, 0));
