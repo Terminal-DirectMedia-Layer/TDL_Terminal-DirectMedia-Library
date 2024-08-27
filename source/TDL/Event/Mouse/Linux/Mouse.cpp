@@ -1,15 +1,15 @@
 
-#include "TDL/Event/Mouse/linux/Mouse.hpp"
-#include "TDL/Event/Mouse/EventMouseData.hpp"
 #include <iostream>
+
 #include <fcntl.h>
 #include <string.h>
 #include <gpm.h>
+
+#include "TDL/Event/Mouse/Linux/Mouse.hpp"
+#include "TDL/Event/Mouse/EventMouseData.hpp"
 #include "TDL/Window/AWindow.hpp"
 
-tdl::Mouse::Mouse()
-{
-}
+tdl::Mouse::Mouse() {}
 
 bool tdl::Mouse::mouseMove(AWindow *window, EventMouseData data)
 {

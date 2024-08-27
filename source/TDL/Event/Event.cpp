@@ -1,8 +1,9 @@
 
-#include "TDL/Event/Event.hpp"
 #include <regex>
 #include <iostream>
 #include <queue>
+
+#include "TDL/Event/Event.hpp"
 
 namespace tdl
 {

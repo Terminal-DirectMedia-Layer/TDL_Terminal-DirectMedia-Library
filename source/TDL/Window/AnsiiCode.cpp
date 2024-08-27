@@ -1,5 +1,5 @@
-#include "TDL/Window/AnsiiCode.hpp"
 
+#include "TDL/Window/AnsiiCode.hpp"
 
 void tdl::AnsiiCode::setRGBFrontGround(Pixel pixel)
 {

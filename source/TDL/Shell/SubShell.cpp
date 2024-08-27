@@ -1,5 +1,14 @@
-#include "TDL/Shell/SubShell.hpp"
+
 #include <iostream>
+#include <cstring>
+
+#include <termios.h>
+#include <sys/select.h>
+#include <sys/ioctl.h>
+#include <string.h>
+#include <stdlib.h>
+#include <regex>
+#include <unistd.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
@@ -8,22 +17,16 @@
 #include <fcntl.h>
 #include <termios.h>
 #include <pty.h>
-#include <cstring>
 #include <stdlib.h>
 #include <fcntl.h>
 #include <errno.h>
 #include <unistd.h>
 #include <stdio.h>
-#define __USE_BSD
-#include <termios.h>
-#include <sys/select.h>
-#include <sys/ioctl.h>
-#include <string.h>
-#include <stdlib.h>
-#include <regex>
-#include <unistd.h>
 #include <limits.h>
 
+#include "TDL/Shell/SubShell.hpp"
+
+#define __USE_BSD
 
 namespace tdl {
 
@@ -63,23 +66,17 @@ namespace tdl {
 
         int pid = fork();
         if (pid == 0) {
-            struct termios slave_orig_term_settings; // Saved terminal settings
-            struct termios new_term_settings; // Current terminal settings
+            struct termios slave_orig_term_settings;
+            struct termios new_term_settings;
 
             // CHILD
 
-            // Close the master side of the PTY
             close(_master_pty);
-
-            // Save the defaults parameters of the slave side of the PTY
             rc = tcgetattr(_slave_pty, &slave_orig_term_settings);
-
-            // Set RAW mode on slave side of PTY
             new_term_settings = slave_orig_term_settings;
             cfmakeraw (&new_term_settings);
             tcsetattr (_slave_pty, TCSANOW, &new_term_settings);
 
-            // The slave side of the PTY becomes the standard input and outputs of the child process
             close(0); // Close standard input (current terminal)
             close(1); // Close standard output (current terminal)
             close(2); // Close standard error (current terminal)
@@ -87,25 +84,17 @@ namespace tdl {
             dup(_slave_pty); // PTY becomes standard input (0)
             dup(_slave_pty); // PTY becomes standard output (1)
             dup(_slave_pty); // PTY becomes standard error (2)
-
-            // Now the original file descriptor is useless
             close(_slave_pty);
-
-            // Make the current process a new session leader
             setsid();
 
             // As the child is a session leader, set the controlling terminal to be the slave side of the PTY
             // (Mandatory for programs like the shell to make them manage correctly their outputs)
             ioctl(0, TIOCSCTTY, 1);
-
-            // Execution of the program
             {
             rc = execvp(_path.c_str(), NULL);
             }
         } else {
             close(_slave_pty);
-
-
         }
     }
 
@@ -122,14 +111,12 @@ namespace tdl {
         char buffer[4096];
         int rc;
 
-        //FD_ZERO(&fd_in);
         FD_SET(_master_pty, &fd_in);
 
         struct timeval timeout;
-        timeout.tv_sec = 0;  // Zero seconds
-        timeout.tv_usec = 0; // Zero microseconds
+        timeout.tv_sec = 0;
+        timeout.tv_usec = 0;
 
-        // Wait until data is available to read on _master_pty
         rc = select(_master_pty + 1, &fd_in, NULL, NULL, &timeout);
 
         if (rc == -1) {
@@ -169,5 +156,4 @@ namespace tdl {
             }
         }
     }
-
 }

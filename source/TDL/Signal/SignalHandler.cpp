@@ -1,8 +1,8 @@
 
+#include <algorithm>
 
 #include "TDL/Signal/SignalHandler.hpp"
 #include "TDL/Event/Event.hpp"
-#include <algorithm>
 
 tdl::SignalHandler &tdl::SignalHandler::getInstance()
 {

@@ -10,7 +10,7 @@ The purpose of this project is to provide the majority of the functionality of s
 
 ## From AUR
 
-To install from the AUR you can find the link [here](https://aur.archlinux.org/packages/tdl_terminal_directmedia_library).
+To install from the AUR you can find the link [here](https://aur.archLinux.org/packages/tdl_terminal_directmedia_library).
 
 ## From this repository
 

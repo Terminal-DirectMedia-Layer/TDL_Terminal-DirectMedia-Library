@@ -1,13 +1,8 @@
-/*
-** EPITECH PROJECT, 2024
-** libncurse
-** File description:
-** input.cpp
-*/
 
-#include "TDL/Input/InputKeyboard.hpp"
 #include <unistd.h>
 #include <sys/ioctl.h>
+
+#include "TDL/Input/InputKeyboard.hpp"
 #include "TDL/Window/AWindow.hpp"
 
 tdl::InputKeyboard::InputKeyboard(): _shared_data(KeyCodes::KEY_END)
@@ -62,7 +57,6 @@ int tdl::InputKeyboard::readInputKeyboard(AWindow *win, char *buffer, int _nread
     }
     return consumed;
 }
-
 
 tdl::KeyCodes tdl::InputKeyboard::charToKeyCodes(char key)
 {

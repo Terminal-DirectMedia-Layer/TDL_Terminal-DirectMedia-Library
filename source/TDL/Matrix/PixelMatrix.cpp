@@ -1,11 +1,12 @@
 
-#include "TDL/Matrix/PixelMatrix.hpp"
 #include <algorithm>
 #include <iterator>
 #include <utility>
 #include <vector>
 #include <map>
 #include <unordered_map>
+
+#include "TDL/Matrix/PixelMatrix.hpp"
 
 namespace tdl {
 
@@ -149,7 +150,6 @@ namespace tdl {
         _pixelsTab = std::vector<Pixel>(_size.x() * _size.y(), Pixel(0, 0, 0, 255));
     }
 
-
     PixelMatrix::~PixelMatrix() {}
 
     void PixelMatrix::setPixel(const Vector2u &pos, Pixel &color) {
@@ -230,5 +230,4 @@ namespace tdl {
     void PixelMatrix::clear() {
         std::fill(_pixelsTab.begin(), _pixelsTab.end(), Pixel(0, 0, 0, 255));
     }
-
 }

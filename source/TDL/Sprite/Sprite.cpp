@@ -1,4 +1,8 @@
 
+#include <optional>
+#include <algorithm>
+#include <cmath>
+
 #include "TDL/Sprite/Sprite.hpp"
 #include "TDL/Vector.hpp"
 #include "TDL/Rect.hpp"
@@ -6,9 +10,6 @@
 #include "TDL/Window/Window.hpp"
 #include "TDL/Drawable/Drawable.hpp"
 #include "TDL/Matrix/Transform.hpp"
-#include <optional>
-#include <algorithm>
-#include <cmath>
 
 /**Vector2u pos and a rect
  * 
@@ -113,12 +114,10 @@ tdl::Pixel tdl::Sprite::lerp(tdl::Pixel a, tdl::Pixel b, double t) {
              pos = Vector2u(static_cast<unsigned int>(point.x()), static_cast<unsigned int>(point.y()));
             if (pos <= drawSize) {
                 drawable->getMatrix().setPixel(pos, pixels);
-                //drawable->getMatrix().registerToUpdate(pos);
             }
          }  
      }
  }
-
 
 bool tdl::Sprite::isIntersect(const Vector2i &point)
 {

@@ -1,12 +1,16 @@
 
 #include <string>
-#include <png.h>
 #include <vector>
-#include "TDL/Vector.hpp"
 #include <iostream>
+
+#include <png.h>
+
+#include "TDL/Vector.hpp"
 #include "TDL/Drawable/Texture/TextureLoader.hpp"
 
-tdl::TextureLoader::TextureLoader(std::string path) : _path(path), _info_ptr(nullptr), _row_pointers(nullptr), _png_ptr(nullptr), _size(0, 0), _channels(0), _bit_depth(0)
+tdl::TextureLoader::TextureLoader(std::string path) : _path(path), _info_ptr(nullptr),
+                                                      _row_pointers(nullptr), _png_ptr(nullptr),
+                                                      _size(0, 0), _channels(0), _bit_depth(0)
 {
     if(path != "")
         loadTexture();

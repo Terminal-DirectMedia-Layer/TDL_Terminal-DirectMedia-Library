@@ -1,19 +1,20 @@
-#include "TDL/Window.hpp"
+
 #include <iostream>
-#include <unistd.h>
-#include <sys/ioctl.h>
 #include <utility>
 #include <vector>
+#include <cstring>
+
+#include <unistd.h>
+#include <sys/ioctl.h>
 #include <fcntl.h>
 #include <termios.h>
-#include <cstring>
+
+#include "TDL/Window.hpp"
 #include "TDL/Signal/SignalHandler.hpp"
 #include "TDL/Matrix/PixelMatrix.hpp"
-#include "TDL/Event/Mouse/linux/Mouse.hpp"
+#include "TDL/Event/Mouse/Linux/Mouse.hpp"
 #include "TDL/Event/Mouse/EventMouseData.hpp"
 #include "TDL/Event/Event.hpp"
-
-
 
 tdl::Window::Window(std::string  title, std::string const& ttyPath) {
     struct winsize w{};

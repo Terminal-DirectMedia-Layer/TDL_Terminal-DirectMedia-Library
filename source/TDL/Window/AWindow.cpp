@@ -1,14 +1,17 @@
+
 #include <iostream>
-#include <unistd.h>
-#include <sys/ioctl.h>
+#include <cstring>
 #include <utility>
 #include <vector>
+
+#include <unistd.h>
+#include <sys/ioctl.h>
 #include <fcntl.h>
 #include <termios.h>
-#include <cstring>
+
 #include "TDL/Signal/SignalHandler.hpp"
 #include "TDL/Matrix/PixelMatrix.hpp"
-#include "TDL/Event/Mouse/linux/Mouse.hpp"
+#include "TDL/Event/Mouse/Linux/Mouse.hpp"
 #include "TDL/Event/Mouse/EventMouseData.hpp"
 #include "TDL/Event/Event.hpp"
 #include "TDL/Window/AWindow.hpp"

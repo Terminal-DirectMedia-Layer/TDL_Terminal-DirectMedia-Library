@@ -3,9 +3,8 @@
 #include FT_FREETYPE_H
 
 #include <string>
-#include "TDL/Text/Font/Font.hpp"
 #include <iostream>
-
+#include "TDL/Text/Font/Font.hpp"
 
 namespace tdl {
     Font::Font() : _size(12){
@@ -35,6 +34,4 @@ namespace tdl {
     FT_Face Font::getFace() {
         return _face;
     }
-
-
 }

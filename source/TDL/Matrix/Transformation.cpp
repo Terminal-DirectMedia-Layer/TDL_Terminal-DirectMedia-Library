@@ -1,17 +1,15 @@
-//
-// Created by thomas on 17/05/24.
-//
 
-#include "TDL/Matrix/Transformation.hpp"
-#include "TDL/Matrix/Transform.hpp"
 #include <iomanip>
 #include <iostream>
 
-
+#include "TDL/Matrix/Transformation.hpp"
+#include "TDL/Matrix/Transform.hpp"
 
 namespace tdl
 {
-    Transformable::Transformable() : m_origin(0, 0), m_position(0, 0), m_scale(1, 1), m_rotation(0), m_transform(), TransformNeedUpdate(true)
+    Transformable::Transformable() : m_origin(0, 0), m_position(0, 0),
+                                     m_scale(1, 1), m_rotation(0),
+                                     m_transform(), TransformNeedUpdate(true)
     {
     }
 
