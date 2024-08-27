@@ -1,10 +1,11 @@
 
 
-#ifndef LIBNCURSE_SIGNALHANDLER_HPP
-#define LIBNCURSE_SIGNALHANDLER_HPP
+#ifndef TDL_SIGNALHANDLER_HPP
+    #define TDL_SIGNALHANDLER_HPP
+
+#include <csignal>
 
 #include "TDL/Window/AWindow.hpp"
-#include <csignal>
 
 namespace tdl {
 /**
@@ -21,8 +22,8 @@ namespace tdl {
 */
         static SignalHandler &getInstance();
 
-        SignalHandler(SignalHandler const&) = delete;
-        void operator=(SignalHandler const&) = delete;
+        SignalHandler(SignalHandler const&) = delete; // copy constructor
+        void operator=(SignalHandler const&) = delete; // copy operator
 
 /**
  * @brief register a new window to the signal handler
@@ -66,4 +67,4 @@ namespace tdl {
     };
 }
 
-#endif //LIBNCURSE_SIGNALHANDLER_HPP
+#endif //TDL_SIGNALHANDLER_HPP
