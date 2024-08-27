@@ -4,6 +4,7 @@
 
     #include <AL/al.h>
     #include <AL/alc.h>
+
     #include <string>
     #include <vector>
     #include <thread>

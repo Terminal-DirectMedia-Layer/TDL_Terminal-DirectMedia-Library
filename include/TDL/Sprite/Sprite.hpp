@@ -1,4 +1,10 @@
 
+
+#ifndef SPRITE_HPP
+    #define SPRITE_HPP
+
+#include <optional>
+
 #include "TDL/Window/window.hpp"
 #include "TDL/Drawable/Texture/Texture.hpp"
 #include "TDL/Vector.hpp"
@@ -6,10 +12,6 @@
 #include "TDL/Pixel/Pixel.hpp"
 #include "TDL/Matrix/Transformation.hpp"
 #include "TDL/Drawable/Drawable.hpp"
-#include <optional>
-
-#ifndef SPRITE_HPP
-    #define SPRITE_HPP
 
 namespace tdl {
 
