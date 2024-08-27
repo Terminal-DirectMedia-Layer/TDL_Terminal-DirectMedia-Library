@@ -5,7 +5,7 @@
 #include <string>
 
 #include "TDL/Pixel/Pixel.hpp"
-#include "TDL/Vector.hpp"
+#include "TDL/Math/Vector.hpp"
 
 namespace tdl {
     /**

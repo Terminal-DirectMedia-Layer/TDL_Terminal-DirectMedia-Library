@@ -1,10 +1,10 @@
 
-#ifndef LIBNCURSE_RECT_HPP
-    #define LIBNCURSE_RECT_HPP
-
+#ifndef TDL_RECT_HPP
+    #define TDL_RECT_HPP
 
 #include <tuple>
 #include <cstdint>
+
 namespace tdl {
 
     /**
@@ -267,5 +267,5 @@ namespace tdl {
     using RectU = Rect<u_int32_t>; /* !< the rect with u_int32_t */
     using RectF = Rect<double>; /* !< the rect with double */
 }
-#endif //LIBNCURSE_RECT_HPP
+#endif //TDL_RECT_HPP
     

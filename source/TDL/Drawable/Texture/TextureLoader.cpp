@@ -5,7 +5,7 @@
 
 #include <png.h>
 
-#include "TDL/Vector.hpp"
+#include "TDL/Math/Vector.hpp"
 #include "TDL/Drawable/Texture/TextureLoader.hpp"
 
 tdl::TextureLoader::TextureLoader(std::string path) : _path(path), _info_ptr(nullptr),

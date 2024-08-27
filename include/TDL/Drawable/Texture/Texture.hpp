@@ -7,8 +7,8 @@
 #include <optional>
 
 #include "TextureLoader.hpp"
-#include "TDL/Vector.hpp"
-#include "TDL/Rect.hpp"
+#include "TDL/Math/Vector.hpp"
+#include "TDL/Math/Rect.hpp"
 #include "TDL/Pixel/Pixel.hpp"
 #include "TDL/Matrix/Transformation.hpp"
 #include "TDL/Drawable/Drawable.hpp"

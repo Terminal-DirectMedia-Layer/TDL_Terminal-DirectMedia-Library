@@ -3,8 +3,8 @@
 #include <utility>
 
 #include "TDL/Drawable/Texture/Texture.hpp"
-#include "TDL/Vector.hpp"
-#include "TDL/Rect.hpp"
+#include "TDL/Math/Vector.hpp"
+#include "TDL/Math/Rect.hpp"
 #include "TDL/Pixel/Pixel.hpp"
 #include "TDL/Drawable/Drawable.hpp"
 

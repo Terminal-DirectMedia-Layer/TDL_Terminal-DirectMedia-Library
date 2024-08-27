@@ -9,8 +9,8 @@
 #include <algorithm>
 
 #include "TDL/Pixel/Pixel.hpp"
-#include "TDL/Vector.hpp"
-#include "TDL/Rect.hpp"
+#include "TDL/Math/Vector.hpp"
+#include "TDL/Math/Rect.hpp"
 
 namespace tdl {
 

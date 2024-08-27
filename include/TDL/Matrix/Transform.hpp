@@ -2,10 +2,10 @@
 #ifndef TDL_TRANSFORM_HPP
     #define TDL_TRANSFORM_HPP
 
-#include "TDL/Vector.hpp"
+#include "TDL/Math/Vector.hpp"
 #include "TDL/Matrix/PixelMatrix.hpp"
 #include "TDL/Math/UnitConverter.hpp"
-#include "TDL/Rect.hpp"
+#include "TDL/Math/Rect.hpp"
 
 namespace tdl {
     /**

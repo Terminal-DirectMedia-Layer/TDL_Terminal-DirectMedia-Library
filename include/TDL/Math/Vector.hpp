@@ -1,18 +1,10 @@
 
-/*
- * Vector.hpp
- *
- *  Created on: 26 sept. 2021
-*/
-
-#ifndef LIBNCURSE_VECTOR_HPP
-    #define LIBNCURSE_VECTOR_HPP
+#ifndef TDL_VECTOR_HPP
+    #define TDL_VECTOR_HPP
 
 #include <tuple>
 #include <cstdint>
-
 #include <variant>
-
 #include <cmath>
 
 namespace tdl
@@ -290,4 +282,4 @@ namespace tdl
     using Vector2f = Vector2<double>;
 }
 
-#endif //LIBNCURSE_VECTOR_HPP
+#endif //TDL_VECTOR_HPP

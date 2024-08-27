@@ -4,8 +4,8 @@
 #include <cmath>
 
 #include "TDL/Sprite/Sprite.hpp"
-#include "TDL/Vector.hpp"
-#include "TDL/Rect.hpp"
+#include "TDL/Math/Vector.hpp"
+#include "TDL/Math/Rect.hpp"
 #include "TDL/Pixel/Pixel.hpp"
 #include "TDL/Window/Window.hpp"
 #include "TDL/Drawable/Drawable.hpp"

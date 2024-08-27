@@ -14,7 +14,7 @@
 #include <termios.h>
 
 #include "TDL/Pixel/Pixel.hpp"
-#include "TDL/Vector.hpp"
+#include "TDL/Math/Vector.hpp"
 #include "TDL/Matrix/PixelMatrix.hpp"
 #include "TDL/Drawable/Drawable.hpp"
 #include "TDL/Event/Event.hpp"

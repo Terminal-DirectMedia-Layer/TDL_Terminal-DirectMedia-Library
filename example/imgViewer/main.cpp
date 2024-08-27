@@ -14,7 +14,7 @@
 #include "TDL/Input/InputKeyboard.hpp"
 #include "TDL/Sprite/Sprite.hpp"
 #include "TDL/Pixel/Pixel.hpp"
-#include "TDL/Vector.hpp"
+#include "TDL/Math/Vector.hpp"
 #include "TDL/Text/Font/Font.hpp"
 #include "TDL/Text/Text.hpp"
 #include <tuple>

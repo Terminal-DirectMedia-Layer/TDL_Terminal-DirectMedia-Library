@@ -4,7 +4,7 @@
 
 #include "TDL/Matrix/PixelMatrix.hpp"
 #include "TDL/Pixel/Pixel.hpp"
-#include "TDL/Rect.hpp"
+#include "TDL/Math/Rect.hpp"
 
 namespace tdl {
 
