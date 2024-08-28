@@ -115,7 +115,7 @@ tdl::Pixel tdl::Sprite::lerp(tdl::Pixel a, tdl::Pixel b, double t) {
             if (pos <= drawSize) {
                 drawable->getMatrix().setPixel(pos, pixels);
             }
-         }  
+         }
      }
  }
 

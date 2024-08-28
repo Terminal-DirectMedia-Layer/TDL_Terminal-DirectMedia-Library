@@ -174,6 +174,10 @@ namespace tdl {
  */
             void clear();
 
+        Pixel* getRawPixelData() {
+            return _pixelsTab.data();
+        }
+
 /**
  * @brief operator- to crop the matrix
  * 

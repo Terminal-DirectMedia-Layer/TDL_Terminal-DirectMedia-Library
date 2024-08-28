@@ -101,6 +101,8 @@ namespace tdl {
          */
             void draw() override;
 
+            virtual Vector2u getTerminalSize() = 0;
+
         protected:
 
         /**

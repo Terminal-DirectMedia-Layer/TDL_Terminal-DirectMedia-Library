@@ -16,10 +16,11 @@ find_package(PNG REQUIRED)
 find_package(OpenAL REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(SNDFILE REQUIRED sndfile)
-
+set(GPM_INCLUDE_DIR "/usr/include")
+set(GPM_LIBRARIES "/usr/lib/libgpm.so")
 file(GLOB_RECURSE TDL_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp")
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${PNG_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS} ${X11_INCLUDE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${PNG_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS} ${X11_INCLUDE_DIR} ${SNDFILE_INCLUDE_DIRS} ${GPM_INCLUDE_DIR})
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -58,7 +59,7 @@ endif (DOXYGEN_FOUND)
 if (BUILD_SHARED_LIBS)
     add_library(TDL SHARED ${TDL_SOURCE})
 
-    target_link_libraries(TDL ${PNG_LIBRARIES} ${FREETYPE_LIBRARIES} ${OPENAL_LIBRARY} ${SNDFILE_LIBRARIES})
+    target_link_libraries(TDL ${PNG_LIBRARIES} ${FREETYPE_LIBRARIES} ${OPENAL_LIBRARY} ${SNDFILE_LIBRARIES} ${GPM_LIBRARIES})
 
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/tdl
             DESTINATION include

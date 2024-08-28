@@ -86,6 +86,9 @@ namespace tdl
         */
             std::string getActivePath() const { return _subShell.getActivePath(); }
 
+            Vector2u getTerminalSize() override { return _size; }
+
+
         private:
 
 /**

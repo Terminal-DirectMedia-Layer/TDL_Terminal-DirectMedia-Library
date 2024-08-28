@@ -1,3 +1,4 @@
+![TDL Logo](doc/img/tdl_icone.png)
 # TDL — Terminal Direct Media Library
 
 ## Description
@@ -20,11 +21,10 @@ To install and use TDL in your project, please follow these steps:
 
 2. Create build folders and run the following command inside:
 ```
-cmake .. -DCMAKE_INSTALL_PREFIX=/usr/ -DBUILD_SHARED_LIBS=ON
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local/ -DBUILD_SHARED_LIBS=ON
 cmake --build . --target install (you may need to run this as sudo)
 ```
-The file should be correctly installed, and you can compile your code with the library using:
-``` make your_project -ltdl```
+The file should be correctly installed, and you can build your code using cmake and use the library.
 
 ## State of Development
 
