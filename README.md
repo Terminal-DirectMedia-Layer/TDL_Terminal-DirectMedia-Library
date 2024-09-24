@@ -6,7 +6,9 @@
   <h1>Terminal Direct Media Library</h1>
 </div>
 
-[![License: GPL-3](https://img.shields.io/badge/License-GPL-3-yellow.svg)](LICENSE)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+
+
 
 ---
 
