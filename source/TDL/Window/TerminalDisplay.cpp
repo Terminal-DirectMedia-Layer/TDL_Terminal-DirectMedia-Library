@@ -40,7 +40,7 @@ namespace tdl {
         getOldMatrix() = PixelMatrix(_size);
         SignalHandler::getInstance().registerWindow(this);
         start = std::chrono::system_clock::now();
-        _input = InputKeyboard();
+        _input = new Keyboard();
         _mouse = new tdl::Mouse();
         _cursorPos = Vector2u(0, height);
         _subShell.openSubShell(shellPath);
@@ -109,6 +109,7 @@ namespace tdl {
             int _nread = 0;
             int index = 0;
 
+            _input->pollKeyboard(this);
             std::regex e("\\x1b\\[<\\d+;\\d+;\\d+[mM]");
             ioctl(getFd(), FIONREAD, &_nread);
             char buffer[_nread + 1];
@@ -117,7 +118,6 @@ namespace tdl {
                 
                 buffer[_nread ] = 0;
                 if (_nread == 0) {
-                    index += _input.readInputKeyboard(this, buffer, _nread);
                 } else {
                     while ( index <= _nread) {
 
@@ -135,7 +135,7 @@ namespace tdl {
                         if (custom != nullptr && std::regex_match(buffer + index, *custom))
                         {
                             Event ev;
-                            ev.type = Event::EventType::CUSTOM;
+                            ev.type = TDL_CUSTOM;
                             int length = strlen(buffer + index);
 
                             ev.custom.data = new char[length + 1];

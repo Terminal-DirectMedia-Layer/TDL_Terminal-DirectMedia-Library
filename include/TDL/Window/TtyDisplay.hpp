@@ -26,8 +26,8 @@
 #include "TDL/Matrix/PixelMatrix.hpp"
 #include "TDL/Drawable/Drawable.hpp"
 #include "TDL/Event/Event.hpp"
-#include "TDL/Input/InputKeyboard.hpp"
-#include "TDL/Event/Mouse/Linux/GpmMouse.hpp"
+#include "TDL/Input/Module/Keyboard.hpp"
+#include "TDL/Input/Module/Mouse.hpp"
 #include "TDL/Window/AWindow.hpp"
 
 namespace tdl {
@@ -108,15 +108,16 @@ namespace tdl {
  * \section Attributes
  *
  */
-            InputKeyboard _input; /*!< the input keyboard */
-            GpmMouse *_mouse; /*!< the input mouse */
+            Keyboard *_input; /*!< the input keyboard */
+            TTYMouse *_mouse; /*!< the input mouse */
             struct fb_var_screeninfo _vinfo; /*!< the variable screen information */
             struct fb_fix_screeninfo _finfo; /*!< the fixed screen information */
             long int _screensize; /*!< the size of the screen in bytes */
             char *_fbp; /*!< the framebuffer pointer */
             int _fbfd; /*!< the file descriptor of the framebuffer */
-            char *_blackScreen; /*!< the black screen */
-            char *_displayScreen; /*!< the screen to display */
+			std::unique_ptr<char[]> _blackScreen; /*!< the black screen */
+            std::unique_ptr<char[]> _displayScreen; /*!< the screen to display */
+            std::unique_ptr<char[]> _startScreen; /*!< the screen at the start of the program */
             Vector2u _terminalSize; /*!< the terminal size */
     };
 }

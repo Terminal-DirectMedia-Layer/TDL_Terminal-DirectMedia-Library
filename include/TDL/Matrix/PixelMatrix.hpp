@@ -7,6 +7,9 @@
 #include <queue>
 #include <map>
 #include <algorithm>
+#include <iterator>
+#include <utility>
+#include <vector>
 
 #include "TDL/Pixel/Pixel.hpp"
 #include "TDL/Math/Vector.hpp"
@@ -64,16 +67,25 @@ namespace tdl {
  */
             void setPixel(const Vector2u &pos, Pixel &color);
 
+            void setPixel(u_int32_t x, u_int32_t y, Pixel &color);
+
 /**
  * @brief get the pixel at the position pos
  * @param pos the position of the pixel
  * @return Pixel the pixel at the position pos
  */
-            Pixel &getPixel(Vector2u pos) {
+            inline Pixel &getPixel(Vector2u pos) {
                 if (pos.x() > _size.x() || pos.y() > _size.y()) {
                     return _pixelsTab[0];
                 }
                 return _pixelsTab[pos.y() * _size.x() + pos.x()];
+            }
+
+            inline Pixel &getPixel(u_int32_t x, u_int32_t y) {
+                if (x > _size.x() || y > _size.y()) {
+                    return _pixelsTab[0];
+                }
+                return _pixelsTab[y * _size.x() + x];
             }
 
 /**
@@ -122,7 +134,24 @@ namespace tdl {
 * @param pos the position of the pixel
 * @return Vector<Pixel> an 3*2 vector of pixel at the position pos
 */
-            void getPixelChar(Vector2u pos, Pixel *pixel);
+            inline bool getPixelChar(Vector2u pos, Pixel *pixel) {
+                return getPixelChar(pos.x(), pos.y(), pixel);
+              }
+
+            inline bool getPixelChar(u_int32_t x, u_int32_t y, Pixel *pixel) {
+              	u_int32_t sizeX = _size.x();
+                if (x + 2 < sizeX && y + 3 < _size.y()) {
+                    pixel[0] = _pixelsTab[y * sizeX + x];
+                    pixel[1] = _pixelsTab[y * sizeX + x + 1];
+                    pixel[2] = _pixelsTab[(y + 1) * sizeX + x];
+                    pixel[3] = _pixelsTab[(y + 1) * sizeX + x + 1];
+                    pixel[4] = _pixelsTab[(y + 2) * sizeX + x];
+                    pixel[5] = _pixelsTab[(y + 2) * sizeX + x + 1];
+                    return true;
+                } else {
+                    return false;
+                }
+              }
 
 /**
  * @brief Set the Pixel Char object at the position pos
@@ -132,6 +161,8 @@ namespace tdl {
  */
             void setPixelChar(Vector2u pos, Pixel *pixel);
 
+            void setPixelChar(u_int32_t x, u_int32_t y, Pixel *pixel);
+
 /**
  * @brief compute the char and the color of the char at the position pos
  * 
@@ -139,20 +170,20 @@ namespace tdl {
  * @param pixels the matrix of pixel
  * @return CharColor 
  */
-            CharColor computeCharColor(Vector2u pos, Pixel *pixels);
+            CharColor computeCharColor(Vector2u pos, Pixel *pixels, CharColor &charColor);
 
 /**
  * @brief get the size of the matrix
  * @return Vector2u the size of the matrix
  */
-            [[nodiscard]] Vector2u getSize() const { return _size;}
+            [[nodiscard]] inline Vector2u getSize() const { return _size;}
 
 /**
  * @brief Get the Pixels Tab object
  * 
  * @return std::vector<Pixel>& the matrix of pixel
  */
-            std::vector<Pixel> &getPixelsTab() { return _pixelsTab; }
+           inline std::vector<Pixel> &getPixelsTab() { return _pixelsTab; }
 
 /**
  * @brief append the matrix of pixel to the matrix
@@ -174,7 +205,7 @@ namespace tdl {
  */
             void clear();
 
-        Pixel* getRawPixelData() {
+        inline Pixel* getRawPixelData() {
             return _pixelsTab.data();
         }
 
@@ -207,7 +238,10 @@ namespace tdl {
         private:
             Vector2u _size; /*!< the size of the matrix */
             std::vector<Pixel> _pixelsTab; /*!< the matrix of pixel */
+            std::vector<Pixel> _pixelsTabBlackScreen; /*!< the copy of the matrix of pixel */
             std::queue<Vector2u> _toUpdate; /*!< the queue of the pixel to update */
+			std::map<Pixel, std::vector<std::pair<int, int>>> _pixelGroups; // a stocker
+
     };
 }
 

@@ -18,7 +18,7 @@
 #include "TDL/Matrix/PixelMatrix.hpp"
 #include "TDL/Drawable/Drawable.hpp"
 #include "TDL/Event/Event.hpp"
-#include "TDL/Input/InputKeyboard.hpp"
+#include "TDL/Input/Module/Keyboard.hpp"
 #include "TDL/Event/Mouse/IMouse.hpp"
 #include "TDL/Window/AWindow.hpp"
 
@@ -94,7 +94,7 @@ namespace tdl {
  * \section Attributes
  * 
  */
-            InputKeyboard _input; /*!< the input keyboard */
+            Keyboard* _input; /*!< the input keyboard */
             IMouse *_mouse; /*!< the input mouse */
 
     };

@@ -61,21 +61,22 @@ void tdl::AWindow::update(bool all) {
     Vector2u pos = Vector2u(0, 0);
     Vector2u oldPos = Vector2u(0, 0);
     Pixel pixels[6] = {Pixel(0, 0, 0, 0)};
+    Pixel oldPixels[6] = {Pixel(0, 0, 0, 0)};
+    u_int32_t sizeX = getMatrix().getSize().x();
+    u_int32_t sizeY = getMatrix().getSize().y();
+
     Pixel oldForeColor = Pixel(0, 0, 0, 0);
     Pixel oldBackColor = Pixel(0, 0, 0, 0);
 
     if (_update)
         _update = false;
     setUpdate(true);
-    for (u_int32_t i = 0; i < _size.y(); i += 3) {
-        for (u_int32_t j = 0; j < _size.x(); j += 2) {
-            try {
-                getMatrix().getPixelChar(Vector2u(j, i), pixels);
-            } catch (std::out_of_range &e) {
+    for (u_int32_t i = 0; i < sizeY; i += 3) {
+        for (u_int32_t j = 0; j < sizeX; j += 2) {
+            if (getMatrix().getPixelChar(j, i, pixels) == false)
                 continue;
-            }
-            getOldMatrix().setPixelChar(Vector2u(j, i), pixels);
-            charColor = getMatrix().computeCharColor(Vector2u(j, i), pixels);
+            getOldMatrix().setPixelChar(j, i, pixels);
+            charColor = getMatrix().computeCharColor(Vector2u(j, i), pixels, charColor);
             if (!charColor.shape)
                 continue;
             if (pos.x() != oldPos.x() + 2) {
@@ -96,4 +97,5 @@ void tdl::AWindow::update(bool all) {
         pos.x() = 0;
         pos.y() += 2;
     }
+    _firstLoop = false;
 }

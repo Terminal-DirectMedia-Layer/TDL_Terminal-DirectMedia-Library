@@ -34,7 +34,7 @@ tdl::Window::Window(std::string  title, std::string const& ttyPath) {
     getOldMatrix() = PixelMatrix(_size);
     SignalHandler::getInstance().registerWindow(this);
     start = std::chrono::system_clock::now();
-    _input = InputKeyboard();
+    _input = new Keyboard();
     _mouse = new tdl::Mouse();
 }
 /**
@@ -45,6 +45,7 @@ tdl::Window::~Window()
 {
     SignalHandler::getInstance().unRegisterWindow(this);
     delete _mouse;
+    delete _input;
     close(_fd);
 
 }
@@ -87,7 +88,7 @@ bool tdl::Window::pollEvent(tdl::Event &event, std::regex *custom)
     if (_events.empty()){
         int _nread = 0;
         int index = 0;
-
+        _input->pollKeyboard(this);
         std::regex e("\\x1b\\[<\\d+;\\d+;\\d+[mM]");
 
         ioctl(getFd(), FIONREAD, &_nread);
@@ -97,11 +98,7 @@ bool tdl::Window::pollEvent(tdl::Event &event, std::regex *custom)
             return false;
         }
         buffer[_nread] = 0;
-        if (_nread == 0) {
-            index =+ _input.readInputKeyboard(this, buffer, _nread);
-            return false;
-        }
-        while (buffer[index] != 0 && _nread != index) {
+        /*while (buffer[index] != 0 && _nread != index) {
             auto it = std::find_if(buffer + index, buffer + _nread, [](char c) {
                 return c == 'm' || c == 'M';
             });
@@ -126,8 +123,7 @@ bool tdl::Window::pollEvent(tdl::Event &event, std::regex *custom)
                 index += _nread;
                 continue;
             }
-            index += _input.readInputKeyboard(this, buffer + index, _nread);
-        }
+        }*/
     }
     if (!_events.empty()){
         event = _events.front();

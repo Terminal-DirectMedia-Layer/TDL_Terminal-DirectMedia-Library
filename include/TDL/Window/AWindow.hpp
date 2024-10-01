@@ -111,8 +111,7 @@ namespace tdl {
          */
             void disableEcho();
 
-        void draw(Drawable *drawable) override { return; } /* actualy does nothing an it does any vocation to be call*/
-
+        	void draw(Drawable *drawable) override { return; } /* actualy does nothing an it does any vocation to be call*/
 
             int _fd{}; /*!< the fd of the window */
             std::string _title; /* !< the title of the window */
@@ -122,6 +121,7 @@ namespace tdl {
             bool _update = true; /* !< a boolean to check if the window need to be updated */
             int framecounter = 0; /* !< the frame counter */
             std::chrono::time_point<std::chrono::system_clock> start; /* !< the start time of the frame */
+            bool _firstLoop = true; /* !< a boolean to check if it's the first loop */
 
     };
 }
