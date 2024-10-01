@@ -28,6 +28,29 @@ TDL is a C++ library that aims to provide a simple and easy-to-use interface for
 
 ## 🚀 Install
 
+### Dependencies
+
+To build and use TDL, you need the following dependencies:
+
+- CMake
+- GCC or Clang
+- FreeType2
+- libpng
+- openAl
+- libsndfile
+- pkg-config
+- libalsa
+
+if you want to install dependancies on ubuntu you can use the following command:
+```
+sudo apt-get install cmake g++ libfreetype6-dev libpng-dev libopenal-dev libsndfile1-dev pkg-config libalsa-ocaml-dev
+```
+
+On ArchLinux you can use the following command:
+```
+sudo pacman -S cmake gcc freetype2 libpng openal libsndfile pkg-config alsa-lib
+```
+
 ### From AUR
 
 To install from the AUR you can find the link [here](https://aur.archLinux.org/packages/tdl_terminal_directmedia_library).
