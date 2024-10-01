@@ -5,14 +5,14 @@
 #include "TDL/Input/InputKeyboard.hpp"
 #include "TDL/Window/AWindow.hpp"
 
-tdl::InputKeyboard::InputKeyboard(): _shared_data(KeyCodes::KEY_END)
+tdl::InputKeyboard::InputKeyboard()
 {
 }
 
 tdl::InputKeyboard::~InputKeyboard() = default;
 
 int tdl::InputKeyboard::readInputKeyboard(AWindow *win, char *buffer, int _nread) {
-    int consumed = 0;
+    /*int consumed = 0;
     if (_nread != 0) {
         if (buffer[0] == 27 && buffer[1] == 91) {
             switch (buffer[2]) {
@@ -36,7 +36,6 @@ int tdl::InputKeyboard::readInputKeyboard(AWindow *win, char *buffer, int _nread
             _shared_data = charToKeyCodes(buffer[0]);
             consumed += 1;
         }
-        _key_states[_shared_data] = true;
         Event event;
         event.type = Event::EventType::KEYPRESSED;
         event.key.code = _shared_data;
@@ -55,10 +54,7 @@ int tdl::InputKeyboard::readInputKeyboard(AWindow *win, char *buffer, int _nread
             }
         }
     }
-    return consumed;
-}
+    */
+    return 0;
 
-tdl::KeyCodes tdl::InputKeyboard::charToKeyCodes(char key)
-{
-    return static_cast<KeyCodes>(key);
 }

@@ -5,10 +5,12 @@
 #include <iostream>
 #include <regex>
 #include <queue>
+#include <fstream>
+#include <string>
+#include <cstring>
 
-#include "TDL/Input/EInput.hpp"
-#include "TDL/Input/InputKeyboard.hpp"
 #include "TDL/Event/Mouse/IMouse.hpp"
+#include "TDL/Event/InputEventCode.hpp"
 
 namespace tdl {
     /**
@@ -16,7 +18,8 @@ namespace tdl {
      * @brief The event structure. It's used to handle the event in the window
      * @note if you want to add a new event, you have to add it in the union and in the enum EventType if you want to store data for the event you can add it in the struct
      */
-    class Event : public InputKeyboard
+
+    class Event
     {
     public:
 
@@ -48,7 +51,11 @@ namespace tdl {
          * it permited to register the key that is pressed or released
          */
         struct keyEvent {
-            KeyCodes code;
+            const char * code;
+
+            bool operator==(const char *other) const {
+                return strcmp(code, other) == 0;
+            }
         };
 
         /**
@@ -70,13 +77,13 @@ namespace tdl {
         };
 
         struct mouseButtonEvent {
-            MouseButton button;
+            int button;
             int x;
             int y;
         };
 
         struct mouseScrollEvent {
-            MouseButton direction;
+            int direction;
             int x;
             int y;
         };
@@ -85,25 +92,7 @@ namespace tdl {
             char *data;
         };
 
-        /**
-         * @brief The enum EventType
-         * it permited to register the type of the event
-         *
-         * @note if you want to add a new event, just keep count at the last position
-         */
-        enum EventType {
-            KEYPRESSED, /* KEYPRESSED event */
-            KEYRELEASED, /* KEYRELEASED event */
-            MOUSEMOVED, /* MOUSEMOVED event */
-            MOUSEBUTTONPRESSED, /* MousePressed event */
-            MOUSEBUTTONRELEASED, /* MouseReleased event */
-            MOUSESCROLLED, /* MOUSESCROLLED event */
-            WINDOWRESIZED, /* WINDOWRESIZED event */
-            CUSTOM, /* CUSTOM event */
-            count // This is not an event, it's just a marker keep it last
-        };
-
-        EventType type{}; /* !< the type of the event */
+        	int type  = TDL_RESERVED; /*!< the type of the event */
 
             /**
              * @brief The union that contains all the event data

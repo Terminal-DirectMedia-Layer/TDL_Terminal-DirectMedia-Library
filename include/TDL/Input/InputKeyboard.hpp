@@ -10,7 +10,6 @@
 #include <mutex>
 #include <map>
 
-#include "EInput.hpp"
 
 
 namespace tdl {
@@ -49,10 +48,8 @@ namespace tdl {
  * @param key the char to cast
  * @return tdl::TDLKeyCodes the casted value
  */
-        static KeyCodes charToKeyCodes(char key);
 
     protected:
-        KeyCodes _shared_data;
         std::map<char, bool> _key_states;
         std::map<char, bool> _prev_key_states;  
     };
