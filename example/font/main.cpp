@@ -1,16 +1,13 @@
 
-
-#include <TDL/Window/Window.hpp>
+#include <TDL/Window/TtyDisplay.hpp>
 #include "TDL/Text/Font/Font.hpp"
 #include "TDL/Text/Text.hpp"
 #include "TDL/Matrix/Transformation.hpp"
 #include "TDL/Sound/Sound.hpp"
 
-
-
 int main()
 {
-    tdl::Window *win = tdl::Window::createWindow("font");
+    tdl::TtyDisplay *win = tdl::TtyDisplay::createTtyDisplay("font");
     tdl::Font font;
     font.loadFromFile("../example/assets/font.ttf");
     std::string s;
@@ -24,24 +21,23 @@ int main()
     {
         win->clearPixel();
         text.setText(s);
-        //text.setRotation(x);
         text.draw(win);
         text.setPosition(100, 45);
         win->update();
         win->draw();
+
         for(tdl::Event event; win->pollEvent(event);) {
-            if (event.type == tdl::Event::EventType::KEYPRESSED) {
-                if (event.key.code == tdl::KeyCodes::KEY_ESC) {
+            if (event.type == TDL_KEYPRESSED) {
+                if (event.key == TDL_KEY_ESC) {
                     delete win;
                     return 0;
                 }
-                if (event.key.code == tdl::KeyCodes::KEY_TAB && !s.empty())
+                if (event.key == TDL_KEY_DELETE && !s.empty())
                     s.pop_back();
                 else
-                    s.push_back(event.key.code);
+                    s.push_back(event.key.code[0]);
             }
         }
-        x += 10;
         win->printFrameRate();
     }
 

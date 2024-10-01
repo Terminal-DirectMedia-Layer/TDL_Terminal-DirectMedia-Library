@@ -62,29 +62,34 @@ int main()
             s->draw(win);
         win->update();
         win->draw();
+
         for(tdl::Event event; win->pollEvent(event, &pngRegex);) {
-            if (event.type == tdl::Event::EventType::KEYPRESSED) {
-                if (event.key.code == tdl::KeyCodes::KEY_ESC)
-                    return 0;
-                if (event.key.code == tdl::KeyCodes::KEY_RIGHT) {
-                    pos += tdl::Vector2u(1, 0);
-                }
-                if (event.key.code == tdl::KeyCodes::KEY_LEFT) {
-                    pos -= tdl::Vector2u(1, 0);
-                }
-                if (event.key.code == tdl::KeyCodes::KEY_UP) {
-                    pos -= tdl::Vector2u(0, 1);
-                }
-                if (event.key.code == tdl::KeyCodes::KEY_DOWN) {
-                    pos += tdl::Vector2u(0, 1);
-                }
-                if (event.key.code == tdl::KeyCodes::KEY_ENTER) {
+            if (event.type == TDL_KEYPRESSED) {
+                if (event.key == "Enter") {
                     s.append("\n");
                     s = "";
                 }
-                    s.append(1, event.key.code);
             }
-            if (event.type == tdl::Event::EventType::MOUSEBUTTONPRESSED && event.mouseButton.button == tdl::MouseButton::LEFT) {
+            if (event.type == TDL_KEYREPEAT)
+            {
+                if (event.key == "+z")
+                {
+                    sprite->move(tdl::Vector2f(0, -1));
+                }
+                if (event.key == "+s")
+                {
+                    sprite->move(tdl::Vector2f(0, 1));
+                }
+                if (event.key == "+q")
+                {
+                    sprite->move(tdl::Vector2f(-1, 0));
+                }
+                if (event.key == "+d")
+                {
+                    sprite->move(tdl::Vector2f(1, 0));
+                }
+            }
+            if (event.type == TDL_MOUSEPRESSED && event.mouseButton.button == TDL_MOUSELEFT) {
 
                 if (sprite->isIntersect(tdl::Vector2i(event.mouseButton.x, event.mouseButton.y))) {
                     isIntersect = true;
@@ -92,10 +97,10 @@ int main()
                     win->setHeight(win->getHeight() + 3);
                 }
             }
-            if (event.type == tdl::Event::EventType::MOUSEBUTTONRELEASED) {
+            if (event.type == TDL_MOUSERELEASED) {
                 isIntersect = false;
             }
-            if (event.type == tdl::Event::EventType::MOUSEMOVED) {
+            if (event.type == TDL_MOUSEMOVED) {
                 mouse = tdl::Vector2u(event.mouseMove.x, event.mouseMove.y);
             }
         }

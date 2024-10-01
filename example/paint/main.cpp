@@ -24,6 +24,7 @@ int main()
         sprite->draw(win);
         win->update();
         win->draw();
+        /*
         for(tdl::Event event; win->pollEvent(event);) {
             if (event.type == tdl::Event::EventType::MOUSEBUTTONPRESSED) {
                 isClicked = true;
@@ -39,7 +40,10 @@ int main()
                     sprite->setTexture(tex);
                 }
             }
+
+
         }
+        */
         x += 10;
         win->printFrameRate();
     }

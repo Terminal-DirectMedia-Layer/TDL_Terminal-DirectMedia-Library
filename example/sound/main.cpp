@@ -46,11 +46,11 @@ int main()
         win->draw();
         for(tdl::Event event; win->pollEvent(event);) {
             std::cerr << "Event type: " << event.type << std::endl;
-            if (event.type == tdl::Event::EventType::KEYPRESSED) {
+            if (event.type == TDL_KEYPRESSED) {
                 std::cerr << "Key code: " << event.key.code << std::endl;
-                if (event.key.code == tdl::KeyCodes::KEY_A)
+                if (event.key == TDL_KEY_A) {
                     run = false;
-                if (event.key.code == tdl::KeyCodes::KEY_SPACE){
+                if (event.key == TDL_KEY_SPACE) {
                     if (play) {
                         sound.pause();
                         play = false;
@@ -59,19 +59,19 @@ int main()
                         play = true;
                     }
                 }
-                if (event.key.code == tdl::KeyCodes::KEY_UP) {
+                if (event.key == TDL_KEY_UP) {
                     rotation += 0.1;
                     tex->setRotation(rotation);
                 }
-                if (event.key.code == tdl::KeyCodes::KEY_DOWN) {
+                if (event.key == TDL_KEY_DOWN) {
                     rotation -= 0.1;
                     tex->setRotation(rotation);
                 }
-            }    
+                }
+            }
+            win->printFrameRate();
         }
-        win->printFrameRate();
     }
-
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
 

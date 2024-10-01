@@ -39,6 +39,7 @@ int main()
         sprite->draw(win);
         win->update();
         win->draw();
+        /*
         for(tdl::Event event; win->pollEvent(event, &pngRegex);) {
             if (event.type == tdl::Event::EventType::KEYPRESSED) {
                 if (event.key.code == tdl::KeyCodes::KEY_ESC)
@@ -88,6 +89,8 @@ int main()
                 sprites.push_back(std::tuple<tdl::Sprite *, bool>(sprite, false));
             }
         }
+
+         */
         for (auto &s : sprites) {
             if (std::get<1>(s)) {
                 std::get<0>(s)->setPosition(mouse);
