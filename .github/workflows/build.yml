@@ -1,0 +1,37 @@
+name: TDL CICD
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build-on-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: install dependencies
+        run: apt-get update
+          apt-get -y install cmake g++ libfreetype6-dev libpng-dev libopenal-dev libsndfile1-dev pkg-config libalsa-ocaml-dev
+      - name: Build
+        run:
+          cmake .. -DBUILD_DEMO=ON
+          cmake --build .
+  build-on-manjaro:
+    runs-on: manjaro-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: install dependencies
+        run: sudo pacman -Syu
+          sudo pacman -S cmake gcc pkg-config freetype2 openal libsndfile
+      - name: Build
+        run:
+          cmake .. -DBUILD_DEMO=ON
+          cmake --build .
