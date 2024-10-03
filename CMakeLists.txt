@@ -65,7 +65,6 @@ if (BUILD_SHARED_LIBS)
             EXPORT TDLTargets
             LIBRARY DESTINATION lib
             PUBLIC_HEADER DESTINATION include)
-endif()
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
@@ -91,3 +90,4 @@ install(EXPORT TDLTargets
         NAMESPACE TDL::
         DESTINATION lib/cmake/TDL
 )
+endif()
