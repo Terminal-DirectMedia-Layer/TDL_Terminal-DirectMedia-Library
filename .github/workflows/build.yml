@@ -22,8 +22,11 @@ jobs:
           sudo apt-get -y install cmake g++ libfreetype6-dev libpng-dev libopenal-dev libsndfile1-dev pkg-config libalsa-ocaml-dev
       - name: Build
         run: |
+          mkdir build
+          cd build
           cmake .. -DBUILD_DEMO=ON
           cmake --build .
+          cd ..
   build-on-manjaro:
     runs-on: manjaro-latest
     steps:
@@ -35,5 +38,8 @@ jobs:
           sudo pacman -S cmake gcc pkg-config freetype2 openal libsndfile
       - name: Build
         run: |
+          mkdir build
+          cd build
           cmake .. -DBUILD_DEMO=ON
           cmake --build .
+          cd ..
