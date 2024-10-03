@@ -17,10 +17,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: install dependencies
-        run: apt-get update
+        run: |
+          apt-get update
           apt-get -y install cmake g++ libfreetype6-dev libpng-dev libopenal-dev libsndfile1-dev pkg-config libalsa-ocaml-dev
       - name: Build
-        run:
+        run: |
           cmake .. -DBUILD_DEMO=ON
           cmake --build .
   build-on-manjaro:
@@ -29,9 +30,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: install dependencies
-        run: sudo pacman -Syu
+        run: |
+          sudo pacman -Syu
           sudo pacman -S cmake gcc pkg-config freetype2 openal libsndfile
       - name: Build
-        run:
+        run: |
           cmake .. -DBUILD_DEMO=ON
           cmake --build .
