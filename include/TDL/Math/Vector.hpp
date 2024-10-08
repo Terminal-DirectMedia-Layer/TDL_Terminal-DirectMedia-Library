@@ -231,6 +231,7 @@ namespace tdl
 
     public:
 
+
 /**
  * @brief getter for x value of the vetor
  *
@@ -238,7 +239,7 @@ namespace tdl
  * @param v the vector
  * @return T& the x value of the vector
  */
-        constexpr T& x() { return std::get<0>(_values); }
+        inline constexpr T& x() { return std::get<0>(_values); }
 
 /**
  * @brief getter for y value of the vetor
@@ -247,21 +248,23 @@ namespace tdl
  * @param v the vector
  * @return T& the y value of the vector
  */
-        constexpr T& y() { return std::get<1>(_values); }
+        inline constexpr T& y() { return std::get<1>(_values); }
 
 /**
  * @brief getter for x value of the vetor
  * 
  * @return constexpr T 
  */
-        constexpr T y() const { return std::get<1>(_values); }
+        inline constexpr T y() const { return std::get<1>(_values); }
 
 /**
  * @brief getter for y value of the vetor
  * 
  * @return constexpr T 
  */
-        constexpr T x() const { return std::get<0>(_values); }
+        inline constexpr T x() const { return std::get<0>(_values); }
+
+
     };
 
 /**

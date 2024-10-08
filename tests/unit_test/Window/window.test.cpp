@@ -91,7 +91,7 @@ TEST_CASE("Window test", "[window]")
         write(window->getFd(), "A", 1);
         for(tdl::Event event; window->pollEvent(event);) {
             if (event.type == tdl::Event::EventType::KEYPRESSED) {
-                CHECK(event.key.code == tdl::KeyCodes::KEY_A);
+                CHECK(event.key.code == tdl::KeyCodes::TDL_KEY_A);
             }
         }
     }
@@ -102,12 +102,12 @@ TEST_CASE("Window test", "[window]")
         write(window->getFd(), "A", 1);
         for(tdl::Event event; window->pollEvent(event);) {
             if (event.type == tdl::Event::EventType::KEYPRESSED) {
-                CHECK(event.key.code == tdl::KeyCodes::KEY_A);
+                CHECK(event.key.code == tdl::KeyCodes::TDL_KEY_A);
             }
         }
         for(tdl::Event event; window->pollEvent(event);) {
             if (event.type == tdl::Event::EventType::KEYRELEASED) {
-                CHECK(event.key.code == tdl::KeyCodes::KEY_A);
+                CHECK(event.key.code == tdl::KeyCodes::TDL_KEY_A);
             }
         }
     }
@@ -118,7 +118,7 @@ TEST_CASE("Window test", "[window]")
         write(window->getFd(), "^[[A", 4);
         for(tdl::Event event; window->pollEvent(event);) {
             if (event.type == tdl::Event::EventType::KEYPRESSED) {
-                CHECK(event.key.code == tdl::KeyCodes::KEY_UP);
+                CHECK(event.key.code == tdl::KeyCodes::TDL_KEY_UP);
             }
         }
     }

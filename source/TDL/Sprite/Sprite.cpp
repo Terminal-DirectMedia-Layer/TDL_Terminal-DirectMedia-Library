@@ -99,24 +99,45 @@ tdl::Pixel tdl::Sprite::lerp(tdl::Pixel a, tdl::Pixel b, double t) {
  * @param window the window to draw the sprite on
  */
  void tdl::Sprite::draw(tdl::Drawable *drawable) {
-     Transform left = _texture->getTransform() * this->getTransform();
-     PixelMatrix right = _texture->getOriginalImageData() - _texture->getRect();
-     Vector2u rightSize = right.getSize();
-     Vector2u drawSize = drawable->getMatrix().getSize();
-     Vector2u pos = Vector2u(0, 0);
-     Pixel pixels;
-     Vector2f point;
+    Transform left = _texture->getTransform() * this->getTransform();
+    PixelMatrix right = _texture->getOriginalImageData() - _texture->getRect();
+    Vector2u rightSize = right.getSize();
+    Vector2u drawSize = drawable->getMatrix().getSize();
+    u_int32_t drawSizeX = drawSize.x();
+    u_int32_t drawSizeY = drawSize.y();
+    u_int32_t sizeX = rightSize.x();
+    u_int32_t sizeY = rightSize.y();
+    auto* pRight = right.getRawPixelData();
+    auto* pDraw = drawable->getMatrix().getRawPixelData();
 
-     for (unsigned int y = 0; y < rightSize.y(); y++) {
-         for (unsigned int x = 0; x < rightSize.x(); x++) {
-             pixels = right.getPixel(Vector2u(x, y));
+    for (unsigned int y = 0; y < sizeY; y++) {
+        auto rowStart = pRight + y * sizeX;
+        std::transform(rowStart, rowStart + sizeX, pDraw, [&](Pixel& pixel) {
+            unsigned int x = &pixel - rowStart; // Calculate the x coordinate
+            Vector2f point = left.transformPoint(x, y);
+            u_int32_t pointX = static_cast<u_int32_t>(point.x());
+            u_int32_t pointY = static_cast<u_int32_t>(point.y());
+            if (pointX >= 0 && pointX < drawSizeX && pointY >= 0 && pointY < drawSizeY) {
+                drawable->getMatrix().setPixel(pointX, pointY, pixel);
+            }
+            return pixel;
+        });
+    }
+
+     /*
+     for (unsigned int y = 0; y < sizeY; y++) {
+         for (unsigned int x = 0; x < sizeX; x++) {
+             pixels = right.getPixel(x, y);
              point = left.transformPoint(x, y);
-             pos = Vector2u(static_cast<unsigned int>(point.x()), static_cast<unsigned int>(point.y()));
-            if (pos <= drawSize) {
-                drawable->getMatrix().setPixel(pos, pixels);
+             pointX = (u_int32_t)(point.x());
+             pointY = (u_int32_t)(point.y());
+            if (pointX <= drawSizeX && pointY <= drawSizeY) {
+                drawable->getMatrix().setPixel(pointX, pointY, pixels);
             }
          }
      }
+*/
+
  }
 
 bool tdl::Sprite::isIntersect(const Vector2i &point)

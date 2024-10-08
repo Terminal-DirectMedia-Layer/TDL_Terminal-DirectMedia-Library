@@ -21,69 +21,106 @@ namespace tdl {
          * 
          * @param pixel the pixel to get the color
          */
-            void setRGBFrontGround(Pixel color);
+            inline void setRGBFrontGround(Pixel pixel)
+            {
+                _content += "\033[38;2;" + std::to_string(GET_R(pixel.color)) + ";" + std::to_string(GET_G(pixel.color)) + ";" + std::to_string(GET_B(pixel.color)) + "m";
+            }
 
         /**
          * @brief ansii back color code
          * 
          * @param pixel the pixel to get the color
          */
-            void setRGBBackGround(Pixel color);
+            inline void setRGBBackGround(Pixel pixel)
+            {
+                _content += "\033[48;2;" + std::to_string(GET_R(pixel.color)) + ";" + std::to_string(GET_G(pixel.color)) + ";" + std::to_string(GET_B(pixel.color)) + "m";
+            }
 
         /**
          * @brief ansii clear screen code
          * 
          */
-            void clearScreen();
+            inline void clearScreen()
+            {
+                _content += "\033[2J";
+            }
  
         /**
          * @brief ansii move cursor code
          * 
          * @param pos the position to move the cursor
          */
-            void moveCursor(Vector2u pos);
+            inline void moveCursor(Vector2u pos)
+            {
+                _content += "\033[" + std::to_string(pos.y() / 2) + ";" + std::to_string(pos.x()) + "H";
+            }
 
         /**
          * @brief ansii print pixel code
          * 
          */
-            void printPixel(const char *shape);
+            inline void printPixel(const char *shape)
+            {
+                if (shape == nullptr)
+                    return;
+                _content += std::string(shape);
+            }
 
         /**
          * @brief ansii alternate screen buffer code
          * 
          */   
-            void alternateScreenBuffer();
+            inline void alternateScreenBuffer()
+            {
+                _content += "\033[?1049h";
+            }
 
         /**
          * @brief ansii remove mouse cursor code
          * 
          */
-            void removeMouseCursor();
+            inline void removeMouseCursor()
+            {
+                _content += "\033[?25l";
+            }
 
         /**
          * @brief ansii enable mouse move code
          * 
          */
-            void enableMouseMove();
+            inline void enableMouseMove()
+            {
+                _content += "\033[?1003h";
+                _content += "\033[?1006h";
+            }
 
         /**
          * @brief ansii disable mouse move code
          * 
          */
-            void disableMouseMove();
+            inline void disableMouseMove()
+            {
+                _content += "\033[?1003l";
+                _content += "\033[?1006l";
+            }
 
         /**
          * @brief ansii enable mouse click code
          * 
          */
-            void enableMouseClick();
+            inline void enableMouseClick()
+            {
+                _content += "\033[?1000h";
+            }
 
         /**
          * @brief ansii disable mouse click code
          * 
          */
-            void disableMouseClick();
+            inline void disableMouseClick()
+            {
+                _content += "\033[?1000l";
+            }
 
             virtual void draw() = 0;
 
