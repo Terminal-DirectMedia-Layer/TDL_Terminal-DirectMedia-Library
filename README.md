@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="doc/img/tdl_Banner.png" alt="TDL Logo" width=600px>
+  <img src="docs/img/tdl_Banner.png" alt="TDL Logo" width=600px>
 </div>
 
 <div align="center">
@@ -85,7 +85,7 @@ The examples will be built in the `demo folder at the root of the repository.
 ### Display a window
 
 <div align="left">
-  <img src="doc/img/window.gif" alt="Simple Black Window" width="600">
+  <img src="docs/img/window.gif" alt="Simple Black Window" width="600">
 </div>
 
 <details>
@@ -107,7 +107,7 @@ The examples will be built in the `demo folder at the root of the repository.
 ### Display an image
 
 <div align="left">
-  <img src="doc/img/bird.gif" alt="Image Display" width="600">
+  <img src="docs/img/bird.gif" alt="Image Display" width="600">
 </div>
 
 <details>
