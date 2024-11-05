@@ -4,7 +4,7 @@ on:
   # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
-  path:
+  paths:
     - .github/workflows/docs.yml
     - docs/**
 
