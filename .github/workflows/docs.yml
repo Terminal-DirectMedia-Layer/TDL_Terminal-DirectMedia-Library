@@ -38,6 +38,7 @@ jobs:
         run: |
           cd ./docs
           pip install -r requirements.txt
+          ls
           make html
       - name: Setup Pages
         uses: actions/configure-pages@v5
