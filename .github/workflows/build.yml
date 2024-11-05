@@ -27,19 +27,3 @@ jobs:
           cmake .. -DBUILD_DEMO=ON
           cmake --build .
           cd ..
-  build-on-manjaro:
-    runs-on: manjaro-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: install dependencies
-        run: |
-          sudo pacman -Syu
-          sudo pacman -S cmake gcc pkg-config freetype2 openal libsndfile
-      - name: Build
-        run: |
-          mkdir build
-          cd build
-          cmake .. -DBUILD_DEMO=ON
-          cmake --build .
-          cd ..
