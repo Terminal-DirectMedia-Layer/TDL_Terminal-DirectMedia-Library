@@ -12,3 +12,6 @@ html/
 latex/
 demo/
 docs/env/
+docs/html/
+docs/build/
+docs/xml/

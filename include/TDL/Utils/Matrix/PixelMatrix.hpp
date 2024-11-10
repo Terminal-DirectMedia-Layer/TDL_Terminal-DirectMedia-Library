@@ -99,21 +99,21 @@ namespace tdl {
  * @brief register the pixel at the position pos to be updated
  */
 
-    void registerToUpdate(const Vector2u& pos) {
-        _toUpdate.push(pos);
-    }
+            void registerToUpdate(const Vector2u& pos) {
+                _toUpdate.push(pos);
+            }
 
 /**
  * @brief register the pixel at the position pos to be updated
  * 
  * @param pos the position of the pixel
  */
-    void registerPixelCharToUpdate(Vector2u pos) {
-        for (int i = 0; i < 3; i++)
-            for (int j = 0; j < 2; j++) {
-                registerToUpdate(Vector2u(pos.x() + j, pos.y() + i));
+            void registerPixelCharToUpdate(Vector2u pos) {
+                for (int i = 0; i < 3; i++)
+                    for (int j = 0; j < 2; j++) {
+                        registerToUpdate(Vector2u(pos.x() + j, pos.y() + i));
+                    }
             }
-    }
 
 /**
  * @brief check if the pixel at the position pos need to be updated
@@ -123,9 +123,9 @@ namespace tdl {
  * @return true if the pixel need to be updated
  * @return false if the pixel don't need to be updated
  */
-    static bool isPixelCharToUpdate(Pixel *right, Pixel *left) {
-        return (right[0] != left[0] || right[1] != left[1] || right[2] != left[2] || right[3] != left[3] || right[4] != left[4] || right[5] != left[5]);
-    }
+            static bool isPixelCharToUpdate(Pixel *right, Pixel *left) {
+                return (right[0] != left[0] || right[1] != left[1] || right[2] != left[2] || right[3] != left[3] || right[4] != left[4] || right[5] != left[5]);
+            }
 
 /**
 * @brief get an array of 3*2 pixel at the position pos
@@ -205,9 +205,9 @@ namespace tdl {
  */
             void clear();
 
-        inline Pixel* getRawPixelData() {
-            return _pixelsTab.data();
-        }
+            inline Pixel* getRawPixelData() {
+                return _pixelsTab.data();
+            }
 
 /**
  * @brief operator- to crop the matrix
