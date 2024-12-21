@@ -129,7 +129,7 @@ namespace tdl {
          * 
          * @return std::string the content of the window
          */
-            [[nodiscard]] std::string getContent() const { return _content; }
+            [[nodiscard]] std::string &getContent() { return _content; }
 
 
         std::string _content; /* !< the content of the window */
