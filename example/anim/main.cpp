@@ -8,8 +8,6 @@
 #include <iostream>
 #include <unistd.h>
 #include <sys/ioctl.h>
-#include <TDL/TerminalDisplay.hpp>
-#include "TDL/Sprite.hpp"
 #include <tuple>
 #include <queue>
 #include <chrono>
@@ -18,6 +16,7 @@
 
 int main()
 {
+    /*
     auto start = std::chrono::high_resolution_clock::now();
     tdl::TerminalDisplay *win = tdl::TerminalDisplay::createTerminalDisplay("test", "/dev/tty", 20);
     tdl::Texture *tex = tdl::Texture::createTexture("../example/assets/Spinner.png");
@@ -39,7 +38,6 @@ int main()
         sprite->draw(win);
         win->update();
         win->draw();
-        /*
         for(tdl::Event event; win->pollEvent(event, &pngRegex);) {
             if (event.type == tdl::Event::EventType::KEYPRESSED) {
                 if (event.key.code == tdl::KeyCodes::KEY_ESC)
@@ -90,7 +88,6 @@ int main()
             }
         }
 
-         */
         for (auto &s : sprites) {
             if (std::get<1>(s)) {
                 std::get<0>(s)->setPosition(mouse);
@@ -126,4 +123,5 @@ int main()
     delete tex;
 
     return 0;
+    */
 }

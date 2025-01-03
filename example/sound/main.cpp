@@ -4,27 +4,28 @@
 ** File description:
 ** main.cpp
 */
-
+/*
 #include <iostream>
 #include <unistd.h>
 #include <sys/ioctl.h>
-#include <TDL/Window/Window.hpp>
+#include <TDL/Graphics/Window/Window.hpp>
 #include "TDL/Event/Event.hpp"
 #include "TDL/Input/InputKeyboard.hpp"
-#include "TDL/Sprite/Sprite.hpp"
-#include "TDL/Pixel/Pixel.hpp"
-#include "TDL/Math/Vector.hpp"
-#include "TDL/Text/Font/Font.hpp"
-#include "TDL/Text/Text.hpp"
+#include "TDL/Graphics/Drawable/Sprite/Sprite.hpp"
+#include "TDL/Graphics/Drawable/Pixel/Pixel.hpp"
+#include "TDL/Utils/Math/Vector.hpp"
+#include "TDL/Graphics/Drawable/Text/Font/Font.hpp"
+#include "TDL/Graphics/Drawable/Text/Text.hpp"
 #include <tuple>
 #include <queue>
-#include "TDL/Matrix/Transform.hpp"
+#include "TDL/Utils/Matrix/Transform.hpp"
 #include "TDL/Sound/Sound.hpp"
 #include <chrono>
 #include <fstream>
-
+*/
 int main()
 {
+  /*
     bool play = true;
     bool run = true;
     auto start = std::chrono::high_resolution_clock::now();
@@ -78,6 +79,6 @@ int main()
     std::ofstream time_file("execution_time.txt", std::ios::app);
     time_file << elapsed.count() << std::endl;
     time_file.close();
-
+*/
     return 0;
 }

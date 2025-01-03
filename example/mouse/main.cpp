@@ -1,12 +1,13 @@
 
 
-#include <TDL/Shell/SubShell.hpp>
+// #include <TDL/Shell/SubShell.hpp>
 
 #include <iostream>
 
 
 int main()
 {
+  /*
     tdl::SubShell shell;
     shell.openSubShell();
     shell.writeOnSubShell("ls\n");
@@ -16,4 +17,6 @@ int main()
             continue;
         std::cout << str << std::endl;
     }
+
+   */
 }

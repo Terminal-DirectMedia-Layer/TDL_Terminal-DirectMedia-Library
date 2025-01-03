@@ -1,12 +1,14 @@
 
-#include <TDL/Window/TtyDisplay.hpp>
-#include "TDL/Text/Font/Font.hpp"
-#include "TDL/Text/Text.hpp"
-#include "TDL/Matrix/Transformation.hpp"
+/*
+#include <TDL/Graphics/Window/TtyDisplay.hpp>
+#include "TDL/Graphics/Drawable/Text/Font/Font.hpp"
+#include "TDL/Graphics/Drawable/Text/Text.hpp"
+#include "TDL/Graphics/FrameBuffer/Feature/Transformation.hpp"
 #include "TDL/Sound/Sound.hpp"
-
+*/
 int main()
 {
+    /*
     tdl::TtyDisplay *win = tdl::TtyDisplay::createTtyDisplay("font");
     tdl::Font font;
     font.loadFromFile("../example/assets/font.ttf");
@@ -41,4 +43,6 @@ int main()
         win->printFrameRate();
     }
 
+
+     */
 }

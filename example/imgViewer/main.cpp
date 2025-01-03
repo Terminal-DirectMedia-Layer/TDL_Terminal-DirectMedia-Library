@@ -5,21 +5,25 @@
 ** main.cpp
 */
 
+int main() {
+  return 0;
+  }
+/*
 #include <iostream>
 #include <unistd.h>
 #include <sys/ioctl.h>
-#include <TDL/Shell/SubShell.hpp>
-#include <TDL/Window/TerminalDisplay.hpp>
+#include <TDL/PTY/SubShell.hpp>
+#include <TDL/Graphics/Window/TerminalDisplay.hpp>
 #include "TDL/Event/Event.hpp"
 #include "TDL/Input/InputKeyboard.hpp"
-#include "TDL/Sprite/Sprite.hpp"
-#include "TDL/Pixel/Pixel.hpp"
-#include "TDL/Math/Vector.hpp"
-#include "TDL/Text/Font/Font.hpp"
-#include "TDL/Text/Text.hpp"
+#include "TDL/Graphics/Drawable/Sprite/Sprite.hpp"
+#include "TDL/Graphics/Drawable/Pixel/Pixel.hpp"
+#include "TDL/Utils/Math/Vector.hpp"
+#include "TDL/Graphics/Drawable/Text/Font/Font.hpp"
+#include "TDL/Graphics/Drawable/Text/Text.hpp"
 #include <tuple>
 #include <queue>
-#include "TDL/Matrix/Transform.hpp"
+#include "TDL/Utils/Matrix/Transform.hpp"
 #include <chrono>
 #include <fstream>
 #include <regex>
@@ -135,3 +139,4 @@ int main()
 
     return 0;
 }
+*/
