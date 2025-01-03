@@ -2,10 +2,10 @@
 #ifndef TDL_TEXT_HPP
     #define TDL_TEXT_HPP
 
-#include "TDL/Text/Font/Font.hpp"
-#include "TDL/Drawable/Drawable.hpp"
-#include "TDL/Matrix/Transform.hpp"
-#include "TDL/Matrix/Transformation.hpp"
+#include "TDL/Graphics/Drawable/Text/Font/Font.hpp"
+#include "TDL/Graphics/Drawable/ADrawable.hpp"
+#include "TDL/Utils/Matrix/Transform.hpp"
+#include "TDL/Graphics/FrameBuffer/Feature/Transformation.hpp"
 
 namespace tdl {
     /**
@@ -67,33 +67,33 @@ namespace tdl {
      * 
      * @param color the color to set
      */
-        void setColor(Pixel color) { _color = color; }
+        //void setColor(Pixel color) { _color = color; }
 
     /**
      * @brief Get the Color object
      * 
      * @return std::optional<Pixel> the color of the text
      */
-        std::optional<Pixel> getColor() { return _color; }
+        //std::optional<Pixel> getColor() { return _color; }
 
     /**
      * @brief reset the color of the text
      * 
      */
-        void resetColor() { _color = std::nullopt; }
+        //void resetColor() { _color = std::nullopt; }
 
     /**
      * @brief draw the text
      * 
      * @param drawable the drawable to draw on
      */
-        void draw(Drawable *drawable);
+        void draw(Window *drawable);
 
     private:
         Font _font; /* !< the font of the text */
         std::string _text; /* !< the text to display */
         std::string _oldText; /* !< the old text to display */
-        std::optional<Pixel> _color; /* !< the color of the text */
+        //std::optional<Pixel> _color; /* !< the color of the text */
     };
 }
 

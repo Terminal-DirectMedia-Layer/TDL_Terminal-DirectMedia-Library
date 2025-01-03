@@ -8,19 +8,20 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include "TDL/Input/Event.hpp"
+#include "TDL/Event/Input/InputEvent.hpp"
 
 namespace tdl {
 
     std::list<std::string> InputEvent::findEventBus() const
     {
         std::ifstream file("/proc/bus/input/devices");
+
         if (!file.is_open()) {
             std::cerr << "Unable to open /proc/bus/input/devices" << std::endl;
             return {};
         }
-
         std::string line;
+
         std::regex event_regex("event\\d+");
         std::regex type_regex;
         std::smatch match;
@@ -62,37 +63,44 @@ namespace tdl {
         FD_ZERO(&_set);
         _timeout.tv_sec = 0;
         _timeout.tv_usec = 0;
+
         for (auto &event : _eventBus) {
+
             fd = open(event.c_str(), O_RDONLY | O_NONBLOCK);
             if (fd == -1) {
                 std::cerr << "Unable to open the event bus" << std::endl;
                 return;
             }
             _fds.push_back(fd);
+            _devs.push_back(libevdev_new());
+            libevdev_new_from_fd(fd, &_devs.back());
+            std::cerr << "Event bus found: " << event << " fd: " << fd << " dev: " << _devs.back() << std::endl;
             FD_SET(fd, &_set);
         }
     }
 
     InputEvent::~InputEvent()
     {
+        for (auto &dev : _devs) {
+            libevdev_free(dev);
+        }
         for (auto &fd : _fds) {
             close(fd);
         }
     }
 
-    std::unique_ptr<struct input_event> InputEvent::getInputEvent()
+#include <optional>
+
+    std::optional<std::pair<struct libevdev *, std::unique_ptr<struct input_event>>> InputEvent::getInputEvent()
     {
         auto ev = std::make_unique<struct input_event>();
 
-        for (auto &fd : _fds) {
-            ssize_t size = read(fd, ev.get(), sizeof(struct input_event));
-            if (size == -1) {
-                continue;
-            } else if (size == 0) {
-                continue;
+        for (auto dev : _devs) {
+            if (libevdev_next_event(dev, LIBEVDEV_READ_FLAG_NORMAL, ev.get()) == 0) {
+                return std::make_pair(dev, std::move(ev));
             }
-            return ev;
         }
-        return nullptr;
+
+        return std::nullopt;
     }
 } // namespace tdl

@@ -4,7 +4,7 @@
 
 #include <string>
 #include <iostream>
-#include "TDL/Text/Font/Font.hpp"
+#include "TDL/Graphics/Drawable/Text/Font/Font.hpp"
 
 namespace tdl {
     Font::Font() : _size(12){

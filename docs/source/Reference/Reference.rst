@@ -10,3 +10,4 @@ Here is the class reference of the TDL library. You will found here all the clas
    :caption: Contents:
 
    Graphics/Graphics
+   Utils/Utils

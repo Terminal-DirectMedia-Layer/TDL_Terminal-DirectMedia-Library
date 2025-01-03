@@ -231,6 +231,11 @@ namespace tdl
 
     public:
 
+        inline constexpr Vector2 lerp(const Vector2 &v, float t) const
+        {
+            return Vector2(this->x() + (v.x() - this->x()) * t, this->y() + (v.y() - this->y()) * t);
+        }
+
 
 /**
  * @brief getter for x value of the vetor
@@ -263,7 +268,6 @@ namespace tdl
  * @return constexpr T 
  */
         inline constexpr T x() const { return std::get<0>(_values); }
-
 
     };
 

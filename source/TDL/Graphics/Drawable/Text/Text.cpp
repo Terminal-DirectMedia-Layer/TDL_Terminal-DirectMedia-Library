@@ -1,7 +1,6 @@
 
-#include "TDL/Text/Text.hpp"
-#include "TDL/Matrix/PixelMatrix.hpp"
-#include "TDL/Pixel/Pixel.hpp"
+#include "TDL/Graphics/Drawable/Text/Text.hpp"
+#include "TDL/Graphics/Drawable/Pixel/Pixel.hpp"
 
 namespace tdl {
     Text::Text()
@@ -39,8 +38,9 @@ namespace tdl {
         return _text;
     }
 
-    void Text::draw(Drawable *drawable)
+    void Text::draw(Window *drawable)
     {
+        /*
         int pen_x = 0;
         int pen_y = 0;
         Transform left = getTransform();
@@ -81,6 +81,8 @@ namespace tdl {
             }
         }
         _oldText = _text;
+
+         */
 
     }
 } // namespace tdl

@@ -1,7 +1,7 @@
 
 #include <algorithm>
 
-#include "TDL/Signal/SignalHandler.hpp"
+#include "TDL/Utils/Signal/SignalHandler.hpp"
 #include "TDL/Event/Event.hpp"
 
 tdl::SignalHandler &tdl::SignalHandler::getInstance()
@@ -10,12 +10,12 @@ tdl::SignalHandler &tdl::SignalHandler::getInstance()
     return instance;
 }
 
-void tdl::SignalHandler::registerWindow(AWindow *win)
+void tdl::SignalHandler::registerWindow(Window *win)
 {
     _windows.push_back(win);
 }
 
-void tdl::SignalHandler::unRegisterWindow(AWindow *win)
+void tdl::SignalHandler::unRegisterWindow(Window *win)
 {
     _windows.erase(std::remove(_windows.begin(), _windows.end(), win), _windows.end());
 }
@@ -28,6 +28,7 @@ void tdl::SignalHandler::handleSignal(int sig)
 
 void tdl::SignalHandler::handleSignalInstance()
 {
+    /*
     for (auto &win : _windows) {
         win->updateTermSize();
         Event event;
@@ -36,4 +37,5 @@ void tdl::SignalHandler::handleSignalInstance()
         event.size.height = win->getHeight();
         win->pushEvent(event);
     }
+    */
 }

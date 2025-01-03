@@ -2,10 +2,9 @@
 #ifndef TDL_TRANSFORM_HPP
     #define TDL_TRANSFORM_HPP
 
-#include "TDL/Math/Vector.hpp"
-#include "TDL/Matrix/PixelMatrix.hpp"
-#include "TDL/Math/UnitConverter.hpp"
-#include "TDL/Math/Rect.hpp"
+#include "TDL/Utils/Math/Vector.hpp"
+#include "TDL/Utils/Math/UnitConverter.hpp"
+#include "TDL/Utils/Math/Rect.hpp"
 
 namespace tdl {
     /**
@@ -275,7 +274,6 @@ namespace tdl {
         return left.transformPoint(right);
     }
 
-
     /**
      * @brief operator *= for transform
      * 
@@ -295,7 +293,7 @@ namespace tdl {
      * @param right the right matrix
      * @return constexpr PixelMatrix the transformed matrix
      */
-    PixelMatrix operator *(const Transform &left, PixelMatrix &right);
+    //PixelMatrix operator *(const Transform &left, PixelMatrix &right);
 
     /**
      * @brief operator *= for transform

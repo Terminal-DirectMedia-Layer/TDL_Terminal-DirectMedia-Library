@@ -1,9 +1,9 @@
 
 #pragma once
 
-#include "TDL/Window/TerminalDisplay.hpp"
-#include "TDL/Pixel/Pixel.hpp"
-#include "TDL/Math/Vector.hpp"
-#include "TDL/Math/Rect.hpp"
+#include "TDL/Graphics/Window/TerminalDisplay.hpp"
+#include "TDL/Graphics/Drawable/Pixel/Pixel.hpp"
+#include "TDL/Utils/Math/Vector.hpp"
+#include "TDL/Utils/Math/Rect.hpp"
 #include "TDL/Event/Event.hpp"
-#include "TDL/Shell/SubShell.hpp"
+#include "TDL/Pty/SubShell.hpp"

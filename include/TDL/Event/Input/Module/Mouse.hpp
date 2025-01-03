@@ -7,20 +7,23 @@
     #include <map>
     #include <linux/input.h>
 
-    #include "TDL/Window/AWindow.hpp"
-    #include "TDL/Input/Event.hpp"
+    #include "TDL/Event/Input/InputEvent.hpp"
+    #include "TDL/Event/Event.hpp"
+    #include "TDL/Utils/Thread/ThreadSafeQueue.hpp"
 
     #define MAX_EVENTS 64
 
     namespace tdl {
 
-    class TTYMouse : public InputEvent
+        class EventNotifier;
+
+    class Mouse : public InputEvent
     {
         public:
-            TTYMouse();
-            ~TTYMouse();
+            Mouse(ThreadSafeQueue<Event> &events);
+            ~Mouse();
 
-            void pollMouse(AWindow* window);
+            void pollMouse();
 
             private:
 
@@ -33,6 +36,8 @@
             int _xTracking;
             int _yTracking;
             bool _isTouchTracking = false;
+
+            ThreadSafeQueue<Event> &_events;
 
     };
     }

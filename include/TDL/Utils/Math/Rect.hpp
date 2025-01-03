@@ -2,8 +2,9 @@
 #ifndef TDL_RECT_HPP
     #define TDL_RECT_HPP
 
-#include <tuple>
 #include <cstdint>
+#include <sys/types.h>
+#include <tuple>
 
 namespace tdl {
 

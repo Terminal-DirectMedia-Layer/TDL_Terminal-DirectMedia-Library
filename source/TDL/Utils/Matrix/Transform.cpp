@@ -1,9 +1,10 @@
 
-#include "TDL/Matrix/Transform.hpp"
-#include "TDL/Math/UnitConverter.hpp"
+#include "TDL/Utils/Matrix/Transform.hpp"
+#include "TDL/Utils/Math/UnitConverter.hpp"
 
 namespace tdl
 {
+    /*
     PixelMatrix operator*(const Transform &left, PixelMatrix &right) {
         Vector2f topLeft = left.transformPoint(0, 0);
         Vector2f topRight = left.transformPoint(right.getSize().x(), 0);
@@ -29,4 +30,6 @@ namespace tdl
         }
         return result;
     }
+*/
+
 }
