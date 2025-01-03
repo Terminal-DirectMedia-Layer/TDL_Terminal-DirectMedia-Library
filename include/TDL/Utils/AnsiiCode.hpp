@@ -3,9 +3,13 @@
     #define TDL_ANSII_CODE_HPP
 
 #include <string>
+#include <regex>
 
-#include "TDL/Pixel/Pixel.hpp"
-#include "TDL/Math/Vector.hpp"
+#include <unistd.h>
+
+
+#include "TDL/Graphics/Drawable/Pixel/Pixel.hpp"
+#include "TDL/Utils/Math/Vector.hpp"
 
 namespace tdl {
     /**
@@ -122,7 +126,65 @@ namespace tdl {
                 _content += "\033[?1000l";
             }
 
-            virtual void draw() = 0;
+            /**
+            * @brief anssi start sixel code
+            */
+            inline void startSixel()
+            {
+                _content += "\033P0;0;0;q";
+            }
+
+            inline void endSixel()
+            {
+                _content += "\033\\";
+            }
+
+            inline void setSixelColor(int id, Pixel pixel, bool isBack = false)
+            {
+              if (isBack){
+                _content += '#';
+                _content += std::to_string(id).c_str();
+              }else {
+            	_content += '#';
+                _content += std::to_string(id).c_str();
+                _content += ";2;";
+                _content += std::to_string(GET_R(pixel.color) * 100 / 255).c_str();
+                _content += ';';
+                _content += std::to_string(GET_G(pixel.color) * 100 / 255).c_str();
+                _content += ';';
+                _content += std::to_string(GET_B(pixel.color) * 100 / 255).c_str();
+                }
+            }
+
+            inline void jumpSixelColumn()
+            {
+                _content += '$';
+            }
+
+            inline void jumpSixelLine()
+            {
+                _content += '-';
+            }
+
+            void turnSixelOn(std::string mask)
+            {
+                _content += mask.c_str();
+            }
+
+            inline Vector2u getSixelSize(int fd)
+            {
+                write(fd, "\033[14t", 5);
+                char buf[32];
+                read(fd, buf, 32);
+                std::regex re(R"((\d+);(\d+);(\d+)*)");
+                std::smatch match;
+                std::string str(buf);
+
+                if (std::regex_search(str, match, re)) {
+                    return Vector2u(std::stoi(match[3]), std::stoi(match[2]));
+                }
+                return Vector2u(0, 0);
+            }
 
         /**
          * @brief get the content of the window
