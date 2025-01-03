@@ -7,13 +7,14 @@
 #include <map>
 #include <linux/input.h>
 #include <zlib.h>
+#include <linux/input-event-codes.h>
 
-#include "TDL/Input/Module/Keyboard.hpp"
-#include "TDL/Window/AWindow.hpp"
+#include "TDL/Event/Input/Module/Keyboard.hpp"
+#include "TDL/Event/EventNotifier.hpp"
 
 
 namespace tdl {
-    Keyboard::Keyboard() : InputEvent(KEYBOARD)
+    Keyboard::Keyboard(ThreadSafeQueue<Event> &event) : InputEvent(KEYBOARD), _events(event)
     {
         _charset = findCharset();
         loadKeymap();
@@ -23,34 +24,57 @@ namespace tdl {
     {
     }
 
-    void Keyboard::pollKeyboard(AWindow* window)
+    short Keyboard::getModifiers(struct input_event &event)
     {
-        std::unique_ptr<struct input_event> ev;
-        ev = getInputEvent();
-        if (ev == nullptr) {
-            return;
+        std::string key = _keymap[event.code];
+        if (key == TDL_KEY_SHIFT) {
+            return 1;
         }
-        Event event;
-        if (ev->type == EV_KEY) {
-            if (_keymap.find(ev->code) != _keymap.end()) {
-            switch (ev->value) {
-                case 0:
-                    event.type = TDL_KEYPRESSED;
-                    break;
-                case 1:
-                    event.type = TDL_KEYRELEASED;
-                    break;
-                case 2:
-                    event.type = TDL_KEYREPEAT;
-                    break;
-                default:
-                    break;
-                }
-                event.key.code = _keymap[ev->code].c_str();
-                window->pushEvent(event);
-            }
+        if (key == TDL_KEY_CONTROL) {
+            return 2;
         }
+        if (key == TDL_KEY_ALT) {
+            return 4;
+        }
+        return 0;
+    }
 
+    void Keyboard::pollKeyboard()
+    {
+        std::optional<std::pair<struct libevdev *, std::unique_ptr<struct input_event>>> ret = std::nullopt;
+        struct libevdev *dev = nullptr;
+        struct input_event *ev = nullptr;
+        while (_events.read) {
+            ret = getInputEvent();
+
+            if (!ret.has_value()) {
+                continue;
+            }
+            dev = ret->first;
+            ev = ret->second.get();
+            Event event;
+            if (ev->type == EV_KEY) {
+                if (_keymap.find(ev->code) != _keymap.end()) {
+                switch (ev->value) {
+                    case 0:
+                        event.type = TDL_KEYPRESSED;
+                        break;
+                    case 1:
+                        event.type = TDL_KEYRELEASED;
+                        break;
+                    case 2:
+                        event.type = TDL_KEYREPEAT;
+                        break;
+                    default:
+                        break;
+                    }
+                    event.key.code = _keymap[ev->code].c_str();
+                    _events.push(event);
+                }
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+        }
     }
 
     std::string Keyboard::findCharset() const
@@ -108,7 +132,6 @@ namespace tdl {
                     continue;
                 }
                 _keymap[keycode] = key;
-                //std::cerr << "Keycode: " << keycode << " Key " << key << std::endl;
             }
         }
     }

@@ -6,9 +6,11 @@
 #include <regex>
 #include <array>
 #include <list>
+#include <libevdev/libevdev.h>
 
 #include <linux/input.h>
 #include <sys/select.h>
+#include <optional>
 
 namespace tdl {
 
@@ -29,7 +31,7 @@ namespace tdl {
             InputEvent(inputEventType type);
             ~InputEvent();
 
-            std::unique_ptr<struct input_event> getInputEvent();
+                std::optional<std::pair<struct libevdev *, std::unique_ptr<struct input_event>>> getInputEvent();
 
             private:
 
@@ -39,6 +41,7 @@ namespace tdl {
                 std::list<std::string> _eventBus;
                 fd_set _set;
                 std::list<int> _fds;
+                std::list<struct libevdev *> _devs;
                 struct timeval _timeout;
 
       };
