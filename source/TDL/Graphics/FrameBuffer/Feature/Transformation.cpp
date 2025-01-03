@@ -2,8 +2,8 @@
 #include <iomanip>
 #include <iostream>
 
-#include "TDL/Matrix/Transformation.hpp"
-#include "TDL/Matrix/Transform.hpp"
+#include "TDL/Graphics/FrameBuffer/Feature/Transformation.hpp"
+#include "TDL/Utils/Matrix/Transform.hpp"
 
 namespace tdl
 {
@@ -123,7 +123,7 @@ namespace tdl
             double tx = -m_origin.x() * sxc - m_origin.y() * sys + m_position.x();
             double ty = m_origin.x() * sxs - m_origin.y() * syc + m_position.y();
             m_transform = Transform(sxc, sys, tx,
-                                    -sxs, syc, ty,  
+                                    -sxs, syc, ty,
                                     0.f, 0.f, 1.f);
             TransformNeedUpdate = false;
         }

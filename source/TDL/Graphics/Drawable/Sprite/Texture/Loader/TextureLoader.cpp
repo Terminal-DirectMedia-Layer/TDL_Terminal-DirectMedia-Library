@@ -5,8 +5,8 @@
 
 #include <png.h>
 
-#include "TDL/Math/Vector.hpp"
-#include "TDL/Drawable/Texture/TextureLoader.hpp"
+#include "TDL/Utils/Math/Vector.hpp"
+#include "TDL/Graphics/Drawable/Sprite/Texture/Loader/TextureLoader.hpp"
 
 tdl::TextureLoader::TextureLoader(std::string path) : _path(path), _info_ptr(nullptr),
                                                       _row_pointers(nullptr), _png_ptr(nullptr),

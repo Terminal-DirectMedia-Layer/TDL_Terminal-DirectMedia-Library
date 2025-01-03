@@ -1,5 +1,5 @@
 
-#include "TDL/Pixel/Pixel.hpp"
+#include "TDL/Graphics/Drawable/Pixel/Pixel.hpp"
 
 namespace tdl {
 

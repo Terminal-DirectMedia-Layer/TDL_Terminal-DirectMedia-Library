@@ -5,7 +5,7 @@
 #include <string>
 #include <png.h>
 
-#include "TDL/Math/Vector.hpp"
+#include "TDL/Utils/Math/Vector.hpp"
 
 namespace tdl {
     /**

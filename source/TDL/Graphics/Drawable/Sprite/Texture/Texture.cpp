@@ -2,62 +2,24 @@
 #include <iostream>
 #include <utility>
 
-#include "TDL/Drawable/Texture/Texture.hpp"
-#include "TDL/Math/Vector.hpp"
-#include "TDL/Math/Rect.hpp"
-#include "TDL/Pixel/Pixel.hpp"
-#include "TDL/Drawable/Drawable.hpp"
+#include "TDL/Graphics/Drawable/Sprite/Texture/Texture.hpp"
+#include "TDL/Utils/Math/Vector.hpp"
+#include "TDL/Utils/Math/Rect.hpp"
+#include "TDL/Graphics/Drawable/Pixel/Pixel.hpp"
 
 namespace tdl {
 
-    Texture *Texture::createTexture(std::string path)
-    {
-        return createTexture(path, false);
-    }
-
-    Texture *Texture::createTexture(std::string &path, bool repeat)
-    {
-        try {
-            return new Texture(path, repeat);
-        } catch (const std::exception &e) {
-            std::cerr << e.what() << std::endl;
-        }
-        return nullptr;
-    }
-
-    Texture::Texture(std::string &path, bool repeat) : TextureLoader(path), Transformable()
+    Texture::Texture(std::string path) : TextureLoader(path)
     {
         loadPixels();
     }
 
-    Texture *Texture::createTextureFromVector(Pixel *pixelData, Vector2u &size)
+    Texture::Texture(Pixel *pixelData, Vector2u &size) : TextureLoader("")
     {
-        Vector2f scale = Vector2f(1.0, 1.0);
-        return createTextureFromVector(pixelData, size, scale, false);
-    }
-
-    Texture *Texture::createTextureFromVector(Pixel *pixelData, Vector2u &size, Vector2f &scale)
-    {
-        return createTextureFromVector(pixelData, size, scale, false);
-    }
-
-    Texture *Texture::createTextureFromVector(Pixel *pixelData, Vector2u &size, bool repeat)
-    {
-        Vector2f scale = Vector2f(1.0, 1.0);
-        return createTextureFromVector(pixelData, size, scale, repeat);
-    }
-
-    Texture *Texture::createTextureFromVector(Pixel *pixelData, Vector2u &size, Vector2f &scale, bool repeat)
-    {
-        return new Texture(pixelData, size, scale, repeat);
-    }
-
-    Texture::Texture(Pixel *pixelData, Vector2u &size, tdl::Vector2f &scale, bool repeat) : TextureLoader("")
-    {
-        _originalImageData = PixelMatrix(size);
+        _originalImageData = Matrix<Pixel>(size);
         for (u_int32_t y = 0; y < size.y(); y++) {
             for (u_int32_t x = 0; x < size.x(); x++) {
-                _originalImageData.setPixel(Vector2u(x, y), pixelData[y * size.x() + x]);
+                _originalImageData.setElement(Vector2u(x, y), pixelData[y * size.x() + x]);
             }
         }
         _size = size;
@@ -69,7 +31,7 @@ namespace tdl {
     {
         Pixel color;
         png_byte *ptr;
-        if (!_originalImageData.getPixelsTab().empty())
+        if (!_originalImageData.empty())
             _originalImageData.clear();
         for (u_int32_t y = 0; y < _size.y(); y++) {
             std::vector<Pixel> row;
@@ -90,6 +52,6 @@ namespace tdl {
 
     Pixel Texture::getOriginalPixel(Vector2u &pos)
     {
-        return _originalImageData.getPixel(pos);
+        return _originalImageData.getElement(pos);
     }
 }

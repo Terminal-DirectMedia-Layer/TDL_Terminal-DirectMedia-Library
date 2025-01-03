@@ -3,30 +3,13 @@
 #include <algorithm>
 #include <cmath>
 
-#include "TDL/Sprite/Sprite.hpp"
-#include "TDL/Math/Vector.hpp"
-#include "TDL/Math/Rect.hpp"
-#include "TDL/Pixel/Pixel.hpp"
-#include "TDL/Window/Window.hpp"
-#include "TDL/Drawable/Drawable.hpp"
-#include "TDL/Matrix/Transform.hpp"
+#include "TDL/Graphics/Drawable/Sprite/Sprite.hpp"
+#include "TDL/Utils/Math/Vector.hpp"
+#include "TDL/Utils/Math/Rect.hpp"
+#include "TDL/Graphics/Drawable/Pixel/Pixel.hpp"
+#include "TDL/Graphics/Window/Window.hpp"
+#include "TDL/Utils/Matrix/Transform.hpp"
 
-/**Vector2u pos and a rect
- * 
- * @param texture the texture of the sprite to create
- * @param pos the position of the sprite
- * @param rect the rect of the sprite
- * @return tdl::Sprite* the sprite created
- */
-tdl::Sprite* tdl::Sprite::createSprite(tdl::Texture *texture, tdl::Vector2u &pos, tdl::RectU &rect)
-{
-    return new tdl::Sprite(texture, pos, rect);
-}
-
-tdl::Sprite* tdl::Sprite::createSprite(tdl::Texture *texture, tdl::Vector2u pos)
-{
-    return new tdl::Sprite(texture, pos);
-}
 
 /**
  * @brief Construct a new tdl::Sprite::Sprite object
@@ -34,12 +17,13 @@ tdl::Sprite* tdl::Sprite::createSprite(tdl::Texture *texture, tdl::Vector2u pos)
  * @param texture the texture of the sprite
  * @param pos the position of the sprite
  */
-tdl::Sprite::Sprite(tdl::Texture *texture, tdl::Vector2u &pos)
+tdl::Sprite::Sprite(tdl::Texture *texture, tdl::Vector2u pos): ADrawable(texture->getSize())
 {
     _texture = texture;
     _pos = pos;
-    tdl::Vector2u size = texture->getSize();
-    _rect = tdl::RectU(0, 0, size.x(), size.y());
+    _matrix = texture->getTextureData();
+    Vector2u size = texture->getSize();
+    _matrix.resize(size);
 }
 
 /**
@@ -49,11 +33,16 @@ tdl::Sprite::Sprite(tdl::Texture *texture, tdl::Vector2u &pos)
  * @param pos the position of the sprite
  * @param rect the rect of the sprite
  */
-tdl::Sprite::Sprite(Texture *texture, Vector2u &pos, RectU &rect)
+tdl::Sprite::Sprite(Texture *texture, Vector2u pos, RectU rect): ADrawable(texture->getSize())
 {
     _texture = texture;
     _pos = pos;
     _rect = rect;
+    _matrix = texture->getTextureData();
+    Vector2u size = texture->getSize();
+    _matrix.resize(size);
+    _matrix = _matrix - rect;
+
 }
 
 /**
@@ -62,7 +51,7 @@ tdl::Sprite::Sprite(Texture *texture, Vector2u &pos, RectU &rect)
  */
 tdl::Sprite::~Sprite()
 {
-    delete _texture;
+    //delete _texture;
 }
 
 /**
@@ -98,7 +87,26 @@ tdl::Pixel tdl::Sprite::lerp(tdl::Pixel a, tdl::Pixel b, double t) {
  * 
  * @param window the window to draw the sprite on
  */
+
+void tdl::Sprite::draw(Window *d) {
+    Transform left = getTransform();
+    for (u_int32_t y = 0; y < _matrix.getSize().y(); y++) {
+        for (u_int32_t x = 0; x < _matrix.getSize().x(); x++) {
+            Pixel pixel = _matrix.getElement(x, y);
+            Vector2f point = left.transformPoint(x, y);
+            u_int32_t pointX = static_cast<u_int32_t>(point.x());
+            u_int32_t pointY = static_cast<u_int32_t>(point.y());
+            if (pointX < d->getSize().x() && pointY < d->getSize().y()) {
+                d->setPixel(pointX, pointY, pixel);
+            }
+        }
+    }
+}
+
+
+/*
  void tdl::Sprite::draw(tdl::Drawable *drawable) {
+
     Transform left = _texture->getTransform() * this->getTransform();
     PixelMatrix right = _texture->getOriginalImageData() - _texture->getRect();
     Vector2u rightSize = right.getSize();
@@ -123,7 +131,7 @@ tdl::Pixel tdl::Sprite::lerp(tdl::Pixel a, tdl::Pixel b, double t) {
             return pixel;
         });
     }
-
+*/
      /*
      for (unsigned int y = 0; y < sizeY; y++) {
          for (unsigned int x = 0; x < sizeX; x++) {
@@ -136,15 +144,17 @@ tdl::Pixel tdl::Sprite::lerp(tdl::Pixel a, tdl::Pixel b, double t) {
             }
          }
      }
+ }
 */
 
- }
 
 bool tdl::Sprite::isIntersect(const Vector2i &point)
 {
+    /*
     Vector2f pos = getPosition();
-    RectU rect = _rect;
+    //RectU rect = _rect;
     if (point.x() >= pos.x() && point.x() <= pos.x() + rect.width() && point.y() >= pos.y() && point.y() <= pos.y() + rect.height())
         return true;
+     */
     return false;
 }

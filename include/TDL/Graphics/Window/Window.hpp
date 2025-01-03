@@ -13,22 +13,40 @@
 
 #include <termios.h>
 
-#include "TDL/Pixel/Pixel.hpp"
-#include "TDL/Math/Vector.hpp"
-#include "TDL/Matrix/PixelMatrix.hpp"
-#include "TDL/Drawable/Drawable.hpp"
 #include "TDL/Event/Event.hpp"
-#include "TDL/Input/Module/Keyboard.hpp"
-#include "TDL/Event/Mouse/IMouse.hpp"
-#include "TDL/Window/AWindow.hpp"
+#include "TDL/Graphics/Drawable/ADrawable.hpp"
+#include "TDL/Graphics/Drawable/Pixel/Pixel.hpp"
+#include "TDL/Graphics/FrameBuffer/Feature/Placeable.hpp"
+#include "TDL/Graphics/FrameBuffer/FrameBuffer.hpp"
+#include "TDL/Utils/Math/Vector.hpp"
+
+#include <TDL/Event/EventNotifier.hpp>
+
+#define TDL_X_WINDOW_OFFSET 4
+#define TDL_Y_WINDOW_OFFSET 17
+#define TDL_WINDOW_BORDER_LEFT_B 2 // for the round up of the div
+#define TDL_WINDOW_BORDER_RIGHT_B 2
+#define TDL_WINDOW_BORDER_TOP_B 15
+#define TDL_WINDOW_BORDER_BOTTOM_B 2
+
 
 namespace tdl {
+    typedef void (*eventCallback)(Event &event, Window *win);
     /**
      * @class Window
      * @brief Window class
      */
-    class Window : public AWindow {
-        
+
+    class Display;
+
+
+    enum ClickLocation {
+        OUTSIDE,
+        BORDER,
+        INSIDE,
+    };
+
+    class Window : public FrameBuffer, public Placeable {
         public:
 
 /**
@@ -36,14 +54,7 @@ namespace tdl {
  * 
  */
 
-        /**
-         * @brief Create a Window object
-         * 
-         * @param title the title of the window
-         * @param ttyPath the path to the tty by default it's /dev/tty
-         * @return Window* a pointer to the window
-         */
-            static Window* createWindow(std::string const& title, std::string const& ttyPath = "/dev/tty");
+        Window(std::string title, Vector2u size,Vector2u pos = Vector2u(0,0), Pixel background = Pixel(18, 18, 18,255));
 
         /**
          * @brief Destroy the Window object
@@ -51,53 +62,50 @@ namespace tdl {
          */
             ~Window();
 
-/**
- * \subsection Input and event
- * 
- */
+        void draw(Display &d);
 
-        /**
-         * @brief poll the event
-         * 
-         * @param event the event to poll
-         * @return true if event is left in the queue
-         * @return false if no event is left in the queue
-         */
-            bool pollEvent(Event &event, std::regex *custom = nullptr) override;
+        void pushEvent(const Event &event);
+        void pollEvent();
 
-        /**
-         * @brief update the terminal size
-         * @warning this function is called at the creation of the window and when the terminal size change
-         * by the signale handler 
-         */
-            void updateTermSize() override;
+        inline ClickLocation isClickIn(Vector2u pos) {
+            if (pos.x() >= _winPos.getPosition().x() && pos.x() <= _winPos.getPosition().x() + getSize().x()
+                && pos.y() >= _winPos.getPosition().y() && pos.y() <= _winPos.getPosition().y() + getSize().y()) {
+                if (pos.x() >= getPosition().x() && pos.x() <= getPosition().x() + getSize().x()
+                    && pos.y() >= getPosition().y() && pos.y() <= getPosition().y() + getSize().y()) {
+                    return INSIDE;
+                }
+                return BORDER;
+            }
+            return OUTSIDE;
+        }
 
-            Vector2u getTerminalSize() override { return _size; }
+        bool grab = false;
+
+        eventCallback onEvent = nullptr;
+
+        void addDrawable(IDrawable *drawable) {
+            _drawables.push_back(drawable);
+        }
 
         private:
-
-/**
- * \section Private Methods
- * 
- */
-
-        /**
-         * @brief Construct a new tdl::Window::Window object
-         * 
-         * @param title The title of the window
-         * @param tty_path The path to the tty to lauch the window, the available tty are /dev/tty or /dev/pts/0.../dev/pts/x
-         * @note the SignalHandler.getInstance is used to register the window on the signal manager it permited to automatically resize the window when the terminal is resized
-         */
-            Window(std::string  title, std::string const& ttyPath);
 
 /**
  * \section Attributes
  * 
  */
-            Keyboard* _input; /*!< the input keyboard */
-            IMouse *_mouse; /*!< the input mouse */
+            //Keyboard* _input; /*!< the input keyboard */
+            Vector2u _pos;
+            Vector2u _size;
+            std::string _title;
+
+            FrameBuffer _win;
+            Placeable _winPos;
+            std::queue<Event> _events; /*!< the event queue */
+
+            std::vector<IDrawable *> _drawables;
 
     };
+
 }
 
 #endif //TDL_WINDOW_HPP

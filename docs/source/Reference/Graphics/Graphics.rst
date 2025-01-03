@@ -10,3 +10,4 @@ Here is the Graphics Section of the TDL library. You will found here all the cla
    :caption: Contents:
 
    Framebuffer
+   Display

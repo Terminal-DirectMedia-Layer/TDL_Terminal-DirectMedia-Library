@@ -5,13 +5,12 @@
 
 #include <optional>
 
-#include "TDL/Window/Window.hpp"
-#include "TDL/Drawable/Texture/Texture.hpp"
-#include "TDL/Math/Vector.hpp"
-#include "TDL/Math/Rect.hpp"
-#include "TDL/Pixel/Pixel.hpp"
-#include "TDL/Matrix/Transformation.hpp"
-#include "TDL/Drawable/Drawable.hpp"
+#include "TDL/Graphics/Drawable/Sprite/Texture/Texture.hpp"
+#include "TDL/Utils/Math/Vector.hpp"
+#include "TDL/Utils/Math/Rect.hpp"
+#include "TDL/Graphics/Drawable/Pixel/Pixel.hpp"
+#include "TDL/Graphics/FrameBuffer/Feature/Transformation.hpp"
+#include "TDL/Graphics/Drawable/ADrawable.hpp"
 
 namespace tdl {
 
@@ -20,37 +19,40 @@ namespace tdl {
      * @brief Sprite class
      * class for sprite management
      */
-    class Sprite : public Transformable, public Drawable {
+    class Sprite : public Transformable, public ADrawable {
         public :
 
-        /**
-         * @brief Create a Sprite object
-         * 
-         * @param texture the texture of the sprite
-         * @param pos the position of the sprite
-         * @return Sprite* a pointer to the sprite
-         * @overload
-         */
-            static Sprite *createSprite(Texture *texture, Vector2u &pos);
+      /**
+       * @brief Construct a new Sprite object
+       *
+       * @param texture The texture of the sprite
+       * @param pos The position of the sprite
+       * @overload
+       */
+          Sprite(Texture *texture, Vector2u pos);
 
-            static Sprite *createSprite(tdl::Texture *texture, tdl::Vector2u pos);
-
-
-        /**
-         * @brief Create a Sprite object
-         * 
-         * @param texture the texture of the sprite
-         * @param pos the position of the sprite
-         * @param rect the rect of the sprite
-         * @return Sprite* a pointer to the sprite
-         */
-            static Sprite *createSprite(Texture *texture, Vector2u &pos, RectU &rect);
+      /**
+       * @brief Construct a new Sprite object
+       *
+       * @param texture The texture of the sprite
+       * @param pos The position of the sprite
+       * @param rect The rect of the sprite
+       */
+          Sprite(Texture *texture, Vector2u pos, RectU rect);
 
         /**
          * @brief Destroy the Sprite object
          * 
          */
             ~Sprite() override;
+
+          void setRext(RectU &rect) {
+            _rect = rect;
+            _matrix = _texture->getTextureData();
+            Vector2u size = _texture->getSize();
+            _matrix.resize(size);
+            _matrix = _matrix - rect;
+          }
 
         /**
          * @brief Set the Texture object
@@ -87,7 +89,6 @@ namespace tdl {
          * 
          * @param drawable the drawable to draw on
          */
-            void draw(Drawable *drawable) override;
 
             /**
              * @brief lerp between two pixel
@@ -106,25 +107,9 @@ namespace tdl {
          */
             bool isIntersect(const Vector2i &point);
 
+            void draw(Window *d) override;
+
         private : 
-
-        /**
-         * @brief Construct a new Sprite object
-         * 
-         * @param texture The texture of the sprite
-         * @param pos The position of the sprite
-         * @overload
-         */
-            Sprite(Texture *texture, Vector2u &pos);
-
-        /**
-         * @brief Construct a new Sprite object
-         * 
-         * @param texture The texture of the sprite
-         * @param pos The position of the sprite
-         * @param rect The rect of the sprite
-         */
-            Sprite(Texture *texture, Vector2u &pos, RectU &rect);
 
         /**
          * @brief check if the pixel is black
@@ -138,6 +123,7 @@ namespace tdl {
             Texture *_texture; /* !< the texture of the sprite */
             Vector2u _pos; /* !< the position of the sprite */
             std::optional<Pixel> _tint; /* !< the tint of the sprite */
+            RectU _rect; /* !< the rect of the sprite */
     };
 }
 

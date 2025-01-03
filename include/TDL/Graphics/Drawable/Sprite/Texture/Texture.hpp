@@ -6,12 +6,11 @@
 #include <vector>
 #include <optional>
 
-#include "TextureLoader.hpp"
-#include "TDL/Math/Vector.hpp"
-#include "TDL/Math/Rect.hpp"
-#include "TDL/Pixel/Pixel.hpp"
-#include "TDL/Matrix/Transformation.hpp"
-#include "TDL/Drawable/Drawable.hpp"
+#include "TDL/Graphics/Drawable/Pixel/Pixel.hpp"
+#include "TDL/Graphics/Drawable/Sprite/Texture/Loader/TextureLoader.hpp"
+#include "TDL/Utils/Math/Vector.hpp"
+
+#include <TDL/Utils/Matrix/Matrix.hpp>
 
 namespace tdl {
 
@@ -20,7 +19,7 @@ namespace tdl {
  * @brief class to handle texture
  * 
  */
-class Texture : public TextureLoader, public Transformable {
+class Texture : public TextureLoader {
         public : 
 
 
@@ -28,64 +27,7 @@ class Texture : public TextureLoader, public Transformable {
      * @brief Destroy the Texture object
      * 
      */
-            ~Texture() override;
-
-    /**
-     * @brief function to create a texture
-     * 
-     * @param path the path to the png file to load
-     * @return Texture* the texture created
-     * @overload
-     */
-            static Texture *createTexture(std::string path);
-
-    /**
-     * @brief function to create a texture
-     * 
-     * @param path the path to the png file to load
-     * @param repeat the repeat of the texture
-     * @return Texture* the texture created
-     * @overload
-     */
-            static Texture *createTexture(std::string &path, bool repeat);
-
-    /**
-     * @brief function to create a texture from a vector of pixel
-     *
-     * @param pixelData the vector of pixel to create the texture
-     * @return Texture* the texture created
-     * @overload
-     */
-            static Texture *createTextureFromVector(Pixel *pixelData, Vector2u &size);
-
-    /**
-     * @brief function to create a texture from a vector of pixel
-     *
-     * @param pixelData the vector of pixel to create the texture
-     * @param scale the scale of the texture
-     * @return Texture* the texture created
-     * @overload
-     */
-            static Texture *createTextureFromVector(Pixel *pixelData, Vector2u &size, Vector2f &scale);
-
-    /**
-     * @brief function to create a texture from a vector of pixel
-     *
-     * @param pixelData the vector of pixel to create the texture
-     * @param repeat the repeat of the texture
-     * @return Texture* the texture created
-     */
-            static Texture *createTextureFromVector(Pixel *pixelData, Vector2u &size, bool repeat);
-
-    /**
-     * @brief function to create a texture from a vector of pixel
-     *
-     * @param pixelData the vector of pixel to create the texture
-     * @param scale the scale of the texture
-     * @param repeat the repeat of the texture
-     * @return Texture* the texture created
-     */
-            static Texture *createTextureFromVector(Pixel *pixelData, Vector2u &size, Vector2f &scale, bool repeat);
+            ~Texture();
 
     /**
      * @brief get the pixel at the position pos
@@ -95,62 +37,37 @@ class Texture : public TextureLoader, public Transformable {
      */
             Pixel getOriginalPixel(Vector2u &pos);
 
-    /**
-     * @brief Get the Original Image Data object
-     * 
-     * @return PixelMatrix& an reference to the original image data
-     */
-            PixelMatrix &getOriginalImageData() { return _originalImageData; }
+            Matrix<Pixel> &getTextureData() { return _originalImageData; }
 
-    /**
-     * @brief Set the Rect the Texture
-     * 
-     * @param rect the rect to set
-     * @overload
-     */
-             void setRect(const RectU& rect) { _rect = rect; }
+  /**
+* @brief Construct a new Texture:: Texture object
+*
+* @param path the path to the png file to load
+* @param scale the scale of the texture
+* @param repeat the repeat of the texture
+*/
+  Texture(std::string path);
 
-    /**
-     * @brief Set the Rect object
-     * 
-     * @param x the x upper right position of the rect
-     * @param y the y upper right position of the rect
-     * @param width the width of the rect
-     * @param height the height of the rect
-     */
-             void setRect(uint32_t x, uint32_t y, uint32_t width, uint32_t height) { _rect = RectU(x, y, width, height); }
+  /**
+   * @brief function to create a texture from a vector of pixel
+   *
+   * @param pixelData the vector of pixel to create the texture
+   * @param scale the scale of the texture
+   * @param repeat the repeat of the texture
+   */
+  Texture(Pixel *pixelData, Vector2u &size);
 
     /**
      * @brief Get the Rect object
      * 
      * @return std::optional<RectU>& 
      */
-             std::optional<RectU> &getRect() { return _rect; }
 
     /**
      * @brief reset the rect of the texture
      * 
      */
-             void resetRect() { _rect = std::nullopt; }
         private :
-
-    /**
-     * @brief Construct a new Texture:: Texture object
-     * 
-     * @param path the path to the png file to load
-     * @param scale the scale of the texture
-     * @param repeat the repeat of the texture
-     */
-            Texture(std::string &path, bool repeat);
-
-    /**
-     * @brief function to create a texture from a vector of pixel
-     *
-     * @param pixelData the vector of pixel to create the texture
-     * @param scale the scale of the texture
-     * @param repeat the repeat of the texture
-     */
-            Texture(Pixel *pixelData, Vector2u &size, Vector2f &scale, bool repeat);
 
     /**
      * @brief load the image form in pixelData. The load is based from the TextureLoader data
@@ -158,8 +75,7 @@ class Texture : public TextureLoader, public Transformable {
      */
             void loadPixels();
     
-            PixelMatrix _originalImageData; /*!< the original image data */
-            std::optional<RectU> _rect; /*!< the rect of the texture */
+            Matrix<Pixel> _originalImageData; /*!< the original image data */
 
     };
 }

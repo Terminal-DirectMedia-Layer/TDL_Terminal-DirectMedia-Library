@@ -8,34 +8,21 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 #include <termios.h>
+#include <thread>
 
-#include "TDL/Window.hpp"
-#include "TDL/Signal/SignalHandler.hpp"
-#include "TDL/Matrix/PixelMatrix.hpp"
-#include "TDL/Event/Mouse/Linux/Mouse.hpp"
-#include "TDL/Event/Mouse/EventMouseData.hpp"
+#include "TDL/Graphics/Display/Display.hpp"
+#include "TDL/Graphics/Window/Window.hpp"
+#include "TDL/Utils/Signal/SignalHandler.hpp"
 #include "TDL/Event/Event.hpp"
 
-tdl::Window::Window(std::string  title, std::string const& ttyPath) {
-    struct winsize w{};
-    int param;
-    _title = std::move(title);
-    _frameRate = 60;
-    _fd = open(ttyPath.c_str(), O_RDWR);
-    if (_fd == -1)
-        throw std::runtime_error("Can't open tty");
-    ioctl(_fd, TIOCGWINSZ, &w);
-    if (w.ws_col == 0 || w.ws_row == 0)
-        throw std::runtime_error("Can't get terminal size");
-    param = ioctl(_fd, F_GETFL, 0);
-    fcntl(_fd, F_SETFL, param | O_NONBLOCK );
-    _size = Vector2u((w.ws_col + 1) * 2, ((w.ws_row + 1) * 3));
-    getMatrix() = PixelMatrix(_size);
-    getOldMatrix() = PixelMatrix(_size);
-    SignalHandler::getInstance().registerWindow(this);
-    start = std::chrono::system_clock::now();
-    _input = new Keyboard();
-    _mouse = new tdl::Mouse();
+tdl::Window::Window(std::string  title, tdl::Vector2u size, tdl::Vector2u pos, Pixel background) : FrameBuffer(size, background)
+{
+    //_input = new Keyboard();
+    setPosition(pos);
+    _size = size;
+    _win = FrameBuffer(size + Vector2u(TDL_X_WINDOW_OFFSET,TDL_Y_WINDOW_OFFSET), tdl::Pixel(255,255,255,255));
+    _winPos.setPosition(Vector2u(pos.x() + TDL_WINDOW_BORDER_LEFT_B, pos.y() + TDL_WINDOW_BORDER_TOP_B));
+    _title = title;
 }
 /**
  * @brief Destroy the tdl::Window::Window object and unregister the window from the signal manager
@@ -43,36 +30,70 @@ tdl::Window::Window(std::string  title, std::string const& ttyPath) {
  */
 tdl::Window::~Window()
 {
-    SignalHandler::getInstance().unRegisterWindow(this);
-    delete _mouse;
-    delete _input;
-    close(_fd);
-
+    //SignalHandler::getInstance().unRegisterWindow(this);
+    //delete _input;
 }
 
-/**
- * @brief Create a new Window object, initialize the window and return it
- * 
- * @param title the title of the window
- * @param tty_path the path to the tty to lauch the window, the available tty are /dev/tty or /dev/pts/0.../dev/pts/x
- * @return tdl::Window* 
- * @note this is only herre where the window constructor is called because it throw an error if the tty can't be open
- * also we initialize the window here that means that the black background should be printed on the terminal
- */
-tdl::Window* tdl::Window::createWindow(std::string const& title, std::string const& ttyPath) {
-    try {
-        auto * win = new Window(title, ttyPath);
-        win->alternateScreenBuffer();
-        win->disableEcho();
-        win->removeMouseCursor();
-        win->enableMouseClick();
-        win->enableMouseMove();
-        return win;
-    } catch (std::runtime_error& e) {
-        std::cerr << e.what();
-        return nullptr;
+void tdl::Window::draw(tdl::Display &d)
+{
+    for (auto &drawable : _drawables) {
+        drawable->draw(this);
+    }
+    _winPos.setPosition(Vector2u(getPosition().x() - TDL_WINDOW_BORDER_LEFT_B, getPosition().y() - TDL_WINDOW_BORDER_TOP_B));
+    Transform winT = _winPos.getTransform();
+    Transform t = getTransform();
+    u_int32_t size_x = _win.getSize().x();
+    u_int32_t size_y = _win.getSize().y();
+
+    auto drawChunk = [&](u_int32_t startY, u_int32_t endY) {
+        Vector2f pos;
+        for (u_int32_t y = startY; y < endY; y++) {
+            for (u_int32_t x = 0; x < size_x; x++) {
+                if (x > TDL_WINDOW_BORDER_LEFT_B
+                        && x < size_x - TDL_WINDOW_BORDER_RIGHT_B
+                        && y > TDL_WINDOW_BORDER_TOP_B
+                        && y < size_y - TDL_WINDOW_BORDER_BOTTOM_B)
+                {
+                    pos = t.transformPoint(x - TDL_WINDOW_BORDER_LEFT_B, y - TDL_WINDOW_BORDER_TOP_B);
+                    d.setPixel(static_cast<u_int32_t>(pos.x()), static_cast<u_int32_t>(pos.y()), getPixel(x - TDL_WINDOW_BORDER_LEFT_B, y - TDL_WINDOW_BORDER_TOP_B));
+                    continue;
+                }
+                pos = winT.transformPoint(x, y);
+                d.setPixel(static_cast<u_int32_t>(pos.x()), static_cast<u_int32_t>(pos.y()), _win.getPixel(x, y));
+            }
+        }
+    };
+
+    int numThreads = std::thread::hardware_concurrency();
+    std::vector<std::thread> threads;
+    u_int32_t chunkSize = size_y / numThreads;
+
+    for (int i = 0; i < numThreads; ++i) {
+        u_int32_t startY = i * chunkSize;
+        u_int32_t endY = (i == numThreads - 1) ? size_y : startY + chunkSize;
+        threads.emplace_back(drawChunk, startY, endY);
+    }
+
+    for (auto &t : threads) {
+        t.join();
     }
 }
+
+void tdl::Window::pushEvent(const tdl::Event &event)
+{
+    _events.push(event);
+}
+
+void tdl::Window::pollEvent() {
+    while (!_events.empty()) {
+        Event ev = _events.front();
+        if (onEvent != nullptr) {
+            onEvent(ev, this);
+        }
+        _events.pop();
+    }
+}
+
 
 /**
  * @brief Polls the event
@@ -83,6 +104,7 @@ tdl::Window* tdl::Window::createWindow(std::string const& title, std::string con
  * @return true if an event is found
  * @return false if no event is found
  */
+/*
 bool tdl::Window::pollEvent(tdl::Event &event, std::regex *custom)
 {
     if (_events.empty()){
@@ -98,7 +120,7 @@ bool tdl::Window::pollEvent(tdl::Event &event, std::regex *custom)
             return false;
         }
         buffer[_nread] = 0;
-        /*while (buffer[index] != 0 && _nread != index) {
+        while (buffer[index] != 0 && _nread != index) {
             auto it = std::find_if(buffer + index, buffer + _nread, [](char c) {
                 return c == 'm' || c == 'M';
             });
@@ -123,7 +145,7 @@ bool tdl::Window::pollEvent(tdl::Event &event, std::regex *custom)
                 index += _nread;
                 continue;
             }
-        }*/
+        }
     }
     if (!_events.empty()){
         event = _events.front();
@@ -132,19 +154,4 @@ bool tdl::Window::pollEvent(tdl::Event &event, std::regex *custom)
     }
     return false;
 }
-
-void tdl::Window::updateTermSize()
-{
-    struct winsize w{};
-    int timeout = 10;
-    w.ws_col = 0;
-    w.ws_row = 0;
-    while (w.ws_col == 0 && w.ws_row == 0 && timeout > 0) {
-        ioctl(_fd, TIOCGWINSZ, &w);
-        timeout--;
-    }
-    _size = Vector2u((w.ws_col + 1) * 2, ((w.ws_row + 1) * 3));
-    getMatrix().resize(_size);
-    getOldMatrix().resize(_size);
-    update(true);
-}
+*/
