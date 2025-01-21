@@ -67,6 +67,8 @@ namespace tdl {
         void pushEvent(const Event &event);
         void pollEvent();
 
+        std::vector<IDrawable *> &getDrawables() { return _drawables; }
+
         inline ClickLocation isClickIn(Vector2u pos) {
             if (pos.x() >= _winPos.getPosition().x() && pos.x() <= _winPos.getPosition().x() + getSize().x()
                 && pos.y() >= _winPos.getPosition().y() && pos.y() <= _winPos.getPosition().y() + getSize().y()) {
@@ -83,8 +85,22 @@ namespace tdl {
 
         eventCallback onEvent = nullptr;
 
-        void addDrawable(IDrawable *drawable) {
-            _drawables.push_back(drawable);
+        void addDrawable(IDrawable *drawable) { _drawables.push_back(drawable); }
+
+        Pixel &getBackground() {
+            return _background;
+        }
+
+        bool getPixelAtPos(Vector2i pos, Pixel &pixel) {
+            if (pos.x() < 0 || pos.y() < 0 || pos.x() >= getSize().x() || pos.y() >= getSize().y())
+                return false;
+            for (auto &drawable : _drawables) {
+                if (drawable->getPixelAtPos(pos, pixel)) { //TODO crée une priorité sur les sprite pour les dessiner
+                    return true;
+                }
+            }
+            pixel = getPixel(pos.x(), pos.y());
+            return true;
         }
 
         private:
@@ -97,6 +113,8 @@ namespace tdl {
             Vector2u _pos;
             Vector2u _size;
             std::string _title;
+
+            Pixel _background;
 
             FrameBuffer _win;
             Placeable _winPos;

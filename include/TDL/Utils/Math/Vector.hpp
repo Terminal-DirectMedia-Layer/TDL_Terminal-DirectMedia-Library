@@ -268,7 +268,6 @@ namespace tdl
  * @return constexpr T 
  */
         inline constexpr T x() const { return std::get<0>(_values); }
-
     };
 
 /**

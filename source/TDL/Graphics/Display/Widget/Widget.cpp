@@ -1,6 +1,7 @@
 #include "TDL/Graphics/Display/Display.hpp"
 #include "TDL/Graphics/Widget/Widget.hpp"
 #include "TDL/Utils/Parser/Json.hpp"
+#include "TDL/Utils/Memory/Arena.hpp"
 
 
 namespace tdl {
@@ -16,7 +17,7 @@ namespace tdl {
              throw std::runtime_error("Size is not an 2D array");
          }
          Vector2u _size = Vector2u(bufsize[0].get<u_int32_t>(), bufsize[1].get<u_int32_t>());
-         _buffer.resize(_size);
+         _buffer = Matrix<Pixel>(_size);
 
         auto buffer = parser.key_value("buffer");
         if (!buffer.is_array() && buffer.size() == _size.x() * _size.y()) {
@@ -37,8 +38,24 @@ namespace tdl {
     {
     }
 
+    void lerpMouse(double& currentX, double& currentY, float targetX, float targetY, float k) {
+        float deltaX = targetX - currentX;
+        float deltaY = targetY - currentY;
+
+        float distance = std::sqrt(deltaX * deltaX + deltaY * deltaY);
+
+        float factor = 1 - std::exp(-distance * k);
+
+        currentX += deltaX * factor;
+        currentY += deltaY * factor;
+    }
+
     void Widget::draw(Display &d)
     {
+        Vector2f actualPos = getPosition();
+        Vector2f targetPos = Vector2f(_nextPos.x(), _nextPos.y());
+        //lerpMouse(actualPos.x(), actualPos.y(), targetPos.x(), targetPos.y(), 0.01f);
+        setPosition(Vector2u(static_cast<u_int32_t>(targetPos.x()), static_cast<u_int32_t>(targetPos.y())));
         Transform t = getTransform();
 
         for (u_int32_t y = 0; y < _buffer.getSize().y(); y++) {

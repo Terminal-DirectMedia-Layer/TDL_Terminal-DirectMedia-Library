@@ -39,6 +39,8 @@ namespace tdl {
             */
             void draw(FrameBuffer &buffer) override;
 
+            void updateSize(FrameBuffer &buffer) override {}
+
             private:
              	int _fd; /**< The file descriptor of the TTY. */
                 struct fb_var_screeninfo _vinfo; /**< The variable information of the framebuffer. */

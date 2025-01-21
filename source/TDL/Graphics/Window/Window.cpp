@@ -14,15 +14,17 @@
 #include "TDL/Graphics/Window/Window.hpp"
 #include "TDL/Utils/Signal/SignalHandler.hpp"
 #include "TDL/Event/Event.hpp"
+#include "Tracy.hpp"
 
-tdl::Window::Window(std::string  title, tdl::Vector2u size, tdl::Vector2u pos, Pixel background) : FrameBuffer(size, background)
+tdl::Window::Window(std::string  title, tdl::Vector2u size, tdl::Vector2u pos, Pixel background) : FrameBuffer(size, background),
+_win(size + Vector2u(TDL_X_WINDOW_OFFSET, TDL_Y_WINDOW_OFFSET), tdl::Pixel(255, 255, 255, 255))
 {
     //_input = new Keyboard();
     setPosition(pos);
     _size = size;
-    _win = FrameBuffer(size + Vector2u(TDL_X_WINDOW_OFFSET,TDL_Y_WINDOW_OFFSET), tdl::Pixel(255,255,255,255));
     _winPos.setPosition(Vector2u(pos.x() + TDL_WINDOW_BORDER_LEFT_B, pos.y() + TDL_WINDOW_BORDER_TOP_B));
     _title = title;
+    _background = background;
 }
 /**
  * @brief Destroy the tdl::Window::Window object and unregister the window from the signal manager
@@ -36,15 +38,41 @@ tdl::Window::~Window()
 
 void tdl::Window::draw(tdl::Display &d)
 {
+    //plot config cache misses
+
     for (auto &drawable : _drawables) {
         drawable->draw(this);
     }
+
     _winPos.setPosition(Vector2u(getPosition().x() - TDL_WINDOW_BORDER_LEFT_B, getPosition().y() - TDL_WINDOW_BORDER_TOP_B));
     Transform winT = _winPos.getTransform();
     Transform t = getTransform();
     u_int32_t size_x = _win.getSize().x();
     u_int32_t size_y = _win.getSize().y();
+    Pixel p;
+    Pixel white(255, 255, 255, 255);
+    for (u_int32_t y = 0; y < size_y; y++) {
+        for (u_int32_t x = 0; x < size_x; x++) {
 
+            if (x > TDL_WINDOW_BORDER_LEFT_B
+                && x < size_x - TDL_WINDOW_BORDER_RIGHT_B
+                && y > TDL_WINDOW_BORDER_TOP_B
+                && y < size_y - TDL_WINDOW_BORDER_BOTTOM_B)
+            {
+                d.setPixel(
+                    t.transformPoint(x - TDL_WINDOW_BORDER_LEFT_B, y - TDL_WINDOW_BORDER_TOP_B),
+                    getPixel(x - TDL_WINDOW_BORDER_LEFT_B, y - TDL_WINDOW_BORDER_TOP_B)
+                );
+                continue;
+            }
+            d.setPixel(
+                winT.transformPoint(x, y),
+            _win.getPixel(x, y)
+            );
+        }
+    }
+
+/*
     auto drawChunk = [&](u_int32_t startY, u_int32_t endY) {
         Vector2f pos;
         for (u_int32_t y = startY; y < endY; y++) {
@@ -77,6 +105,7 @@ void tdl::Window::draw(tdl::Display &d)
     for (auto &t : threads) {
         t.join();
     }
+    */
 }
 
 void tdl::Window::pushEvent(const tdl::Event &event)
