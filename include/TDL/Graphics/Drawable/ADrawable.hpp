@@ -12,6 +12,8 @@ namespace tdl {
         public:
             virtual void draw(Window *d) = 0;
 
+            virtual bool getPixelAtPos(Vector2i pos, Pixel &pixel) = 0;
+
             protected:
                 ADrawable(Vector2u size);
                 ~ADrawable();

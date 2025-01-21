@@ -59,6 +59,10 @@ namespace tdl {
                 _content += "\033[" + std::to_string(pos.y() / 2) + ";" + std::to_string(pos.x()) + "H";
             }
 
+        inline void disableScrolling() {
+                _content += "\033[r";
+            }
+
         /**
          * @brief ansii print pixel code
          * 
@@ -141,10 +145,10 @@ namespace tdl {
 
             inline void setSixelColor(int id, Pixel pixel, bool isBack = false)
             {
-              if (isBack){
+              if (isBack) {
                 _content += '#';
                 _content += std::to_string(id).c_str();
-              }else {
+              } else {
             	_content += '#';
                 _content += std::to_string(id).c_str();
                 _content += ";2;";

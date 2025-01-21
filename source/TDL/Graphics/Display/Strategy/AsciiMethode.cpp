@@ -30,9 +30,23 @@ namespace tdl
 		if (w.ws_col == 0 || w.ws_row == 0)
    			throw std::runtime_error("Can't get terminal size");
 		param = ioctl(_fd, F_GETFL, 0);
-		fcntl(_fd, F_SETFL, param | O_NONBLOCK );
-       	Vector2u size((w.ws_col + 1) * 2, ((w.ws_row + 1) * 3));
+		fcntl(_fd, F_SETFL, param | O_NONBLOCK);
+        Vector2u size((w.ws_col + 1) * 2, ((w.ws_row + 1) * 3));
+        disableScrolling();
         buffer.resize(size);
+    }
+
+    void AsciiMethode::updateSize(FrameBuffer &buffer) {
+        struct winsize w{};
+        ioctl(_fd, TIOCGWINSZ, &w);
+        if (w.ws_col == 0 || w.ws_row == 0)
+            throw std::runtime_error("Can't get terminal size");
+        buffer.lock();
+        Vector2u newSize((w.ws_col + 1) * 2, ((w.ws_row + 1) * 3));
+        buffer.resize(newSize);
+        buffer.unlock();
+
+
     }
 
     void AsciiMethode::draw(FrameBuffer &buffer)
@@ -44,7 +58,7 @@ namespace tdl
         Pixel oldPixels[6] = {Pixel(0, 0, 0, 0)};
         u_int32_t sizeX = buffer.getSize().x();
         u_int32_t sizeY = buffer.getSize().y();
-
+        std::cerr << "sizeX: " << sizeX << " sizeY: " << sizeY << std::endl;
         Pixel oldForeColor = Pixel(0, 0, 0, 0);
         Pixel oldBackColor = Pixel(0, 0, 0, 0);
 

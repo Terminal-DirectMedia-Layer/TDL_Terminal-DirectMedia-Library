@@ -50,6 +50,8 @@ namespace tdl
          */
         void draw(FrameBuffer &buffer) override;
 
+        void updateSize(FrameBuffer &buffer) override;
+
         private:
           bool getPixelChar(u_int32_t x, u_int32_t y, Pixel *pixel, FrameBuffer &buffer);
           void setPixelChar(u_int32_t x, u_int32_t y, Pixel *pixel, FrameBuffer &buffer);
