@@ -35,7 +35,7 @@ class Texture : public TextureLoader {
      * @param pos the position of the pixel
      * @return Pixel the pixel at the position pos
      */
-            Pixel getOriginalPixel(Vector2u &pos);
+            Pixel getOriginalPixel(Vector2i &pos);
 
             Matrix<Pixel> &getTextureData() { return _originalImageData; }
 

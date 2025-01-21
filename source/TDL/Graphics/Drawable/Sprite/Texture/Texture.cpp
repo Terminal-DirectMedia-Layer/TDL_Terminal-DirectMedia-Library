@@ -6,6 +6,7 @@
 #include "TDL/Utils/Math/Vector.hpp"
 #include "TDL/Utils/Math/Rect.hpp"
 #include "TDL/Graphics/Drawable/Pixel/Pixel.hpp"
+#include "TDL/Utils/Memory/Arena.hpp"
 
 namespace tdl {
 
@@ -33,6 +34,7 @@ namespace tdl {
         png_byte *ptr;
         if (!_originalImageData.empty())
             _originalImageData.clear();
+        _originalImageData.resize(_size);
         for (u_int32_t y = 0; y < _size.y(); y++) {
             std::vector<Pixel> row;
             for (u_int32_t x = 0; x < _size.x(); x++) {
@@ -44,13 +46,12 @@ namespace tdl {
                 } else if (_channels == 1) {
                     color = Pixel(ptr[0], ptr[0], ptr[0], 255);
                 }
-                row.push_back(color);
+                _originalImageData.setElement(Vector2u(x, y), color);
             }
-            _originalImageData.append(row);
         }
     }
 
-    Pixel Texture::getOriginalPixel(Vector2u &pos)
+    Pixel Texture::getOriginalPixel(Vector2i &pos)
     {
         return _originalImageData.getElement(pos);
     }

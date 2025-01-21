@@ -54,6 +54,15 @@ namespace tdl {
             _matrix = _matrix - rect;
           }
 
+        bool getPixelAtPos(Vector2i pos, Pixel &pixel) override;
+
+          Vector2u getPosition() override {
+            return _pos;
+          }
+
+            Vector2u getSize() override {
+                return _matrix.getSize();
+            }
         /**
          * @brief Set the Texture object
          * 

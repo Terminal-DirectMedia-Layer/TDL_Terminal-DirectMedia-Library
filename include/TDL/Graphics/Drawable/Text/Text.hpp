@@ -12,7 +12,7 @@ namespace tdl {
      * @class Text
      * @brief Text class
      */
-    class Text : public Transformable {
+    class Text : public Transformable, public ADrawable {
     public:
 
     /**
@@ -47,6 +47,14 @@ namespace tdl {
      * 
      */
         Font &getFont();
+
+        Vector2u getSize() override {
+            return Vector2u(0, 0);
+        }
+
+        Vector2u getPosition() override {
+            return Vector2u(0, 0);
+        }
 
     /**
      * @brief Set the Text object
@@ -87,7 +95,7 @@ namespace tdl {
      * 
      * @param drawable the drawable to draw on
      */
-        void draw(Window *drawable);
+        void draw(Window *drawable) override;
 
     private:
         Font _font; /* !< the font of the text */

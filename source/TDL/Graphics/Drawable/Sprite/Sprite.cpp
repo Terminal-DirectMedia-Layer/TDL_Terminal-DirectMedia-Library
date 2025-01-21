@@ -103,6 +103,12 @@ void tdl::Sprite::draw(Window *d) {
     }
 }
 
+bool tdl::Sprite::getPixelAtPos(Vector2i pos, Pixel &pixel) {
+    if (pos.x() < 0 || pos.y() < 0 || pos.x() >= _matrix.getSize().x() || pos.y() >= _matrix.getSize().y())
+        return false;
+    pixel = _matrix.getElement(pos.x(), pos.y());
+    return true;
+}
 
 /*
  void tdl::Sprite::draw(tdl::Drawable *drawable) {

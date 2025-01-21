@@ -1,13 +1,16 @@
 
 #include "TDL/Graphics/Drawable/Text/Text.hpp"
+
+#include <TDL/Graphics/Window/Window.hpp>
+
 #include "TDL/Graphics/Drawable/Pixel/Pixel.hpp"
 
 namespace tdl {
-    Text::Text()
+    Text::Text() : ADrawable(Vector2u(0, 0))
     {
     }
 
-    Text::Text(Font &font, std::string text)
+    Text::Text(Font &font, std::string text) : ADrawable(Vector2u(0, 0))
     {
         _font = font;
         _text = text;
@@ -40,7 +43,7 @@ namespace tdl {
 
     void Text::draw(Window *drawable)
     {
-        /*
+
         int pen_x = 0;
         int pen_y = 0;
         Transform left = getTransform();
@@ -58,10 +61,10 @@ namespace tdl {
             for (int y = 0; y < _font.getFace()->glyph->bitmap.rows; ++y) {
                 for (int x = 0; x < _font.getFace()->glyph->bitmap.width; ++x) {
                     u_int8_t grayscale = _font.getFace()->glyph->bitmap.buffer[y * _font.getFace()->glyph->bitmap.pitch + x];
-                    tdl::Pixel pixel = drawable->getPixel(Vector2u(pen_x + x, pen_y + y)) + tdl::Pixel(grayscale, grayscale, grayscale, grayscale) ;
                     Vector2f point = left.transformPoint(pen_x + x, pen_y + y);
-                    drawable->setPixel(Vector2u(point.x(), point.y()), pixel);
-                    drawable->getMatrix().registerToUpdate(Vector2u(point.x(), point.y()));
+                    std::cerr << point.x() << " " << point.y() << "grayscale: " << grayscale << std::endl;
+                    Pixel p = Pixel(grayscale, grayscale, grayscale, grayscale);
+                    drawable->setPixel(Vector2u(point.x(), point.y()), p);
                 }
             }
             pen_x += _font.getFace()->glyph->advance.x / 64;
@@ -73,16 +76,13 @@ namespace tdl {
                 for (int y = 0; y < _font.getFace()->glyph->bitmap.rows; ++y) {
                     for (int x = 0; x < _font.getFace()->glyph->bitmap.width; ++x) {
                         Vector2f point = left.transformPoint(pen_x + x, pen_y + y);
-                        drawable->setPixel(Vector2u(point.x(), point.y()), Pixel(0, 0, 0, 0));
-                        drawable->getMatrix().registerToUpdate(Vector2u(point.x(), point.y()));
+                        drawable->setPixel(Vector2u(point.x(), point.y()), drawable->getBackground());
                     }
                 }
                 pen_x += _font.getFace()->glyph->advance.x / 64;
             }
         }
         _oldText = _text;
-
-         */
 
     }
 } // namespace tdl
