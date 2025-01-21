@@ -10,6 +10,8 @@
 #include <list>
 
 #include <termios.h>
+#include <sixel.h>
+
 
 
 namespace tdl
@@ -54,6 +56,8 @@ namespace tdl
          */
         void draw(FrameBuffer &buffer) override;
 
+        void updateSize(FrameBuffer &buffer) override;
+
         FrameBuffer atkinsonDithering(FrameBuffer buff);
         void generatePalette();
         Pixel findClosestColor(Pixel pixel);
@@ -68,6 +72,9 @@ namespace tdl
         std::unordered_map<u_int32_t, std::string> _mask;
         std::vector<Pixel> _colorPalette;
         int _maskIndex = 0;
+
+        sixel_output_t *_output;
+        sixel_dither_t *_dither;
 
         void transform(Sixel &pixel);
 

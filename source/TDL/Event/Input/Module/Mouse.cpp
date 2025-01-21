@@ -29,6 +29,15 @@ namespace tdl {
 
       }
 
+    void scaleMouseMovement(float rawDeltaX, float rawDeltaY, float baseDPI, float targetDPI, float& scaledX, float& scaledY) {
+        // Calculate the scaling factor
+        float scalingFactor = targetDPI / baseDPI;
+
+        // Scale the raw movement
+        scaledX = rawDeltaX * scalingFactor;
+        scaledY = rawDeltaY * scalingFactor;
+    }
+
     void Mouse::pollMouse()
     {
         while (_events.read) {
@@ -80,25 +89,25 @@ namespace tdl {
                         if(ev->code == ABS_X) {
                             if (!isTouchTracking) {
                                 moveEvent.type = TDL_MOUSEMOVED;
-                                _x += libevdev_get_event_value(dev, EV_ABS, ABS_X) - _xTracking;
-                                _xTracking = ev->value;
+                                _x += (int)((libevdev_get_event_value(dev, EV_ABS, ABS_X ) / 1.2) - _xTracking);
+                                _xTracking = (int)(libevdev_get_event_value(dev, EV_ABS, ABS_X) / 1.2);
                                 if (_x < 0) _x = 0;
                                 moveEvent.mouseMove.x = _x;
                                 moveEvent.mouseMove.y = _y;
                             } else {
-                                _xTracking = ev->value;
+                                _xTracking = (int)(libevdev_get_event_value(dev, EV_ABS, ABS_X) / 1.2);
                             }
                         }
                         if(ev->code == ABS_Y) {
                             if (!isTouchTracking) {
                                 moveEvent.type = TDL_MOUSEMOVED;
-                                _y += libevdev_get_event_value(dev, EV_ABS, ABS_Y) - _yTracking;
-                                _yTracking = ev->value;
+                                _y += (int)((libevdev_get_event_value(dev, EV_ABS, ABS_Y ) / 1.2) - _yTracking);
+                                _yTracking = (int)(libevdev_get_event_value(dev, EV_ABS, ABS_Y) / 1.2);
                                 if (_y < 0) _y = 0;
                                 moveEvent.mouseMove.x = _x;
                                 moveEvent.mouseMove.y = _y;
                             } else {
-                                _yTracking = ev->value;
+                                _yTracking = (int)(libevdev_get_event_value(dev, EV_ABS, ABS_Y) / 1.2);
                             }
                         }
                         break;

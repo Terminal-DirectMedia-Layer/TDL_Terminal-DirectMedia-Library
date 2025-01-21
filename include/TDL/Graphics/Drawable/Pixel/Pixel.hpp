@@ -22,7 +22,7 @@ namespace tdl {
      * @struct Pixel
      * @brief the Pixel structure
      */
-    struct Pixel {
+    struct alignas(4) Pixel {
         uint32_t color;
 
         /**

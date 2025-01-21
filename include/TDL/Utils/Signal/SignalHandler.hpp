@@ -5,7 +5,7 @@
 
 #include <csignal>
 
-#include "TDL/Graphics/Window/Window.hpp"
+#include "TDL/Graphics/Display/Display.hpp"
 
 namespace tdl {
 /**
@@ -31,14 +31,14 @@ namespace tdl {
  *
  * @param win the window to register
  */
-        void registerWindow(Window *win);
+        void registerWindow(Display *win);
 
 /**
  * @brief unregister a window from the signal handler
  *
  * @param win the window to unregister
  */
-        void unRegisterWindow(Window *win);
+        void unRegisterWindow(Display *win);
 
 /**
  * @brief the function called when a signal is received
@@ -63,7 +63,7 @@ namespace tdl {
  */
         void handleSignalInstance();
 
-        std::vector<Window*> _windows; /**< the list of windows registered to the signal handler */
+        std::vector<Display*> _windows; /**< the list of windows registered to the signal handler */
     };
 }
 

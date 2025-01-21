@@ -17,16 +17,19 @@
 
 namespace tdl
 {
+    int write_to_stdout(char *data, int size, void *priv) {
+        return fwrite(data, 1, size, stdout);
+    }
 
-void setNonCanonicalMode(int fd, struct termios &old_tio) {
-    struct termios new_tio;
-    tcgetattr(fd, &old_tio);
-    new_tio = old_tio;
-    new_tio.c_lflag &=(~ICANON & ~ECHO);
-    new_tio.c_cc[VMIN] = 1;
-    new_tio.c_cc[VTIME] = 0;
-    tcsetattr(STDIN_FILENO,TCSANOW, &new_tio);
-}
+    void setNonCanonicalMode(int fd, struct termios &old_tio) {
+        struct termios new_tio;
+        tcgetattr(fd, &old_tio);
+        new_tio = old_tio;
+        new_tio.c_lflag &=(~ICANON & ~ECHO);
+        new_tio.c_cc[VMIN] = 1;
+        new_tio.c_cc[VTIME] = 0;
+        tcsetattr(STDIN_FILENO,TCSANOW, &new_tio);
+    }
 
     SixelMethode::SixelMethode(FrameBuffer &buffer)
     {
@@ -46,11 +49,66 @@ void setNonCanonicalMode(int fd, struct termios &old_tio) {
         write(_fd, _content.c_str(), _content.size());
        	Vector2u size = getSixelSize(_fd);
         buffer.resize(size);
-        generatePalette();
+
+        SIXELSTATUS status = sixel_output_new(&_output, write_to_stdout, NULL,NULL);
+        if (status != SIXEL_OK) {
+            throw std::runtime_error("Erreur d'initialisation de libsixel");
+        }
+
+        _dither = sixel_dither_get(SIXEL_BUILTIN_XTERM256);
+        if (_dither == NULL) {
+            sixel_output_unref(_output);
+            throw std::runtime_error("Erreur lors de la création du dither");
+        }
     }
 
-    void SixelMethode::draw(FrameBuffer &buffer)
+    void SixelMethode::updateSize(FrameBuffer &buffer)
     {
+        struct winsize w{};
+        ioctl(_fd, TIOCGWINSZ, &w);
+        if (w.ws_col == 0 || w.ws_row == 0)
+            throw std::runtime_error("Can't get terminal size");
+        buffer.lock();
+        Vector2u size = getSixelSize(_fd);
+        buffer.resize(size);
+        buffer.unlock();
+        SIXELSTATUS status = sixel_output_new(&_output, write_to_stdout, NULL,NULL);
+        if (status != SIXEL_OK) {
+            throw std::runtime_error("Erreur d'initialisation de libsixel");
+        }
+
+        _dither = sixel_dither_get(SIXEL_BUILTIN_XTERM256);
+        if (_dither == NULL) {
+            sixel_output_unref(_output);
+            throw std::runtime_error("Erreur lors de la création du dither");
+        }
+    }
+
+    void SixelMethode::draw(FrameBuffer &buffer) {
+        std::vector<unsigned char> sixel;
+        Pixel p;
+        for (int y = 0; y < buffer.getSize().y(); y++) {
+            for (int x = 0; x < buffer.getSize().x(); x++) {
+                p = buffer.getPixel(x, y);
+                sixel.push_back(GET_R(p.color));
+                sixel.push_back(GET_G(p.color));
+                sixel.push_back(GET_B(p.color));
+            }
+        }
+
+        SIXELSTATUS status = sixel_encode(
+            sixel.data(),
+            buffer.getSize().x(),
+            buffer.getSize().y(),
+            3 * buffer.getSize().x(),
+            _dither,
+            _output);
+
+        if (status != SIXEL_OK) {
+            std::cerr << "Erreur lors de l'encodage SIXEL: code " << status << std::endl;
+        }
+    }
+    /*
      	int line = 0;
         int pack_count = 0;
         FrameBuffer buff = atkinsonDithering(buffer);
@@ -211,4 +269,6 @@ void setNonCanonicalMode(int fd, struct termios &old_tio) {
           }
           return buff;
     }
+        */
+
 }

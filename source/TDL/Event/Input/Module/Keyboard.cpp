@@ -79,21 +79,27 @@ namespace tdl {
 
     std::string Keyboard::findCharset() const
     {
-        std::ifstream file("/etc/default/keyboard");
+        std::ifstream file;
+        std::vector<std::string> files = {"/etc/default/keyboard", "/etc/vconsole.conf"};
+        for (const auto &file_path : files) {
+            file.open(file_path);
+            if (file.is_open()) {
+                break;
+            }
+        }
         if (!file.is_open()) {
-            std::cerr << "Unable to open /etc/default/keyboard" << std::endl;
+            std::cerr << "Unable to open /etc/default/keyboard or /etc/vconsole.conf" << std::endl;
             return "";
         }
-
         std::string line;
-        std::regex charset_regex("XKBLAYOUT=\"[a-zA-Z]+\"");
+        std::regex charset_regex("XKBLAYOUT=([^\"]+)");
+
         std::smatch match;
         std::string charset = "";
-
         while (std::getline(file, line)) {
+            std::cerr << line << std::endl;
             if (std::regex_search(line, match, charset_regex)) {
-                charset = match.str();
-                charset = charset.substr(11, charset.size() - 12);
+                charset = match[1].str(); // Directly access the first capturing group
                 break;
             }
         }

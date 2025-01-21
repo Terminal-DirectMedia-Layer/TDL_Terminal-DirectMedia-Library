@@ -69,6 +69,12 @@ class Matrix {
             }
         }
 
+    inline void setElement(Vector2f pos, T element) {
+            if (pos.x() < _size.x() && pos.y() < _size.y()) {
+                _matrix[static_cast<u_int32_t>(pos.y()) * _size.x() + static_cast<u_int32_t>(pos.x())] = element;
+            }
+        }
+
         /**
          * @brief get the element at the position pos
          * @param pos the position of the element
@@ -91,6 +97,13 @@ class Matrix {
         inline T &getElement(u_int32_t x, u_int32_t y) {
             if (x <= _size.x() && y <= _size.y()) {
                 return _matrix[y * _size.x() + x];
+            }
+            return _matrix[0];
+        }
+
+        inline T &getElement(Vector2i pos) {
+            if (pos.x() <= _size.x() && pos.y() <= _size.y()) {
+                return _matrix[pos.y() * _size.x() + pos.x()];
             }
             return _matrix[0];
         }

@@ -10,12 +10,12 @@ tdl::SignalHandler &tdl::SignalHandler::getInstance()
     return instance;
 }
 
-void tdl::SignalHandler::registerWindow(Window *win)
+void tdl::SignalHandler::registerWindow(Display *win)
 {
     _windows.push_back(win);
 }
 
-void tdl::SignalHandler::unRegisterWindow(Window *win)
+void tdl::SignalHandler::unRegisterWindow(Display *win)
 {
     _windows.erase(std::remove(_windows.begin(), _windows.end(), win), _windows.end());
 }
@@ -28,14 +28,12 @@ void tdl::SignalHandler::handleSignal(int sig)
 
 void tdl::SignalHandler::handleSignalInstance()
 {
-    /*
-    for (auto &win : _windows) {
-        win->updateTermSize();
+    for (auto &disp : _windows) {
+        disp->updateSize();
         Event event;
         event.type = TDL_WINDOWRESIZED;
-        event.size.width = win->getWidth();
-        event.size.height = win->getHeight();
-        win->pushEvent(event);
+        event.size.width = disp->getSize().x();
+        event.size.height = disp->getSize().y();
+        disp->getNotifier().pushEvent(event);
     }
-    */
 }
