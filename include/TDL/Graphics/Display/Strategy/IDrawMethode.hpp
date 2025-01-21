@@ -21,6 +21,7 @@ namespace tdl
          * @brief draws the object.
          */
         virtual void draw(FrameBuffer &buffer) = 0;
+        virtual void updateSize(FrameBuffer &buffer) = 0;
     };
 }
 

@@ -55,6 +55,16 @@ namespace tdl
             _windows.push_back(win);
         }
 
+        std::vector<Window *> &getWindowsList()
+        {
+            return _windows;
+        }
+
+        Window *getWinFocus()
+        {
+            return _windows.back();
+        }
+
         void close()
         {
             _open = false;
@@ -63,6 +73,19 @@ namespace tdl
         bool isOpen()
         {
             return _open;
+        }
+
+        EventNotifier &getNotifier() {
+            return _eventNotifier;
+        }
+
+        void clear(Pixel background = Pixel(0, 0, 0, 255))
+        {
+            for (auto &win : _windows) {
+                win->clear(win->getBackground());
+            }
+            _previousFrame = _currentFrame;
+            _currentFrame->fill(background);
         }
 
         /**
@@ -77,6 +100,13 @@ namespace tdl
          */
         IDrawMethode *getDrawMethode();
 
+        void updateSize()
+        {
+            _drawMethode->updateSize(*this);
+        }
+
+        bool computePixel(Vector2i pos, Pixel & pixel);
+
         /**
          * @brief draws the display.
          */
@@ -88,11 +118,9 @@ namespace tdl
         void pollEvent();
         eventDisplayCallback onEvent = nullptr;
         FPSCounter fps {};
-        InterruptManager _interruptManager {};
+        InterruptManager _interruptManager;
 
         Widget _cursor;
-
-
 
       protected:
           IDrawMethode *_drawMethode; /**< The draw methode of the display. */
@@ -103,11 +131,11 @@ namespace tdl
             DisplayType _type ; /**< The type of the display. */
             Vector2u _resolution; /**< The resolution of the display. */
             std::vector<Window *> _windows; /**< The windows of the display. */
-            EventNotifier _eventNotifier {}; /**< The event notifier of the display. */
+            EventNotifier _eventNotifier; /**< The event notifier of the display. */
             bool _open = true;
-            Vector2i clickDelta;
 
         Display(DisplayType type = DisplayType::AUTO);
+
 
     };
 

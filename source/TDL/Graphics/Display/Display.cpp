@@ -14,11 +14,13 @@
 #include "TDL/Graphics/Display/Strategy/TtyMethode.hpp"
 #include "TDL/Graphics/Display/Strategy/SixelMethode.hpp"
 #include "TDL/Graphics/Widget/Widget.hpp"
+#include "TDL/Utils/Signal/SignalHandler.hpp"
+#include <Tracy.hpp>
 
 
 namespace tdl
 {
-    Display::Display(DisplayType type) : FrameBuffer() , _drawMethode(nullptr), _cursor("cursor","assets/Default/Cursor.json")
+    Display::Display(DisplayType type) : FrameBuffer() , _drawMethode(nullptr), _cursor("cursor","assets/Default/Cursor.json")//, _eventNotifier()
     {
         if (type != DisplayType::AUTO) {
               _type = type;
@@ -28,9 +30,14 @@ namespace tdl
                       break;
                   case DisplayType::SIXEL:
                       _drawMethode = new SixelMethode(*this);
+                    SignalHandler::getInstance().registerWindow(this);
+
                       break;
                   case DisplayType::ASCII:
                       _drawMethode = new AsciiMethode(*this);
+                    SignalHandler::getInstance().registerWindow(this);
+
+
                       break;
                   default:
                       break;
@@ -41,9 +48,11 @@ namespace tdl
             if (supportsSixel()) {
                 _type = DisplayType::SIXEL;
                 _drawMethode = new SixelMethode(*this);
+                SignalHandler::getInstance().registerWindow(this);
             } else {
                 _type = DisplayType::ASCII;
                 _drawMethode = new AsciiMethode(*this);
+                SignalHandler::getInstance().registerWindow(this);
             }
         } else {
             _type = DisplayType::TTY;
@@ -63,7 +72,8 @@ namespace tdl
 
     void Display::draw()
     {
-        for (auto &win : _windows) {
+
+        for (auto & win : _windows) {
             win->draw(*this);
         }
         _cursor.draw(*this);
@@ -114,28 +124,23 @@ namespace tdl
     void Display::pollEvent()
     {
         Event event;
-        while (_eventNotifier.notify(_windows, event)) {
-            if (event.type == TDL_MOUSEMOVED) {
-                if (_windows.back()->grab) {
-                    _windows.back()->setPosition(Vector2u(event.mouseMove.x + clickDelta.x(), event.mouseMove.y + clickDelta.y()));
-                }
-                _cursor.setPosition(Vector2u(event.mouseMove.x, event.mouseMove.y));
-            }
-            if (event.type == TDL_MOUSEPRESSED) {
-                if (_windows.back()->isClickIn(Vector2u(event.mouseButton.x, event.mouseButton.y)) == BORDER) {
-                    clickDelta = Vector2i(_windows.back()->getPosition().x() - event.mouseButton.x, _windows.back()->getPosition().y() - event.mouseButton.y);
-                    _windows.back()->grab = true;
-                }
-            }
-            if (event.type == TDL_MOUSERELEASED) {
-                _windows.back()->grab = false;
-                clickDelta = Vector2i(0, 0);
-            }
-            if (onEvent != nullptr)
-                onEvent(event);
-        }
+        while (_eventNotifier.notify(_windows, event));
         for (auto &win : _windows) {
             win->pollEvent();
         }
     }
+
+    bool Display::computePixel(Vector2i pos, Pixel &pixel)
+    {
+        if (_cursor.getPixelAtPos(pos, pixel)) {
+            return true;
+        }
+        for (auto &win : _windows) {
+            if (win->getPixelAtPos(pos, pixel)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 } // namespace tdl

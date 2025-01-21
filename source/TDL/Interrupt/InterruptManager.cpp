@@ -1,6 +1,16 @@
 #include "TDL/Interrupt/InterruptManager.hpp"
+#include "TDL/Graphics/Display/Display.hpp"
 
 namespace tdl {
+
+    void mouseCallBack(tdl::Event &event);
+    void changeFocusOnMouse(tdl::Event &event);
+    void changeFocusOnKey(tdl::Event &event);
+    void grabWindow(tdl::Event &event);
+    void releaseWindow(tdl::Event &event);
+    void moveWindow(tdl::Event &event);
+    Vector2i _clickDelta; // for internal use
+
     InterruptManager::InterruptManager() : _running(false),
         _keyboardThread([this]() {
             _keyboard = new Keyboard(_keyboardQueue);
@@ -24,6 +34,12 @@ namespace tdl {
     void InterruptManager::start() {
         _running = true;
         _threads.emplace_back(&InterruptManager::processInterrupts, this);
+        this->addInterrupt(mouseCallBack,TDL_MOUSEMOVED, 1);
+        this->addInterrupt(changeFocusOnMouse,TDL_MOUSEPRESSED, 1);
+        this->addInterrupt(changeFocusOnKey,TDL_KEYPRESSED, 1);
+        this->addInterrupt(grabWindow,TDL_MOUSEPRESSED, 2);
+        this->addInterrupt(releaseWindow,TDL_MOUSERELEASED, 2);
+        this->addInterrupt(moveWindow,TDL_MOUSEMOVED, 2);
     }
 
     void InterruptManager::stop() {
@@ -76,4 +92,59 @@ namespace tdl {
             }
         }
     }
+
+    // section for internal interupt
+
+    void mouseCallBack(tdl::Event &event) {
+        if (event.type == TDL_MOUSEMOVED) {
+            tdl::Display::getInstance()._cursor.setNextPos(tdl::Vector2u(event.mouseMove.x , event.mouseMove.y));
+        }
+    }
+
+    void changeFocusOnMouse(tdl::Event &event) {
+        std::vector<Window *> &windows = tdl::Display::getInstance().getWindowsList();
+        if (event.type == TDL_MOUSEPRESSED && !windows.back()->isClickIn(Vector2u(event.mouseButton.x, event.mouseButton.y))) {
+            for (auto it = windows.rbegin(); it != windows.rend(); ++it) {
+                Window *win = *it;
+                if (win->isClickIn(Vector2u(event.mouseButton.x, event.mouseButton.y)) != OUTSIDE) {
+                    Window *new_focus = win;
+                    windows.erase(std::find(windows.begin(), windows.end(), win));
+                    windows.push_back(new_focus);
+                    break;
+                }
+            }
+        }
+    }
+
+    void changeFocusOnKey(tdl::Event &event) {
+        std::vector<Window *> &windows = tdl::Display::getInstance().getWindowsList();
+        if (event.type == TDL_KEYPRESSED && event.key == TDL_KEY_Q) {
+            Window *new_focus = windows.front();
+            windows.erase(windows.begin());
+            windows.push_back(new_focus);
+        }
+    }
+
+    void grabWindow(tdl::Event &event) {
+        Window *win = tdl::Display::getInstance().getWinFocus();
+        if (event.type == TDL_MOUSEPRESSED && win->isClickIn(Vector2u(event.mouseButton.x, event.mouseButton.y)) == BORDER) {
+            win->grab = true;
+            _clickDelta = Vector2i(event.mouseButton.x - win->getPosition().x(), event.mouseButton.y - win->getPosition().y());
+        }
+    }
+    void releaseWindow(tdl::Event &event) {
+        Window *win = tdl::Display::getInstance().getWinFocus();
+        if (event.type == TDL_MOUSERELEASED) {
+            win->grab = false;
+            _clickDelta = Vector2i(0, 0);
+        }
+    }
+    void moveWindow(tdl::Event &event) {
+        Window *win = tdl::Display::getInstance().getWinFocus();
+        if (win->grab) {
+            win->setPosition(Vector2u(event.mouseMove.x - _clickDelta.x(), event.mouseMove.y - _clickDelta.y()));
+        }
+    }
+
+
 }

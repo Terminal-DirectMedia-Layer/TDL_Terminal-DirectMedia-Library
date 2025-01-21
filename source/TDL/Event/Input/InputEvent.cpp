@@ -3,6 +3,7 @@
 #include <regex>
 #include <queue>
 #include <fstream>
+#include <optional>
 
 #include <linux/input.h>
 #include <fcntl.h>
@@ -60,7 +61,6 @@ namespace tdl {
             std::cerr << "Unable to find the event bus" << std::endl;
             return;
         }
-        FD_ZERO(&_set);
         _timeout.tv_sec = 0;
         _timeout.tv_usec = 0;
 
@@ -75,7 +75,6 @@ namespace tdl {
             _devs.push_back(libevdev_new());
             libevdev_new_from_fd(fd, &_devs.back());
             std::cerr << "Event bus found: " << event << " fd: " << fd << " dev: " << _devs.back() << std::endl;
-            FD_SET(fd, &_set);
         }
     }
 
@@ -88,8 +87,6 @@ namespace tdl {
             close(fd);
         }
     }
-
-#include <optional>
 
     std::optional<std::pair<struct libevdev *, std::unique_ptr<struct input_event>>> InputEvent::getInputEvent()
     {

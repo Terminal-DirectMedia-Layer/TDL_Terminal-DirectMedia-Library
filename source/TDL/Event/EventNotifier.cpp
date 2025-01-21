@@ -2,7 +2,7 @@
 
 namespace tdl {
     EventNotifier::EventNotifier()
-        :
+       :
         _keyboardThread([this]() {
          _keyboard = new Keyboard(_keyboardQueue);
          _keyboard->pollKeyboard();
@@ -33,22 +33,7 @@ namespace tdl {
 
     void EventNotifier::changeFocus(Event &event, std::vector<Window *> &windows)
     {
-        if (event.type == TDL_KEYPRESSED && event.key == TDL_KEY_Q) {
-            Window *new_focus = windows.front();
-            windows.erase(windows.begin());
-            windows.push_back(new_focus);
-        }
-        if (event.type == TDL_MOUSEPRESSED && !windows.back()->isClickIn(Vector2u(event.mouseButton.x, event.mouseButton.y))) {
-            for (auto it = windows.rbegin(); it != windows.rend(); ++it) {
-                Window *win = *it;
-                if (win->isClickIn(Vector2u(event.mouseButton.x, event.mouseButton.y)) != OUTSIDE) {
-                    Window *new_focus = win;
-                    windows.erase(std::find(windows.begin(), windows.end(), win));
-                    windows.push_back(new_focus);
-                    break;
-                }
-            }
-        }
+        //Todo : delete this function
     }
 
     bool EventNotifier::notify(std::vector<Window *> &windows, Event &event)

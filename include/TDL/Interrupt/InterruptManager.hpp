@@ -13,6 +13,7 @@
 #include "TDL/Event/Input/Module/Keyboard.hpp"
 #include "TDL/Event/Input/Module/Mouse.hpp"
 #include "TDL/Utils/Thread/ThreadSafeQueue.hpp"
+#include "TDL/Utils/Math/Vector.hpp"
 
 namespace tdl {
     class InterruptManager {
@@ -23,11 +24,13 @@ namespace tdl {
         ~InterruptManager();
 
         void addInterrupt(InterruptHandler handler, int type, int priority);
+        void addInterrupt(void(InterruptManager::* handler)(tdl::Event &event), int type, int priority);
         void start();
         void stop();
 
     private:
         void processInterrupts();
+
 
         struct Interrupt {
             InterruptHandler handler;
@@ -51,7 +54,10 @@ namespace tdl {
         std::thread _mouseThread;
         ThreadSafeQueue<Event> _mouseQueue;
         Mouse *_mouse;
+
+
     };
+
 }
 
 #endif // INTERRUPT_MANAGER_HPP
