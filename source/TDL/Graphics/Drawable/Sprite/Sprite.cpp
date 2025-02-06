@@ -11,6 +11,14 @@
 #include "TDL/Utils/Matrix/Transform.hpp"
 
 
+tdl::Sprite::Sprite() : ADrawable(Vector2u(0, 0))
+{
+    _texture = nullptr;
+    _pos = Vector2u(0, 0);
+    _rect = RectU(0, 0, 0, 0);
+    _matrix = Matrix<Pixel>(Vector2u(0, 0));
+}
+
 /**
  * @brief Construct a new tdl::Sprite::Sprite object
  * 

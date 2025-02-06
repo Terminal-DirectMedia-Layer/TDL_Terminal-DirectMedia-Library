@@ -11,6 +11,9 @@
 
 #include "TDL/Event/InputEventCode.hpp"
 
+
+#include <asm-generic/int-ll64.h>
+
 namespace tdl {
     /**
      * @struct Event
@@ -43,10 +46,14 @@ namespace tdl {
          * it permited to register the key that is pressed or released
          */
         struct keyEvent {
-            const char *code;
+            __u16 code;
 
-            bool operator==(const char *other) const {
-                return strcmp(code, other) == 0;
+            bool operator==(__u16 other) const {
+                return code == other;
+            }
+
+            const char *toString() const {
+                return keys.at(code);
             }
         };
 

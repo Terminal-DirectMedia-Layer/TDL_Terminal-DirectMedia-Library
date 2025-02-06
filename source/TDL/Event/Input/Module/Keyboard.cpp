@@ -68,12 +68,11 @@ namespace tdl {
                     default:
                         break;
                     }
-                    event.key.code = _keymap[ev->code].c_str();
+                    event.key.code = ev->code;
                     _events.push(event);
                 }
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
-
         }
     }
 

@@ -118,7 +118,7 @@ namespace tdl {
 
     void changeFocusOnKey(tdl::Event &event) {
         std::vector<Window *> &windows = tdl::Display::getInstance().getWindowsList();
-        if (event.type == TDL_KEYPRESSED && event.key == TDL_KEY_Q) {
+        if (event.type == TDL_KEYPRESSED && event.key == KEY_Q) {
             Window *new_focus = windows.front();
             windows.erase(windows.begin());
             windows.push_back(new_focus);
@@ -145,6 +145,4 @@ namespace tdl {
             win->setPosition(Vector2u(event.mouseMove.x - _clickDelta.x(), event.mouseMove.y - _clickDelta.y()));
         }
     }
-
-
 }

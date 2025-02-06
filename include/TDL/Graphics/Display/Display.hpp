@@ -4,6 +4,7 @@
 #include "TDL/Graphics/FrameBuffer/FrameBuffer.hpp"
 #include "TDL/Graphics/Display/Strategy/IDrawMethode.hpp"
 #include "TDL/Graphics/Window/Window.hpp"
+#include "TDL/Graphics/Drawable/Text/Font/Font.hpp"
 
 #include "TDL/Event/EventNotifier.hpp"
 
@@ -112,6 +113,11 @@ namespace tdl
          */
         void draw();
 
+        Font &getFont()
+        {
+            return _glFont;
+        }
+
         /**
          * @brief norifyEvent
         */
@@ -119,7 +125,6 @@ namespace tdl
         eventDisplayCallback onEvent = nullptr;
         FPSCounter fps {};
         InterruptManager _interruptManager;
-
         Widget _cursor;
 
       protected:
@@ -133,6 +138,9 @@ namespace tdl
             std::vector<Window *> _windows; /**< The windows of the display. */
             EventNotifier _eventNotifier; /**< The event notifier of the display. */
             bool _open = true;
+
+            Font _glFont;
+
 
         Display(DisplayType type = DisplayType::AUTO);
 

@@ -32,7 +32,6 @@ namespace tdl {
             ~InputEvent();
 
                 std::optional<std::pair<struct libevdev *, std::unique_ptr<struct input_event>>> getInputEvent();
-
             private:
 
                 std::list<std::string> findEventBus() const;

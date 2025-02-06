@@ -22,6 +22,8 @@ namespace tdl {
     class Sprite : public Transformable, public ADrawable {
         public :
 
+        Sprite();
+
       /**
        * @brief Construct a new Sprite object
        *
@@ -46,7 +48,7 @@ namespace tdl {
          */
             ~Sprite() override;
 
-          void setRext(RectU &rect) {
+          void setRect(RectU &rect) {
             _rect = rect;
             _matrix = _texture->getTextureData();
             Vector2u size = _texture->getSize();

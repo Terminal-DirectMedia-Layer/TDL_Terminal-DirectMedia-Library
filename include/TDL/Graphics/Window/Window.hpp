@@ -19,6 +19,7 @@
 #include "TDL/Graphics/FrameBuffer/Feature/Placeable.hpp"
 #include "TDL/Graphics/FrameBuffer/FrameBuffer.hpp"
 #include "TDL/Utils/Math/Vector.hpp"
+#include "TDL/Graphics/Drawable/Text/Text.hpp"
 
 #include <TDL/Event/EventNotifier.hpp>
 
@@ -112,7 +113,7 @@ namespace tdl {
             //Keyboard* _input; /*!< the input keyboard */
             Vector2u _pos;
             Vector2u _size;
-            std::string _title;
+            Text _title;
 
             Pixel _background;
 

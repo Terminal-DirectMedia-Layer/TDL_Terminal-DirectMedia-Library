@@ -13,7 +13,7 @@
 
 #include <mutex>
 
-#include <Tracy.hpp>
+#define TDL_FRAMEBUFFER_SECTION_SIZE 10
 
 namespace tdl
 {
@@ -174,6 +174,19 @@ namespace tdl
             return *this;
         }
 
+        Pixel *getSector(int sectorId) {
+            int sectorSize = _currentFrame->getSize().y() / _sectorCount;
+            int start = sectorSize * sectorId;
+            int end = sectorSize * (sectorId + 1);
+            Pixel *sector = new Pixel[sectorSize * _currentFrame->getSize().x()];
+            for (int i = start; i < end; i++) {
+                for (int j = 0; j < _currentFrame->getSize().x(); j++) {
+                    sector[i * _currentFrame->getSize().x() + j] = _currentFrame->getElement(j, i);
+                }
+            }
+            return sector;
+        }
+
         /**
          * @brief append operator for the framebuffer.
          * @param pixels The vector of pixels to append.
@@ -186,9 +199,10 @@ namespace tdl
         }
 
       protected:
-          Matrix<Pixel> *_currentFrame; /**< The current frame of the framebuffer. */
-          Matrix<Pixel> *_previousFrame; /**< The previous frame of the framebuffer. */
-            std::mutex _mutex;
+        Matrix<Pixel> *_currentFrame; /**< The current frame of the framebuffer. */
+        Matrix<Pixel> *_previousFrame; /**< The previous frame of the framebuffer. */
+        std::mutex _mutex;
+        int _sectorCount = TDL_FRAMEBUFFER_SECTION_SIZE;
     };
 }
 #endif //FRAMEBUFFER_HPP

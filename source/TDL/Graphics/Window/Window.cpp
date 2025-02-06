@@ -14,7 +14,6 @@
 #include "TDL/Graphics/Window/Window.hpp"
 #include "TDL/Utils/Signal/SignalHandler.hpp"
 #include "TDL/Event/Event.hpp"
-#include "Tracy.hpp"
 
 tdl::Window::Window(std::string  title, tdl::Vector2u size, tdl::Vector2u pos, Pixel background) : FrameBuffer(size, background),
 _win(size + Vector2u(TDL_X_WINDOW_OFFSET, TDL_Y_WINDOW_OFFSET), tdl::Pixel(255, 255, 255, 255))
@@ -23,9 +22,14 @@ _win(size + Vector2u(TDL_X_WINDOW_OFFSET, TDL_Y_WINDOW_OFFSET), tdl::Pixel(255, 
     setPosition(pos);
     _size = size;
     _winPos.setPosition(Vector2u(pos.x() + TDL_WINDOW_BORDER_LEFT_B, pos.y() + TDL_WINDOW_BORDER_TOP_B));
-    _title = title;
+    tdl::Display::getInstance().getFont().setSize(20);
+
+    _title.setFont(tdl::Display::getInstance().getFont());
+    _title.setText(title);
+    _title.setColor(Pixel(100, 100, 100, 0));
     _background = background;
 }
+
 /**
  * @brief Destroy the tdl::Window::Window object and unregister the window from the signal manager
  * 
@@ -45,6 +49,8 @@ void tdl::Window::draw(tdl::Display &d)
     }
 
     _winPos.setPosition(Vector2u(getPosition().x() - TDL_WINDOW_BORDER_LEFT_B, getPosition().y() - TDL_WINDOW_BORDER_TOP_B));
+    _title.setPosition(0, 0);
+    _title.draw(static_cast<Window *>(&_win));
     Transform winT = _winPos.getTransform();
     Transform t = getTransform();
     u_int32_t size_x = _win.getSize().x();

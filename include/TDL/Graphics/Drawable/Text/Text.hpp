@@ -97,10 +97,23 @@ namespace tdl {
      */
         void draw(Window *drawable) override;
 
+        bool getPixelAtPos(Vector2i pos, Pixel &pixel) override {
+            return false;
+        }
+
+        void setColor (Pixel color) {
+            _color = color;
+        }
+
+        Pixel getColor() {
+            return _color;
+        }
+
     private:
         Font _font; /* !< the font of the text */
         std::string _text; /* !< the text to display */
         std::string _oldText; /* !< the old text to display */
+        Pixel _color = Pixel(255, 255, 255, 255); /* !< the color of the text */
         //std::optional<Pixel> _color; /* !< the color of the text */
     };
 }

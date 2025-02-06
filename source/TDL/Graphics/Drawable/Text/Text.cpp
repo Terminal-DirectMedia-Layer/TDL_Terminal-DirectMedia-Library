@@ -43,7 +43,6 @@ namespace tdl {
 
     void Text::draw(Window *drawable)
     {
-
         int pen_x = 0;
         int pen_y = 0;
         Transform left = getTransform();
@@ -57,13 +56,20 @@ namespace tdl {
                 std::cout << "Failed to load Glyph" << std::endl;
                 continue;
             }
-
             for (int y = 0; y < _font.getFace()->glyph->bitmap.rows; ++y) {
                 for (int x = 0; x < _font.getFace()->glyph->bitmap.width; ++x) {
                     u_int8_t grayscale = _font.getFace()->glyph->bitmap.buffer[y * _font.getFace()->glyph->bitmap.pitch + x];
                     Vector2f point = left.transformPoint(pen_x + x, pen_y + y);
-                    std::cerr << point.x() << " " << point.y() << "grayscale: " << grayscale << std::endl;
-                    Pixel p = Pixel(grayscale, grayscale, grayscale, grayscale);
+                    Pixel old = drawable->getPixel(point.x(), point.y());
+                    tdl::Pixel p = drawable->getPixel(point.x(), point.y());
+                    if (grayscale != 0) {
+                        p = tdl::Pixel(
+                            GET_R(_color.color) * grayscale / 255,
+                            GET_G(_color.color) * grayscale / 255,
+                            GET_B(_color.color) * grayscale / 255,
+                            GET_A(_color.color)
+                        );
+                    }
                     drawable->setPixel(Vector2u(point.x(), point.y()), p);
                 }
             }
@@ -83,6 +89,5 @@ namespace tdl {
             }
         }
         _oldText = _text;
-
     }
 } // namespace tdl

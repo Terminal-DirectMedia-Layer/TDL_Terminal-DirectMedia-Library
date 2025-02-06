@@ -15,13 +15,13 @@
 #include "TDL/Graphics/Display/Strategy/SixelMethode.hpp"
 #include "TDL/Graphics/Widget/Widget.hpp"
 #include "TDL/Utils/Signal/SignalHandler.hpp"
-#include <Tracy.hpp>
 
 
 namespace tdl
 {
-    Display::Display(DisplayType type) : FrameBuffer() , _drawMethode(nullptr), _cursor("cursor","assets/Default/Cursor.json")//, _eventNotifier()
+    Display::Display(DisplayType type) : FrameBuffer() , _drawMethode(nullptr), _cursor("cursor","assets/Default/Cursor.json"), _glFont()
     {
+        _glFont.loadFromFile("assets/Default/FunnelSans-VariableFont_wght.ttf");
         if (type != DisplayType::AUTO) {
               _type = type;
               switch (type) {
@@ -36,8 +36,6 @@ namespace tdl
                   case DisplayType::ASCII:
                       _drawMethode = new AsciiMethode(*this);
                     SignalHandler::getInstance().registerWindow(this);
-
-
                       break;
                   default:
                       break;

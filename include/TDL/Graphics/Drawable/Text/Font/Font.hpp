@@ -3,6 +3,7 @@
     #define TDL_FONT_HPP
 
 #include <string>
+#include <memory>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -45,7 +46,8 @@ namespace tdl {
 
     private:
         FT_Library _library; /* !< the library of the font */
-        FT_Face _face; /* !< the face of the font */
+        std::shared_ptr<FT_Face> _face;
+ /* !< the face of the font */
         unsigned int _size; /* !< the size of the font */
     };
 }
