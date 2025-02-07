@@ -12,8 +12,6 @@
 #include <termios.h>
 #include <sixel.h>
 
-
-
 namespace tdl
 {
     class Sixel {

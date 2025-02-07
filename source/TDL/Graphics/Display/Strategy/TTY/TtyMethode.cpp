@@ -1,5 +1,5 @@
 
-#include "TDL/Graphics/Display/Strategy/TtyMethode.hpp"
+#include "TDL/Graphics/Display/Strategy/TTY/TtyMethode.hpp"
 
 #include <fcntl.h>
 #include <linux/fb.h>
