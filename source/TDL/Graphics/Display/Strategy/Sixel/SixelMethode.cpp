@@ -1,5 +1,5 @@
 
-#include "TDL/Graphics/Display/Strategy/SixelMethode.hpp"
+#include "TDL/Graphics/Display/Strategy/Sixel/SixelMethode.hpp"
 #include "TDL/Utils/AnsiiCode.hpp"
 
 #include <fcntl.h>

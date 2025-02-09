@@ -6,35 +6,33 @@
 #include <regex>
 #include <unistd.h>
 #include <termios.h>
-#include <string>
 #include <fcntl.h>
 
 #include "TDL/Graphics/Display/Display.hpp"
-#include "TDL/Graphics/Display/Strategy/AsciiMethode.hpp"
-#include "TDL/Graphics/Display/Strategy/TtyMethode.hpp"
-#include "TDL/Graphics/Display/Strategy/SixelMethode.hpp"
-#include "TDL/Graphics/Widget/Widget.hpp"
+//#include "TDL/Graphics/Display/Strategy/Ascii/AsciiMethode.hpp"
+//#include "TDL/Graphics/Display/Strategy/TTY/TtyMethode.hpp"
+//#include "TDL/Graphics/Display/Strategy/Sixel/SixelMethode.hpp"
+//#include "TDL/Graphics/Widget/Widget.hpp"
 #include "TDL/Utils/Signal/SignalHandler.hpp"
-
 
 namespace tdl
 {
-    Display::Display(DisplayType type) : FrameBuffer() , _drawMethode(nullptr), _cursor("cursor","assets/Default/Cursor.json"), _glFont()
+    Display::Display(DisplayType type) : FrameBuffer() , _drawMethode(nullptr), _cursor("cursor",ASSETS_DIR"/Default/Cursor.json")
     {
-        _glFont.loadFromFile("assets/Default/FunnelSans-VariableFont_wght.ttf");
+        _glFont.loadFromFile(ASSETS_DIR"/Default/FunnelSans-VariableFont_wght.ttf");
         if (type != DisplayType::AUTO) {
               _type = type;
               switch (type) {
                   case DisplayType::TTY:
-                      _drawMethode = new TtyMethode(*this);
+                      //_drawMethode = new TtyMethode(*this);
                       break;
                   case DisplayType::SIXEL:
-                      _drawMethode = new SixelMethode(*this);
+                      //_drawMethode = new SixelMethode(*this);
                     SignalHandler::getInstance().registerWindow(this);
 
                       break;
                   case DisplayType::ASCII:
-                      _drawMethode = new AsciiMethode(*this);
+                      //_drawMethode = new AsciiMethode(*this);
                     SignalHandler::getInstance().registerWindow(this);
                       break;
                   default:
@@ -45,16 +43,16 @@ namespace tdl
         if (isGraphical()) {
             if (supportsSixel()) {
                 _type = DisplayType::SIXEL;
-                _drawMethode = new SixelMethode(*this);
+                //_drawMethode = new SixelMethode(*this);
                 SignalHandler::getInstance().registerWindow(this);
             } else {
                 _type = DisplayType::ASCII;
-                _drawMethode = new AsciiMethode(*this);
+                //_drawMethode = new AsciiMethode(*this);
                 SignalHandler::getInstance().registerWindow(this);
             }
         } else {
             _type = DisplayType::TTY;
-            _drawMethode = new TtyMethode(*this);
+            //_drawMethode = new TtyMethode(*this);
         }
     }
 

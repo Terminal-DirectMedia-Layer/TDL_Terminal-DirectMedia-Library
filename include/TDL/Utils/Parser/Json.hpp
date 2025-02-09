@@ -16,7 +16,7 @@ namespace tdl {
         void parseFile(const std::string &file) {
             std::ifstream inputFile(file);
             if (!inputFile.is_open()) {
-                throw std::runtime_error("Could not open file");
+                throw std::runtime_error("Could not open file" + file);
             }
             inputFile >> jsonData;
         }

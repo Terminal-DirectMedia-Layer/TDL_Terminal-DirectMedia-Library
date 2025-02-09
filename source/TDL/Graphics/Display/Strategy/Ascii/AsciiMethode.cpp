@@ -1,5 +1,5 @@
 
-#include "TDL/Graphics/Display/Strategy/AsciiMethode.hpp"
+#include "TDL/Graphics/Display/Strategy/Ascii/AsciiMethode.hpp"
 
 #include <fcntl.h>
 #include <termios.h>

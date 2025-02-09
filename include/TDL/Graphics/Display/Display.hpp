@@ -8,12 +8,15 @@
 
 #include "TDL/Event/EventNotifier.hpp"
 
-#include "TDL/Event/Input/Module/Mouse.hpp"
 #include "TDL/Graphics/Widget/Widget.hpp"
 
 #include "TDL/Utils/Fps.hpp"
 #include "TDL/Interrupt/InterruptManager.hpp"
 
+#define STRINGIFY(x) #x
+#define TOSTRING(x) STRINGIFY(x)
+
+const std::string assetPath = TOSTRING(ASSETS_DIR);
 
 namespace tdl
 {
