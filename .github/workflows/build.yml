@@ -1,4 +1,4 @@
-name: TDL CICD
+name: Build
 
 on:
   push:
@@ -16,14 +16,29 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get -y install cmake g++ libfreetype6-dev libpng-dev libopenal-dev libsndfile1-dev pkg-config libalsa-ocaml-dev
-      - name: Build
+          sudo apt-get -y install cmake g++ libfreetype6-dev libpng-dev libopenal-dev libsndfile1-dev pkg-config libalsa-ocaml-dev libsixel-dev libevdev-dev nlohmann-json3-dev
+
+      - name: Build the library
         run: |
           mkdir build
           cd build
-          cmake .. -DBUILD_DEMO=ON
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${GITHUB_WORKSPACE}
+          cmake --build . --target install_libs
+          cd ..
+
+      - name: Build the examples
+        env:
+          CMAKE_PREFIX_PATH: ${GITHUB_WORKSPACE}
+          LD_LIBRARY_PATH: ${GITHUB_WORKSPACE}/lib
+        run: |
+          cd example
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${GITHUB_WORKSPACE}
           cmake --build .
+          cd ..
           cd ..

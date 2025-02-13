@@ -22,6 +22,10 @@ set(TDL_EXAMPLES_BUILD_DIR      ${TDL_EXAMPLES_DIR}/build)
 file(
         GLOB SRC_DIRS ${TDL_EXAMPLES_DIR}/*/
         LIST_DIRECTORIES true
+        EXCLUDE ${dir}/assets/*
+        EXCLUDE ${dir}/build/*
+        EXCLUDE ${dir}/cmake-build-debug/*
+        EXCLUDE ${dir}/build
 )
 
 add_custom_command(
@@ -68,9 +72,7 @@ foreach(dir ${SRC_DIRS})
 
     if(SRC_FILES)
         add_executable(${dir_name} ${SRC_FILES})
-
         target_include_directories(${dir_name} PRIVATE ${TDL_INCLUDE_DIR})
-
         target_link_libraries(${dir_name} PRIVATE TDL::TDL)
 
         message(STATUS "Adding example: ${dir_name}")

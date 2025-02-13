@@ -51,7 +51,8 @@ add_custom_target(uninstall
 )
 
 add_custom_target(build_demo
-        COMMAND ${CMAKE_COMMAND} --build ${TDL_EXAMPLES_DIR}
+        COMMAND ${CMAKE_COMMAND} -S ${TDL_EXAMPLES_DIR} -B ${TDL_EXAMPLES_BUILD_DIR}
+        COMMAND ${CMAKE_COMMAND} --build ${TDL_EXAMPLES_BUILD_DIR}
         WORKING_DIRECTORY ${TDL_EXAMPLES_DIR}
         COMMENT "Building examples"
 )
