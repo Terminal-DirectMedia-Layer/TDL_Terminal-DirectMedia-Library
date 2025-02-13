@@ -9,8 +9,10 @@
 #include <string>
 #include <cstring>
 
-#include "TDL/Event/Mouse/IMouse.hpp"
 #include "TDL/Event/InputEventCode.hpp"
+
+
+#include <asm-generic/int-ll64.h>
 
 namespace tdl {
     /**
@@ -33,16 +35,9 @@ namespace tdl {
 
         Event &operator=(const Event &event) = default;
 
-
         bool pollEvent(Event &event, std::regex *custom = nullptr);
 
-        /**
-         * @brief push an event in the queue
-         *
-         * @param event the event to push
-         */
         void pushEvent(const Event &event);
-
 
         std::queue<Event> _events; /*!< the event queue */
 
@@ -51,10 +46,14 @@ namespace tdl {
          * it permited to register the key that is pressed or released
          */
         struct keyEvent {
-            const char * code;
+            __u16 code;
 
-            bool operator==(const char *other) const {
-                return strcmp(code, other) == 0;
+            bool operator==(__u16 other) const {
+                return code == other;
+            }
+
+            const char *toString() const {
+                return keys.at(code);
             }
         };
 
@@ -107,6 +106,7 @@ namespace tdl {
             customEvent custom; /* !< the custom event */
         };
     };
+
 }
 
 #endif //EVENT_HPP

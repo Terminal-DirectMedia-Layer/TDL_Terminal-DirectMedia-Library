@@ -1,3 +1,4 @@
+[//]: # ( [MermaidChart: b8cb3274-dd5a-4ce9-b674-c1cf4af51848]
 <div align="center">
   <img src="docs/img/tdl_Banner.png" alt="TDL Logo" width=600px>
 </div>
@@ -40,15 +41,16 @@ To build and use TDL, you need the following dependencies:
 - libsndfile
 - pkg-config
 - libalsa
+- libevdev
 
 if you want to install dependancies on ubuntu you can use the following command:
 ```
-sudo apt-get install cmake g++ libfreetype6-dev libpng-dev libopenal-dev libsndfile1-dev pkg-config libalsa-ocaml-dev
+sudo apt-get install cmake g++ libfreetype6-dev libpng-dev libopenal-dev libsndfile1-dev pkg-config libalsa-ocaml-dev libevdev-dev
 ```
 
 On ArchLinux you can use the following command:
 ```
-sudo pacman -S cmake gcc freetype2 libpng openal libsndfile pkg-config alsa-lib
+sudo pacman -S cmake gcc freetype2 libpng openal libsndfile pkg-config alsa-lib libevdev
 ```
 
 ### From AUR

@@ -4,7 +4,7 @@
 #include <ostream>
 #include <sstream>
 
-#include "TDL/Drawable/Texture/Texture.hpp"
+#include "TDL/Graphics/Drawable/Sprite/Texture/Texture.hpp"
 
 TEST_CASE("Texture test", "[Texture]")
 {

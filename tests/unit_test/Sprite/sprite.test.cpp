@@ -4,8 +4,8 @@
 #include <ostream>
 #include <sstream>
 
-#include "TDL/Sprite/Sprite.hpp"
-#include "TDL/Window/Window.hpp"
+#include "TDL/Graphics/Drawable/Sprite/Sprite.hpp"
+#include "TDL/Graphics/Window/Window.hpp"
 
 TEST_CASE("Sprite test", "[Sprite]")
 {

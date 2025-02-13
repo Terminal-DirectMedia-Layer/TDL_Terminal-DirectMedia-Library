@@ -2,5 +2,5 @@
 #pragma once
 
 #include <string>
-#include "TDL/Text/Text.hpp"
-#include "TDL/Text/Font/Font.hpp"
+#include "TDL/Graphics/Drawable/Text/Text.hpp"
+#include "TDL/Graphics/Drawable/Text/Font/Font.hpp"

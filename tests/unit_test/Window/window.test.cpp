@@ -6,7 +6,7 @@
 #include <ostream>
 #include <sstream>
 
-#include "TDL/Window/Window.hpp"
+#include "TDL/Graphics/Window/Window.hpp"
 
 TEST_CASE("Window test", "[window]")
 {

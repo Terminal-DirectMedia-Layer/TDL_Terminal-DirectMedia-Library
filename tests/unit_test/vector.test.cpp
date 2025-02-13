@@ -4,7 +4,7 @@
 #include <ostream>
 #include <sstream>
 
-#include "TDL/Math/Vector.hpp"
+#include "TDL/Utils/Math/Vector.hpp"
 
 TEST_CASE("Vector test", "[Vector]")
 {

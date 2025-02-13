@@ -5,6 +5,6 @@
 #include <ostream>
 #include <sstream>
 
-#include "TDL/Window/Window.hpp"
+#include "TDL/Graphics/Window/Window.hpp"
 #include "TDL/Event/Event.hpp"
 

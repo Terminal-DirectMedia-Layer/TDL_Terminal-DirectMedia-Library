@@ -1,0 +1,26 @@
+cmake_minimum_required(VERSION 3.10)
+
+get_filename_component(LIBRARY_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+
+project(${LIBRARY_NAME} VERSION 1.0.0 LANGUAGES CXX)
+
+file(GLOB CPP_FILES "*.cpp")
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+set(START_INSTALL_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../..)
+
+message(STATUS "START_INSTALL_PATH: ${START_INSTALL_PATH}")
+
+include_directories(${START_INSTALL_PATH}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
+add_library(${LIBRARY_NAME} SHARED ${CPP_FILES})
+
+set_target_properties(${LIBRARY_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
+
+install(TARGETS ${LIBRARY_NAME}
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib)
+

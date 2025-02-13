@@ -2,6 +2,10 @@
 #ifndef INPUTEVENTCODE_HPP
     #define INPUTEVENTCODE_HPP
 
+    #include <map>
+	#include <linux/input-event-codes.h>
+	#include <linux/input.h>
+
     #define TDL_KEY_RESERVED "RESERVED"
     #define TDL_KEY_ESC "Escape"
     #define TDL_KEY_AMPSAND "ampersand"
@@ -123,4 +127,66 @@
 	#define TDL_MOUSERIGHT 2
 	#define TDL_WHEELUP 3
 	#define TDL_WHEELDOWN 4
+
+
+    const std::map<__u16, const char *> keys = {
+        {KEY_RESERVED, NULL},       {KEY_ESC, NULL},
+        {KEY_1, "1"},               {KEY_2, "2"},
+        {KEY_3, "3"},               {KEY_4, "4"},
+        {KEY_5, "5"},               {KEY_6, "6"},
+        {KEY_7, "7"},               {KEY_8, "8"},
+        {KEY_9, "9"},               {KEY_0, "0"},
+        {KEY_MINUS, "-"},           {KEY_EQUAL, "="},
+        {KEY_BACKSPACE, NULL},      {KEY_TAB, "  "},
+        {KEY_Q, "q"},               {KEY_W, "w"},
+        {KEY_E, "e"},               {KEY_R, "r"},
+        {KEY_T, "t"},               {KEY_Y, "y"},
+        {KEY_U, "u"},               {KEY_I, "i"},
+        {KEY_O, "o"},               {KEY_P, "p"},
+        {KEY_LEFTBRACE, "["},       {KEY_RIGHTBRACE, "]"},
+        {KEY_ENTER, "\n"},          {KEY_LEFTCTRL, NULL},
+        {KEY_A, "a"},               {KEY_S, "s"},
+        {KEY_D, "d"},               {KEY_F, "f"},
+        {KEY_G, "g"},               {KEY_H, "h"},
+        {KEY_J, "j"},               {KEY_K, "k"},
+        {KEY_L, "l"},               {KEY_SEMICOLON, ";"},
+        {KEY_APOSTROPHE, "'"},      {KEY_GRAVE, "`"},
+        {KEY_LEFTSHIFT, NULL},      {KEY_BACKSLASH, "\\"},
+        {KEY_Z, "z"},               {KEY_X, "x"},
+        {KEY_C, "c"},               {KEY_V, "v"},
+        {KEY_B, "b"},               {KEY_N, "n"},
+        {KEY_M, "m"},               {KEY_COMMA, ","},
+        {KEY_DOT, "."},             {KEY_SLASH, "/"},
+        {KEY_RIGHTSHIFT, NULL},     {KEY_KPASTERISK, "*"},
+        {KEY_LEFTALT, NULL},        {KEY_SPACE, " "},
+        {KEY_CAPSLOCK, NULL},       {KEY_F1, NULL},
+        {KEY_F2, NULL},             {KEY_F3, NULL},
+        {KEY_F4, NULL},             {KEY_F5, NULL},
+        {KEY_F6, NULL},             {KEY_F7, NULL},
+        {KEY_F8, NULL},             {KEY_F9, NULL},
+        {KEY_F10, NULL},            {KEY_NUMLOCK, NULL},
+        {KEY_SCROLLLOCK, NULL},     {KEY_KP7, "7"},
+        {KEY_KP8, "8"},             {KEY_KP9, "9"},
+        {KEY_KPMINUS, "-"},         {KEY_KP4, "4"},
+        {KEY_KP5, "5"},             {KEY_KP6, "6"},
+        {KEY_KPPLUS, "+"},          {KEY_KP1, "1"},
+        {KEY_KP2, "2"},             {KEY_KP3, "3"},
+        {KEY_KP0, "0"},             {KEY_KPDOT, "."},
+        {KEY_ZENKAKUHANKAKU, NULL}, {KEY_102ND, NULL},
+        {KEY_F11, NULL},            {KEY_F12, NULL},
+        {KEY_RO, NULL},             {KEY_KATAKANA, NULL},
+        {KEY_HIRAGANA, NULL},       {KEY_HENKAN, NULL},
+        {KEY_KATAKANAHIRAGANA, NULL},{KEY_MUHENKAN, NULL},
+        {KEY_KPJPCOMMA, NULL},      {KEY_KPENTER, NULL},
+        {KEY_RIGHTCTRL, NULL},      {KEY_KPSLASH, "/"},
+        {KEY_SYSRQ, NULL},          {KEY_RIGHTALT, NULL},
+        {KEY_LINEFEED, NULL},       {KEY_HOME, NULL},
+        {KEY_UP, NULL},             {KEY_PAGEUP, NULL},
+        {KEY_LEFT, NULL},           {KEY_RIGHT, NULL},
+        {KEY_END, NULL},            {KEY_DOWN, NULL},
+        {KEY_PAGEDOWN, NULL},       {KEY_INSERT, NULL},
+        {KEY_DELETE, NULL},         {KEY_MACRO, NULL},
+        {KEY_MUTE, NULL},           {KEY_VOLUMEDOWN, NULL},
+    };
+
 #endif //INPUTEVENTCODE_HPP
