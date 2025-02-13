@@ -20,11 +20,6 @@ jobs:
       - name: Install Dependencies
         run: sudo apt-get update && sudo apt-get install -y cmake ninja-build g++
 
-      - name: install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get -y install cmake g++ libfreetype6-dev libpng-dev libopenal-dev libsndfile1-dev pkg-config libalsa-ocaml-dev libsixel-dev libevdev-dev nlohmann-json3-dev
-
       - name: Install Build Wrapper
         run: |
           curl -L https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip -o build-wrapper.zip
@@ -39,12 +34,11 @@ jobs:
           /opt/build-wrapper/build-wrapper-linux-x86-64 --out-dir bw-output make -j$(nproc)
 
       - name: Run SonarQube Scanner
+        uses: sonarsource/sonarqube-scan-action@master
+        with:
+          args: >
+            -Dsonar.projectKey=TDL
+            -Dsonar.sources=source
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: |
-          sonar-scanner \
-            -Dsonar.projectKey=TDL \
-            -Dsonar.sources=source \
-            -Dsonar.host.url=$SONAR_HOST_URL \
-            -Dsonar.login=$SONAR_TOKEN
