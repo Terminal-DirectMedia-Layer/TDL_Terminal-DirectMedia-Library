@@ -8,21 +8,33 @@ on:
 
 jobs:
   build:
-    name: Build
+    name: Build & Analyze
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - uses: sonarsource/sonarqube-scan-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-      - name: Run SonarQube Scanner with Debug
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Dependencies
+        run: sudo apt-get update && sudo apt-get install -y cmake ninja-build g++
+
+      - name: Install Build Wrapper
+        run: |
+          curl -L https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip -o build-wrapper.zip
+          unzip build-wrapper.zip
+          sudo mv build-wrapper-linux-x86 /opt/build-wrapper
+
+      - name: Compile with Build Wrapper
+        run: |
+          mkdir -p build
+          cd build
+          /opt/build-wrapper/build-wrapper-linux-x86-64 --out-dir bw-output cmake ..
+          /opt/build-wrapper/build-wrapper-linux-x86-64 --out-dir bw-output make -j$(nproc)
+
+      - name: Run SonarQube Scanner
         uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        with:
-          args: "-Dsonar.verbose=true"
