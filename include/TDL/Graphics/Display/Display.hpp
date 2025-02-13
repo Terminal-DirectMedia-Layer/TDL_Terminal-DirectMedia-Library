@@ -12,6 +12,7 @@
 
 #include "TDL/Utils/Fps.hpp"
 #include "TDL/Interrupt/InterruptManager.hpp"
+#include "TDL/Utils/dynLibLoader.hpp"
 
 #define STRINGIFY(x) #x
 #define TOSTRING(x) STRINGIFY(x)
@@ -140,6 +141,7 @@ namespace tdl
             Vector2u _resolution; /**< The resolution of the display. */
             std::vector<Window *> _windows; /**< The windows of the display. */
             EventNotifier _eventNotifier; /**< The event notifier of the display. */
+            DynLibLoader _libLoader; /**< The dynamic library loader of the display. */
             bool _open = true;
 
             Font _glFont;

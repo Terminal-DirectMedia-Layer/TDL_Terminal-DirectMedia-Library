@@ -8,7 +8,15 @@
 
 class DynLibLoader {
     public:
+        DynLibLoader() = default;
         DynLibLoader(const std::string &path) {
+            handle = dlopen(path.c_str(), RTLD_LAZY);
+            if (!handle) {
+                std::cerr << "Error: " << dlerror() << std::endl;
+            }
+        }
+
+        void load(const std::string &path) {
             handle = dlopen(path.c_str(), RTLD_LAZY);
             if (!handle) {
                 std::cerr << "Error: " << dlerror() << std::endl;

@@ -54,7 +54,6 @@ namespace tdl
         if (status != SIXEL_OK) {
             throw std::runtime_error("Erreur d'initialisation de libsixel");
         }
-
         _dither = sixel_dither_get(SIXEL_BUILTIN_XTERM256);
         if (_dither == NULL) {
             sixel_output_unref(_output);

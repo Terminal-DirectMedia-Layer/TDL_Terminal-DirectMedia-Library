@@ -15,14 +15,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 ########################################### END CMAKE FLAGS #############################################
 
 ########################################### START DEBUG FLAGS ###########################################
-set(CMAKE_CXX_FLAGS_DEBUG           "${CMAKE_CXX_FLAGS_DEBUG} -g3 -pg -fsanitize=address")
-set(CMAKE_C_FLAGS_DEBUG             "${CMAKE_C_FLAGS_DEBUG} -g3 -pg -fsanitize=address")
-set(CMAKE_EXE_LINKER_FLAGS_DEBUG    "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -g3 -pg -fsanitize=address")
+set(CMAKE_CXX_FLAGS_DEBUG           "${CMAKE_CXX_FLAGS_DEBUG} -g3 ")
+set(CMAKE_C_FLAGS_DEBUG             "${CMAKE_C_FLAGS_DEBUG} -g3")
+set(CMAKE_EXE_LINKER_FLAGS_DEBUG    "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -g3")
 ############################################ END DEBUG FLAGS ############################################
 
 ########################################### START SOURCE PATH ##########################################
 set(TDL_EXAMPLES_DIR            ${CMAKE_CURRENT_SOURCE_DIR}/example)
 set(TDL_EXAMPLES_OUTPUT_DIR     ${CMAKE_CURRENT_SOURCE_DIR}/demo)
+set(TDL_EXAMPLES_BUILD_DIR      ${TDL_EXAMPLES_DIR}/build)
 set(TDL_LIB_DIR                 ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(TDL_INCLUDE_DIR             ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(TDL_SOURCE_DIR              ${CMAKE_CURRENT_SOURCE_DIR}/source)
@@ -45,14 +46,23 @@ add_custom_target(install_libs
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
-add_custom_target(build_demo
-        COMMAND ${CMAKE_COMMAND} --build . --target demo
-        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-)
-
 add_custom_target(uninstall
         COMMAND sudo ${CMAKE_COMMAND} -P ${CMAKE_EXTERNAL_DIR}/uninstall.cmake
 )
+
+add_custom_target(build_demo
+        COMMAND ${CMAKE_COMMAND} --build ${TDL_EXAMPLES_DIR}
+        WORKING_DIRECTORY ${TDL_EXAMPLES_DIR}
+        COMMENT "Building examples"
+)
+
+add_custom_target(configure_examples
+        COMMAND ${CMAKE_COMMAND} -S ${TDL_EXAMPLES_DIR} -B ${TDL_EXAMPLES_BUILD_DIR}
+        COMMENT "Configuring example project"
+)
+
+add_dependencies(build_demo install_libs)
+add_dependencies(build_demo configure_examples)
 ########################################### END CUSTOM TARGETS ##########################################
 
 ########################################### START BUILD OPTIONS ########################################
@@ -73,6 +83,28 @@ pkg_check_modules(SNDFILE           REQUIRED    sndfile)
 pkg_check_modules(LIBEVDEV          REQUIRED    libevdev)
 ########################################### END DEPENDENCIES CHECK #####################################
 
+########################################### START INTERFACE ############################################
+add_library(TDLDependencies INTERFACE)
+
+target_include_directories(TDLDependencies INTERFACE
+        ${FREETYPE_INCLUDE_DIRS}
+        ${PNG_INCLUDE_DIRS}
+        ${SNDFILE_INCLUDE_DIRS}
+        ${LIBEVDEV_INCLUDE_DIRS}
+        ${LIBSIXEL_INCLUDE_DIRS}
+)
+
+target_link_libraries(TDLDependencies INTERFACE
+        nlohmann_json::nlohmann_json
+        ${FREETYPE_LIBRARIES}
+        ${PNG_LIBRARIES}
+        ${OPENAL_LIBRARY}
+        ${SNDFILE_LIBRARIES}
+        ${LIBEVDEV_LIBRARIES}
+        ${LIBSIXEL_LIBRARIES}
+)
+########################################### END INTERFACE ##############################################
+
 set( INCLUDE_DIR
         ${TDL_INCLUDE_DIR}
         ${PNG_INCLUDE_DIRS}
@@ -90,8 +122,6 @@ list(FILTER TDL_SOURCE EXCLUDE REGEX ${TDL_SIXEL_DIR}/.*)
 list(FILTER TDL_SOURCE EXCLUDE REGEX ${TDL_TTY_DIR}/.*)
 list(FILTER TDL_SOURCE EXCLUDE REGEX ${TDL_ASCII_DIR}/.*)
 
-
-
 include_directories(
         ${TDL_INCLUDE_DIR}
         ${PNG_INCLUDE_DIRS}
@@ -105,17 +135,29 @@ message("Building shared libraries: ${BUILD_SHARED_LIBS}")
 
 add_library(TDL SHARED ${TDL_SOURCE})
 
-target_link_libraries(TDL
-        ${PNG_LIBRARIES}
-        ${FREETYPE_LIBRARIES}
-        ${OPENAL_LIBRARY}
-        ${SNDFILE_LIBRARIES}
-         nlohmann_json::nlohmann_json
-        ${LIBEVDEV_LIBRARIES}
-        ${LIBSIXEL_LIBRARIES}
+target_link_libraries(TDL PRIVATE
+        TDLDependencies
 )
 
+target_include_directories(TDL PUBLIC
+        $<BUILD_INTERFACE:${TDL_INCLUDE_DIR}>
+        $<INSTALL_INTERFACE:include>
+        ${FREETYPE_INCLUDE_DIRS}
+        ${PNG_INCLUDE_DIRS}
+        ${SNDFILE_INCLUDE_DIRS}
+        ${LIBEVDEV_INCLUDE_DIRS}
+        ${LIBSIXEL_INCLUDE_DIRS}
+)
+
+
 ########################################### START INSTALLATION ###########################################
+
+add_subdirectory(${TDL_SIXEL_DIR}) # install .so library for sixel
+add_subdirectory(${TDL_TTY_DIR}) # install .so library for tty
+add_subdirectory(${TDL_ASCII_DIR}) # install .so library for ascii
+########################################### END INSTALLATION #############################################
+
+########################################### START EXPORT CONFIG ##########################################
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/tdl
         DESTINATION include
         FILES_MATCHING PATTERN "*.hpp")
@@ -125,12 +167,16 @@ install(TARGETS TDL
         LIBRARY DESTINATION lib
         PUBLIC_HEADER DESTINATION include)
 
-add_subdirectory(${TDL_SIXEL_DIR}) # install .so library for sixel
-add_subdirectory(${TDL_TTY_DIR}) # install .so library for tty
-add_subdirectory(${TDL_ASCII_DIR}) # install .so library for ascii
-########################################### END INSTALLATION #############################################
+install(EXPORT TDLTargets
+        FILE TDLTargets.cmake
+        NAMESPACE TDL::
+        DESTINATION lib/cmake/TDL)
 
-########################################### START EXPORT CONFIG ##########################################
+install(FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/TDLConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/TDLConfigVersion.cmake"
+        DESTINATION lib/cmake/TDL)
+
 write_basic_package_version_file(
         "${CMAKE_CURRENT_BINARY_DIR}/TDLConfigVersion.cmake"
         VERSION ${PROJECT_VERSION}
@@ -146,14 +192,7 @@ configure_package_config_file(
 install(FILES
         "${CMAKE_CURRENT_BINARY_DIR}/TDLConfig.cmake"
         "${CMAKE_CURRENT_BINARY_DIR}/TDLConfigVersion.cmake"
-        DESTINATION lib/cmake/TDL
-)
-
-install(EXPORT TDLTargets
-        FILE TDLTargets.cmake
-        NAMESPACE TDL::
-        DESTINATION lib/cmake/TDL
-)
+        DESTINATION lib/cmake/TDL)
 ########################################### END EXPORT CONFIG ############################################
 
 ########################################### START EXPORT ASSET ###########################################
@@ -167,13 +206,10 @@ install(DIRECTORY ${CMAKE_BINARY_DIR}/assets
 set(INSTALLED_ASSETS_DIR "${CMAKE_INSTALL_PREFIX}/share/TDL/assets")
 
 add_definitions(-DASSETS_DIR="${INSTALLED_ASSETS_DIR}")
+
+message("FREETYPE_INCLUDE_DIRS: ${FREETYPE_INCLUDE_DIRS}")
 ########################################### END EXPORT ASSET ##############################################
 
 if (BUILD_TESTS)
     add_subdirectory(${TDL_TEST_DIR})
-endif()
-
-if (BUILD_DEMO)
-    add_dependencies(build_demo install_libs)
-    add_subdirectory(${TDL_EXAMPLES_DIR})
 endif()
