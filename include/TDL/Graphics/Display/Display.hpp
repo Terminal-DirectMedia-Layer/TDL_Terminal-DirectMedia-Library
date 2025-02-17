@@ -44,6 +44,11 @@ namespace tdl
             return instance;
         }
 
+        static void destroyInstance() {
+            Display &instance = getInstance();
+            instance.~Display();
+        }
+
         Display(const Display &d) = delete;
         Display &operator=(const Display &d) = delete;
 
@@ -53,6 +58,7 @@ namespace tdl
         ~Display() {
             _eventNotifier.joinKeyboardThread();
             _eventNotifier.joinMouseThread();
+            delete _drawMethode;
         }
 
         void addWindow(Window *win)
@@ -87,10 +93,9 @@ namespace tdl
         void clear(Pixel background = Pixel(0, 0, 0, 255))
         {
             for (auto &win : _windows) {
-                win->clear(win->getBackground());
+                win->clearWin();
             }
-            _previousFrame = _currentFrame;
-            _currentFrame->fill(background);
+            this->FrameBuffer::clear(background);
         }
 
         /**

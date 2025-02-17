@@ -9,10 +9,6 @@
 #include <fcntl.h>
 
 #include "TDL/Graphics/Display/Display.hpp"
-//#include "TDL/Graphics/Display/Strategy/Ascii/AsciiMethode.hpp"
-//#include "TDL/Graphics/Display/Strategy/TTY/TtyMethode.hpp"
-//#include "TDL/Graphics/Display/Strategy/Sixel/SixelMethode.hpp"
-//#include "TDL/Graphics/Widget/Widget.hpp"
 #include "TDL/Utils/Signal/SignalHandler.hpp"
 #include "TDL/Utils/dynLibLoader.hpp"
 
@@ -20,7 +16,7 @@ namespace tdl
 {
     Display::Display(DisplayType type) : FrameBuffer() , _drawMethode(nullptr), _cursor("cursor",ASSETS_DIR"/Default/Cursor.json")
     {
-        std::cerr << "Display" << std::endl;
+        SignalHandler::getInstance().registerWindow(this);
         _glFont.loadFromFile(ASSETS_DIR"/Default/FunnelSans-VariableFont_wght.ttf");
         if (type != DisplayType::AUTO) {
               _type = type;
@@ -47,7 +43,6 @@ namespace tdl
                   default:
                       break;
               }
-            SignalHandler::getInstance().registerWindow(this);
             return;
         }
         if (isGraphical()) {
@@ -56,13 +51,11 @@ namespace tdl
                 auto create = _libLoader.getFunction<tdl::IDrawMethode *(*)(tdl::FrameBuffer &)>("create");
                 _drawMethode = create(*this);
                 _type = DisplayType::SIXEL;
-                SignalHandler::getInstance().registerWindow(this);
             } else {
                 _libLoader.load("/usr/local/lib/libAscii.so");
                 auto create = _libLoader.getFunction<tdl::IDrawMethode *(*)(tdl::FrameBuffer &)>("create");
                 _drawMethode = create(*this);
                 _type = DisplayType::ASCII;
-                SignalHandler::getInstance().registerWindow(this);
             }
         } else {
             _libLoader.load("/usr/local/lib/libTTY.so");

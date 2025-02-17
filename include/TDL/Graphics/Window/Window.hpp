@@ -10,6 +10,7 @@
 #include <iostream>
 #include <queue>
 #include <regex>
+#include "TDL/Graphics/Window/Decorator.hpp"
 
 #include <termios.h>
 
@@ -40,14 +41,7 @@ namespace tdl {
 
     class Display;
 
-
-    enum ClickLocation {
-        OUTSIDE,
-        BORDER,
-        INSIDE,
-    };
-
-    class Window : public FrameBuffer, public Placeable {
+    class Window : public FrameBuffer, public Placeable, public Decorator{
         public:
 
 /**
@@ -55,7 +49,7 @@ namespace tdl {
  * 
  */
 
-        Window(std::string title, Vector2u size,Vector2u pos = Vector2u(0,0), Pixel background = Pixel(18, 18, 18,255));
+        Window(std::string title, Vector2u size,Vector2i pos = Vector2i(0,0), Pixel background = Pixel(18, 18, 18,255));
 
         /**
          * @brief Destroy the Window object
@@ -70,19 +64,31 @@ namespace tdl {
 
         std::vector<IDrawable *> &getDrawables() { return _drawables; }
 
-        inline ClickLocation isClickIn(Vector2u pos) {
-            if (pos.x() >= _winPos.getPosition().x() && pos.x() <= _winPos.getPosition().x() + getSize().x()
-                && pos.y() >= _winPos.getPosition().y() && pos.y() <= _winPos.getPosition().y() + getSize().y()) {
-                if (pos.x() >= getPosition().x() && pos.x() <= getPosition().x() + getSize().x()
-                    && pos.y() >= getPosition().y() && pos.y() <= getPosition().y() + getSize().y()) {
-                    return INSIDE;
-                }
-                return BORDER;
+        inline bool isClickIn(Vector2i pos, ClickRegion region) {
+            RectI decRect = getDimensions();
+            if (pos.y() < decRect.y() || pos.y() > decRect.y() + decRect.height() || pos.x() < decRect.x() || pos.x() > decRect.x() + decRect.width()) {
+                return ClickRegion::OUTSIDE == region;
             }
-            return OUTSIDE;
+            if (pos.y() < getPosition().y() + TDL_WINDOW_BORDER_TOP_B) {
+                return ClickRegion::TITLE_BAR == region;
+            }
+            if (pos.y() >= getPosition().y() + getSize().y() && pos.y() <= decRect.height() + decRect.y()) {
+                return ClickRegion::RESIZE_BOTOM == region;
+            }
+            if (pos.x() >= getPosition().x()  + getSize().x() && pos.x() <= decRect.width() + decRect.x()) {
+                return ClickRegion::RESIZE_RIGHT == region;
+            }
+            if (pos.x() < getPosition().x() && pos.x() > decRect.x()) {
+                return ClickRegion::RESIZE_LEFT == region;
+            }
+            if (pos.y() > getPosition().y() && pos.y() < getSize().y() + getPosition().y() && pos.x() > getPosition().x() && pos.x() < getSize().x() + getPosition().x()) {
+                return ClickRegion::INSIDE == region;
+            }
+            return ClickRegion::NONE == region;
         }
 
         bool grab = false;
+        ClickRegion region = ClickRegion::NONE;
 
         eventCallback onEvent = nullptr;
 
@@ -104,6 +110,48 @@ namespace tdl {
             return true;
         }
 
+        void resizeWindow(Vector2u size) {
+            setDimensions(RectI(getPosition().x() - TDL_WINDOW_BORDER_LEFT_B, getPosition().y() - TDL_WINDOW_BORDER_TOP_B, size.x() + TDL_WINDOW_BORDER_LEFT_B + TDL_WINDOW_BORDER_RIGHT_B, size.y() + TDL_WINDOW_BORDER_TOP_B + TDL_WINDOW_BORDER_BOTTOM_B));
+            resize(size);
+            _size = size;
+        }
+
+        void clearWin() {
+            if (isPosChanged()) {
+                setPosition(_pos);
+            }
+            if (isSizeChanged()) {
+                resizeWindow(_size);
+            }
+            clear(_background);
+        }
+
+        void setWinSize(Vector2u size) {
+            _size = size;
+            sizeChanged = true;
+        }
+
+        void setWinPos(Vector2i pos) {
+            _pos = pos;
+            posChanged = true;
+        }
+
+        bool isSizeChanged() {
+            if (sizeChanged) {
+                sizeChanged = false;
+                return true;
+            }
+            return false;
+        }
+
+        bool isPosChanged() {
+            if (posChanged) {
+                posChanged = false;
+                return true;
+            }
+            return false;
+        }
+
         private:
 
 /**
@@ -111,17 +159,18 @@ namespace tdl {
  * 
  */
             //Keyboard* _input; /*!< the input keyboard */
-            Vector2u _pos;
+            Vector2i _pos;
             Vector2u _size;
             Text _title;
 
             Pixel _background;
 
-            FrameBuffer _win;
-            Placeable _winPos;
             std::queue<Event> _events; /*!< the event queue */
 
             std::vector<IDrawable *> _drawables;
+
+            bool sizeChanged = false;
+            bool posChanged = false;
 
     };
 

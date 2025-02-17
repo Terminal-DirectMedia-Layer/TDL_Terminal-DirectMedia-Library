@@ -13,7 +13,7 @@ int main() {
     }
 
     tdl::Window win("file system", tdl::Vector2u(800,600));
-    win.setPosition(tdl::Vector2u(100,100));
+    win.setPosition(tdl::Vector2i(100,100));
     tdl::Display::getInstance().addWindow(&win);
     int j = 0;
     int x, y = 10;

@@ -16,29 +16,29 @@ namespace tdl
     {
     }
 
-    void Placeable::setPosition(const Vector2u &position)
+    void Placeable::setPosition(const Vector2i &position)
     {
         setPosition(position.x(), position.y());
     }
 
-    void Placeable::setPosition(u_int32_t x, u_int32_t y)
+    void Placeable::setPosition(int32_t x, int32_t y)
     {
         m_position.x() = x <= 1 ? 1 : x;
         m_position.y() = y <= 1 ? 1 : y;
         TransformNeedUpdate = true;
     }
 
-    const Vector2u &Placeable::getPosition() const
+    const Vector2i &Placeable::getPosition() const
     {
         return m_position;
     }
 
-    void Placeable::move(const Vector2u &offset)
+    void Placeable::move(const Vector2i &offset)
     {
         move(offset.x(), offset.y());
     }
 
-    void Placeable::move(u_int32_t offsetX, u_int32_t offsetY)
+    void Placeable::move(int32_t offsetX, int32_t offsetY)
     {
         m_position.x() += offsetX;
         m_position.y() += offsetY;

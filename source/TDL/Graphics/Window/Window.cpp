@@ -15,19 +15,18 @@
 #include "TDL/Utils/Signal/SignalHandler.hpp"
 #include "TDL/Event/Event.hpp"
 
-tdl::Window::Window(std::string  title, tdl::Vector2u size, tdl::Vector2u pos, Pixel background) : FrameBuffer(size, background),
-_win(size + Vector2u(TDL_X_WINDOW_OFFSET, TDL_Y_WINDOW_OFFSET), tdl::Pixel(255, 255, 255, 255))
+tdl::Window::Window(std::string  title, tdl::Vector2u size, tdl::Vector2i pos, Pixel background) : FrameBuffer(size, background)
 {
     //_input = new Keyboard();
     setPosition(pos);
     _size = size;
-    _winPos.setPosition(Vector2u(pos.x() + TDL_WINDOW_BORDER_LEFT_B, pos.y() + TDL_WINDOW_BORDER_TOP_B));
     tdl::Display::getInstance().getFont().setSize(20);
 
     _title.setFont(tdl::Display::getInstance().getFont());
     _title.setText(title);
     _title.setColor(Pixel(100, 100, 100, 0));
     _background = background;
+    setDimensions(RectI(pos.x() - TDL_WINDOW_BORDER_LEFT_B, pos.y() - TDL_WINDOW_BORDER_TOP_B, size.x() + TDL_WINDOW_BORDER_LEFT_B + TDL_WINDOW_BORDER_RIGHT_B, size.y() + TDL_WINDOW_BORDER_TOP_B + TDL_WINDOW_BORDER_BOTTOM_B));
 }
 
 /**
@@ -40,78 +39,81 @@ tdl::Window::~Window()
     //delete _input;
 }
 
+
+float getLuminance(tdl::Pixel p)
+{
+    return 0.2126 * GET_R(p.color) + 0.7152 * GET_G(p.color) + 0.0722 * GET_B(p.color);
+}
+
+bool isEdge(tdl::FrameBuffer &buffer, u_int32_t x, u_int32_t y)
+{
+    tdl::Pixel p = buffer.getPixel(x, y);
+    float luminance = getLuminance(p);
+    float sum = 0;
+    sum += std::abs(luminance - getLuminance(buffer.getPixel(x - 1, y)));
+    sum += std::abs(luminance - getLuminance(buffer.getPixel(x + 1, y)));
+    sum += std::abs(luminance - getLuminance(buffer.getPixel(x, y - 1)));
+    sum += std::abs(luminance - getLuminance(buffer.getPixel(x, y + 1)));
+    return sum > 0.5;
+}
+
+tdl::Pixel applyFxaa(tdl::FrameBuffer &buffer, u_int32_t x, u_int32_t y)
+{
+    tdl::Pixel p = buffer.getPixel(x, y);
+    if (!isEdge(buffer, x, y)) {
+        return p;
+    }
+    tdl::Pixel p1 = buffer.getPixel(x - 1, y);
+    tdl::Pixel p2 = buffer.getPixel(x + 1, y);
+    tdl::Pixel p3 = buffer.getPixel(x, y - 1);
+    tdl::Pixel p4 = buffer.getPixel(x, y + 1);
+    tdl::Pixel center = buffer.getPixel(x, y);
+
+    tdl::Pixel sum(
+            (GET_R(p1.color) + GET_R(p2.color) + GET_R(p3.color) + GET_R(p4.color) + GET_R(center.color)) / 5,
+            (GET_G(p1.color) + GET_G(p2.color) + GET_G(p3.color) + GET_G(p4.color) + GET_G(center.color)) / 5,
+            (GET_B(p1.color) + GET_B(p2.color) + GET_B(p3.color) + GET_B(p4.color) + GET_B(center.color)) / 5,
+            255
+    );
+    return sum;
+}
+
+
 void tdl::Window::draw(tdl::Display &d)
 {
     //plot config cache misses
+    u_int32_t screenWidth = d.getSize().x();
 
     for (auto &drawable : _drawables) {
         drawable->draw(this);
     }
 
-    _winPos.setPosition(Vector2u(getPosition().x() - TDL_WINDOW_BORDER_LEFT_B, getPosition().y() - TDL_WINDOW_BORDER_TOP_B));
-    _title.setPosition(0, 0);
-    _title.draw(static_cast<Window *>(&_win));
-    Transform winT = _winPos.getTransform();
-    Transform t = getTransform();
-    u_int32_t size_x = _win.getSize().x();
-    u_int32_t size_y = _win.getSize().y();
-    Pixel p;
-    Pixel white(255, 255, 255, 255);
-    for (u_int32_t y = 0; y < size_y; y++) {
-        for (u_int32_t x = 0; x < size_x; x++) {
+    setDimensions(RectI(getPosition().x() - TDL_WINDOW_BORDER_LEFT_B, getPosition().y() - TDL_WINDOW_BORDER_TOP_B, getSize().x() + TDL_WINDOW_BORDER_LEFT_B + TDL_WINDOW_BORDER_RIGHT_B, getSize().y() + TDL_WINDOW_BORDER_TOP_B + TDL_WINDOW_BORDER_BOTTOM_B));
+    u_int32_t size_x = getSize().x();
+    u_int32_t size_y = getSize().y();
+    u_int32_t pos_win_x = getPosition().x();
+    u_int32_t pos_win_y = getPosition().y();
+    //fxaa(this);
 
-            if (x > TDL_WINDOW_BORDER_LEFT_B
-                && x < size_x - TDL_WINDOW_BORDER_RIGHT_B
-                && y > TDL_WINDOW_BORDER_TOP_B
-                && y < size_y - TDL_WINDOW_BORDER_BOTTOM_B)
-            {
-                d.setPixel(
-                    t.transformPoint(x - TDL_WINDOW_BORDER_LEFT_B, y - TDL_WINDOW_BORDER_TOP_B),
-                    getPixel(x - TDL_WINDOW_BORDER_LEFT_B, y - TDL_WINDOW_BORDER_TOP_B)
-                );
+    RectI decRect = getDimensions();
+    Pixel *decData = decGetRawData();
+    for (int y = decRect.y(); y < decRect.y() + decRect.height(); y++) {
+        for (int x = decRect.x(); x < decRect.x() + decRect.width() ; x++) {
+            if (x < 0 || y < 0 || x >= d.getSize().x() || y >= d.getSize().y()) {
                 continue;
             }
-            d.setPixel(
-                winT.transformPoint(x, y),
-            _win.getPixel(x, y)
-            );
+            d.setPixel(x, y, decData[(y - decRect.y()) * decRect.width() + (x - decRect.x())]);
         }
     }
-
-/*
-    auto drawChunk = [&](u_int32_t startY, u_int32_t endY) {
-        Vector2f pos;
-        for (u_int32_t y = startY; y < endY; y++) {
-            for (u_int32_t x = 0; x < size_x; x++) {
-                if (x > TDL_WINDOW_BORDER_LEFT_B
-                        && x < size_x - TDL_WINDOW_BORDER_RIGHT_B
-                        && y > TDL_WINDOW_BORDER_TOP_B
-                        && y < size_y - TDL_WINDOW_BORDER_BOTTOM_B)
-                {
-                    pos = t.transformPoint(x - TDL_WINDOW_BORDER_LEFT_B, y - TDL_WINDOW_BORDER_TOP_B);
-                    d.setPixel(static_cast<u_int32_t>(pos.x()), static_cast<u_int32_t>(pos.y()), getPixel(x - TDL_WINDOW_BORDER_LEFT_B, y - TDL_WINDOW_BORDER_TOP_B));
-                    continue;
-                }
-                pos = winT.transformPoint(x, y);
-                d.setPixel(static_cast<u_int32_t>(pos.x()), static_cast<u_int32_t>(pos.y()), _win.getPixel(x, y));
-            }
+    for (u_int32_t y = 0; y < size_y && y < d.getSize().y(); y++) {
+        if (y + pos_win_y < 0 || y + pos_win_y >= d.getSize().y()) {
+            continue;
         }
-    };
-
-    int numThreads = std::thread::hardware_concurrency();
-    std::vector<std::thread> threads;
-    u_int32_t chunkSize = size_y / numThreads;
-
-    for (int i = 0; i < numThreads; ++i) {
-        u_int32_t startY = i * chunkSize;
-        u_int32_t endY = (i == numThreads - 1) ? size_y : startY + chunkSize;
-        threads.emplace_back(drawChunk, startY, endY);
+        u_int32_t drawWidth = std::min(size_x, screenWidth - pos_win_x);
+        memcpy(d.getRawData() + ((pos_win_y + y) * d.getSize().x() + pos_win_x) * sizeof(Pixel),
+               getRawData() + (y * size_x) * sizeof(Pixel),
+               drawWidth * sizeof(Pixel));
     }
-
-    for (auto &t : threads) {
-        t.join();
-    }
-    */
 }
 
 void tdl::Window::pushEvent(const tdl::Event &event)

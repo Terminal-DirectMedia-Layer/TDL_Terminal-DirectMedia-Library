@@ -74,6 +74,29 @@ namespace tdl {
             return *this;
         }
 
+        constexpr Transform getInverse() const {
+            const float *m = m_matrix;
+            float det = m[0] * (m[4] * m[8] - m[7] * m[5]) -
+                        m[1] * (m[3] * m[8] - m[5] * m[6]) +
+                        m[2] * (m[3] * m[7] - m[4] * m[6]);
+
+            if (det != 0) {
+                float invDet = 1.f / det;
+
+                return Transform((m[4] * m[8] - m[7] * m[5]) * invDet,
+                                 -(m[1] * m[8] - m[2] * m[7]) * invDet,
+                                 (m[1] * m[5] - m[2] * m[4]) * invDet,
+                                 -(m[3] * m[8] - m[5] * m[6]) * invDet,
+                                 (m[0] * m[8] - m[2] * m[6]) * invDet,
+                                 -(m[0] * m[5] - m[3] * m[2]) * invDet,
+                                 (m[3] * m[7] - m[4] * m[6]) * invDet,
+                                 -(m[0] * m[7] - m[1] * m[6]) * invDet,
+                                 (m[0] * m[4] - m[1] * m[3]) * invDet);
+            } else {
+                return Transform(); // Return identity matrix if determinant is zero
+            }
+        }
+
         /**
          * @brief get the inverse of the transform
          * 
@@ -155,6 +178,12 @@ namespace tdl {
                                       0.f, 0.f, 1.f);
             // clang-format on
             return combine(transform);
+        }
+
+        Vector2u getScaledSize(const Vector2u &originalSize) const {
+            float scaledWidth = originalSize.x() * m_matrix[0];
+            float scaledHeight = originalSize.y() * m_matrix[4];
+            return Vector2u(static_cast<u_int32_t>(scaledWidth), static_cast<u_int32_t>(scaledHeight));
         }
 
         /**

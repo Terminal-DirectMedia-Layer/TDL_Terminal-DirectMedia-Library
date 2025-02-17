@@ -54,6 +54,9 @@ namespace tdl {
  */
         SignalHandler() {
             std::signal(SIGWINCH, SignalHandler::handleSignal);
+            std::signal(SIGINT, SignalHandler::handleSignal);
+            std::signal(SIGSEGV, SignalHandler::handleSignal);
+            std::signal(SIGABRT, SignalHandler::handleSignal);
         }
 
 /**

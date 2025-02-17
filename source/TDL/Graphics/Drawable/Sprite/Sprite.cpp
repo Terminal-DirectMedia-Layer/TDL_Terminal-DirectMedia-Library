@@ -98,14 +98,33 @@ tdl::Pixel tdl::Sprite::lerp(tdl::Pixel a, tdl::Pixel b, double t) {
 
 void tdl::Sprite::draw(Window *d) {
     Transform left = getTransform();
-    for (u_int32_t y = 0; y < _matrix.getSize().y(); y++) {
-        for (u_int32_t x = 0; x < _matrix.getSize().x(); x++) {
-            Pixel pixel = _matrix.getElement(x, y);
-            Vector2f point = left.transformPoint(x, y);
-            u_int32_t pointX = static_cast<u_int32_t>(point.x());
-            u_int32_t pointY = static_cast<u_int32_t>(point.y());
-            if (pointX < d->getSize().x() && pointY < d->getSize().y()) {
-                d->setPixel(pointX, pointY, pixel);
+    Transform inverse = left.getInverse();
+
+    for (u_int32_t y = 0; y < d->getSize().y(); y++) {
+        for (u_int32_t x = 0; x < d->getSize().x(); x++) {
+            Vector2f point = inverse.transformPoint(x, y);
+            float srcX = point.x();
+            float srcY = point.y();
+
+            if (srcX >= 0 && srcX < _matrix.getSize().x() - 1 && srcY >= 0 && srcY < _matrix.getSize().y() - 1) {
+                int x1 = static_cast<int>(std::floor(srcX));
+                int y1 = static_cast<int>(std::floor(srcY));
+                int x2 = x1 + 1;
+                int y2 = y1 + 1;
+
+                Pixel p11 = _matrix.getElement(x1, y1);
+                Pixel p12 = _matrix.getElement(x1, y2);
+                Pixel p21 = _matrix.getElement(x2, y1);
+                Pixel p22 = _matrix.getElement(x2, y2);
+
+                float dx = srcX - x1;
+                float dy = srcY - y1;
+
+                Pixel p1 = lerp(p11, p21, dx);
+                Pixel p2 = lerp(p12, p22, dx);
+                Pixel pixel = lerp(p1, p2, dy);
+
+                d->setPixel(x, y, pixel);
             }
         }
     }

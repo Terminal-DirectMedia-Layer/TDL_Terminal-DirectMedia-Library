@@ -12,6 +12,14 @@
 #include "TDL/Utils/Memory/Arena.hpp"
 
 #include <mutex>
+#include <fcntl.h>
+#include <unistd.h>
+#include <iostream>
+#include <sys/mman.h>
+#include <string.h>
+
+
+extern int framebuffer_count;
 
 #define TDL_FRAMEBUFFER_SECTION_SIZE 10
 
@@ -35,8 +43,22 @@ namespace tdl
          * @brief Constructor for the Framebuffer class.
          */
         FrameBuffer() {
-            _currentFrame = new Matrix<Pixel>();
-            _previousFrame = new Matrix<Pixel>();
+            _frameSize = Vector2u(1, 1);
+           	std::string framebuffer_name = "./framebuffer" + std::to_string(framebuffer_count);
+            _name = framebuffer_name;
+            _frameBufferFD = open(framebuffer_name.c_str(), O_RDWR | O_CREAT, 0644);
+           	if (_frameBufferFD == -1) {
+                throw std::runtime_error("Error creating framebuffer file");
+            }
+            framebuffer_count++;
+            if (ftruncate(_frameBufferFD, 1 * sizeof(Pixel)) == -1) {
+                throw std::runtime_error("Error resizing framebuffer file");
+            }
+            _frameBufferMap = (char *)mmap(NULL, 1 * sizeof(Pixel), PROT_READ | PROT_WRITE, MAP_SHARED, _frameBufferFD, 0);
+			if (_frameBufferMap == MAP_FAILED) {
+                throw std::runtime_error("Error mapping framebuffer file");
+            }
+            memset(_frameBufferMap, 0, 1 * sizeof(Pixel));
         }
 
         /**
@@ -45,36 +67,55 @@ namespace tdl
          * @details The constructor initializes the framebuffer with a given size.
          */
         FrameBuffer(Vector2u size) {
-            _currentFrame = new Matrix<Pixel>(size);
-            _previousFrame = new Matrix<Pixel>(size);
+			_frameSize = size;
+            std::string framebuffer_name = "./framebuffer" + std::to_string(framebuffer_count);
+            _name = framebuffer_name;
+            _frameBufferFD = open(framebuffer_name.c_str(), O_RDWR | O_CREAT, 0644);
+           	if (_frameBufferFD == -1) {
+                throw std::runtime_error("Error creating framebuffer file");
+            }
+            framebuffer_count++;
+            u_int memSize = _frameSize.x() * _frameSize.y() * sizeof(Pixel);
+            if (ftruncate(_frameBufferFD, memSize) == -1) {
+                throw std::runtime_error("Error resizing framebuffer file");
+            }
+            _frameBufferMap = (char *)mmap(NULL, memSize, PROT_READ | PROT_WRITE, MAP_SHARED, _frameBufferFD, 0);
+			if (_frameBufferMap == MAP_FAILED) {
+                throw std::runtime_error("Error mapping framebuffer file");
+            }
+            memset(_frameBufferMap, 0, memSize);
         }
 
         FrameBuffer(Vector2u size, Pixel background)
         {
-            _currentFrame = new Matrix<Pixel>(size);
-            _previousFrame = new Matrix<Pixel>(size);
-          _currentFrame->fill(background);
-          _previousFrame->fill(background);
+          _frameSize = size;
+            std::string framebuffer_name = "./framebuffer" + std::to_string(framebuffer_count);
+            _name = framebuffer_name;
+
+            _frameBufferFD = open(framebuffer_name.c_str(), O_RDWR | O_CREAT, 0644);
+           	if (_frameBufferFD == -1) {
+                throw std::runtime_error("Error creating framebuffer file");
+            }
+            framebuffer_count++;
+            u_int memSize = _frameSize.x() * _frameSize.y() * sizeof(Pixel);
+
+            if (ftruncate(_frameBufferFD, memSize) == -1) {
+                throw std::runtime_error("Error resizing framebuffer file");
+            }
+            _frameBufferMap = (char *)mmap(NULL, memSize, PROT_READ | PROT_WRITE, MAP_SHARED, _frameBufferFD, 0);
+			if (_frameBufferMap == MAP_FAILED) {
+                throw std::runtime_error("Error mapping framebuffer file");
+            }
+            memset(_frameBufferMap, 0, memSize);
+            std::fill(reinterpret_cast<Pixel*>(_frameBufferMap), reinterpret_cast<Pixel*>(_frameBufferMap) + _frameSize.x() * _frameSize.y(), background);
         }
 
         /**
          * @brief Destructor for the Framebuffer class.
          */
         ~FrameBuffer() {
-            delete _currentFrame;
-            delete _previousFrame;
+           close(_frameBufferFD);
         }
-
-        /**
-         * @brief sets a pixel at a given position.
-         * @param pos The position of the pixel.
-         * @param color The color of the pixel.
-         */
-        inline void setPixel(const Vector2u &pos, Pixel &color)
-        {
-            _currentFrame->setElement(pos, color);
-        }
-
 
         /**
          * @overload
@@ -85,22 +126,25 @@ namespace tdl
          */
         inline void setPixel(u_int32_t x, u_int32_t y, Pixel &color)
         {
-            _currentFrame->setElement(x, y, color);
+            if (x >= _frameSize.x() || y >= _frameSize.y() || x < 0 || y < 0) {
+                return;
+            }
+            memcpy(_frameBufferMap + (y * _frameSize.x() + x) * sizeof(Pixel), &color, sizeof(Pixel));
         }
 
         inline void setPixel(Vector2f pos, Pixel &color)
         {
-            _currentFrame->setElement(pos , color);
+            setPixel(pos.x(), pos.y(), color);
         }
 
         /**
-         * @brief gets a pixel at a given position.
+         * @brief sets a pixel at a given position.
          * @param pos The position of the pixel.
-         * @return The pixel at the given position.
+         * @param color The color of the pixel.
          */
-        inline Pixel &getPixel(const Vector2u &pos)
+        inline void setPixel(const Vector2u &pos, Pixel &color)
         {
-            return _currentFrame->getElement(pos);
+        	setPixel(pos.x(), pos.y(), color);
         }
 
         /**
@@ -112,7 +156,21 @@ namespace tdl
          */
         inline Pixel &getPixel(u_int32_t x, u_int32_t y)
         {
-            return _currentFrame->getElement(x, y);
+            static Pixel blackPixel(0, 0, 0, 0);
+            if (x >= _frameSize.x() || y >= _frameSize.y() || x < 0 || y < 0) {
+                return blackPixel;
+            }
+            return *reinterpret_cast<Pixel*>(_frameBufferMap + (y * _frameSize.x() + x) * sizeof(Pixel));
+        }
+
+        /**
+         * @brief gets a pixel at a given position.
+         * @param pos The position of the pixel.
+         * @return The pixel at the given position.
+         */
+        inline Pixel &getPixel(const Vector2u &pos)
+        {
+            return getPixel(pos.x(), pos.y());
         }
 
         /**
@@ -121,7 +179,7 @@ namespace tdl
          */
        inline Vector2u getSize()
         {
-            return _currentFrame->getSize();
+            return _frameSize;
         }
 
         /**
@@ -130,19 +188,48 @@ namespace tdl
          */
         void append(std::vector<Pixel> &pixels)
         {
-            _currentFrame->append(pixels);
         }
 
         /**
          * @brief resizes the framebuffer.
          * @param size The new size of the framebuffer.
          */
-        void resize(Vector2u &size)
-        {
-            _currentFrame->resize(size);
-            _currentFrame->fill(Pixel(0, 0, 0, 255));
-            _previousFrame->resize(size);
-            _previousFrame->fill(Pixel(0, 0, 0, 255));
+        void resize(Vector2u &size) {
+            lock();
+            // Unmap the current framebuffer memory
+            if (_frameBufferMap && munmap(_frameBufferMap, _frameSize.x() * _frameSize.y() * sizeof(Pixel)) == -1) {
+                throw std::runtime_error("Error unmapping framebuffer file");
+            }
+
+            // Close the current file descriptor
+            if (close(_frameBufferFD) == -1) {
+                throw std::runtime_error("Error closing framebuffer file descriptor");
+            }
+
+            // Reopen the file descriptor
+            _frameBufferFD = open(_name.c_str(), O_RDWR | O_CREAT, 0644);
+            if (_frameBufferFD == -1) {
+                throw std::runtime_error("Error reopening framebuffer file");
+            }
+
+            // Truncate the file to the new size
+            u_int memSize = size.x() * size.y() * sizeof(Pixel);
+            if (ftruncate(_frameBufferFD, memSize) == -1) {
+                throw std::runtime_error("Error resizing framebuffer file");
+            }
+
+            // Remap the file to the new size
+            _frameBufferMap = (char *)mmap(NULL, memSize, PROT_READ | PROT_WRITE, MAP_SHARED, _frameBufferFD, 0);
+            if (_frameBufferMap == MAP_FAILED) {
+                throw std::runtime_error("Error mapping framebuffer file");
+            }
+
+            // Initialize the new memory to zero
+            std::fill(reinterpret_cast<Pixel*>(_frameBufferMap), reinterpret_cast<Pixel*>(_frameBufferMap) + size.x() * size.y(), Pixel(0, 0, 0, 255));
+
+            // Update the frame size
+            _frameSize = size;
+            unlock();
         }
 
         /**
@@ -151,8 +238,8 @@ namespace tdl
          */
         void clear(Pixel background = Pixel(0, 0, 0, 255))
         {
-            _previousFrame = _currentFrame;
-            _currentFrame->fill(background);
+
+            std::fill(reinterpret_cast<Pixel*>(_frameBufferMap), reinterpret_cast<Pixel*>(_frameBufferMap) + _frameSize.x() * _frameSize.y(), background);
         }
 
         void lock()
@@ -165,42 +252,20 @@ namespace tdl
             _mutex.unlock();
         }
 
-        Pixel *getRawData()
+        char *getRawData()
         {
-            return _currentFrame->getRawData();
+        	return _frameBufferMap;
         }
 
         FrameBuffer &getCurrent() {
             return *this;
         }
 
-        Pixel *getSector(int sectorId) {
-            int sectorSize = _currentFrame->getSize().y() / _sectorCount;
-            int start = sectorSize * sectorId;
-            int end = sectorSize * (sectorId + 1);
-            Pixel *sector = new Pixel[sectorSize * _currentFrame->getSize().x()];
-            for (int i = start; i < end; i++) {
-                for (int j = 0; j < _currentFrame->getSize().x(); j++) {
-                    sector[i * _currentFrame->getSize().x() + j] = _currentFrame->getElement(j, i);
-                }
-            }
-            return sector;
-        }
-
-        /**
-         * @brief append operator for the framebuffer.
-         * @param pixels The vector of pixels to append.
-         */
-        FrameBuffer *operator+(std::vector<Pixel> &pixels)
-        {
-            _currentFrame->append(pixels);
-            _previousFrame->append(pixels);
-            return this;
-        }
-
       protected:
-        Matrix<Pixel> *_currentFrame; /**< The current frame of the framebuffer. */
-        Matrix<Pixel> *_previousFrame; /**< The previous frame of the framebuffer. */
+        std::string _name;
+        int _frameBufferFD;
+        char* _frameBufferMap;
+        Vector2u _frameSize;
         std::mutex _mutex;
         int _sectorCount = TDL_FRAMEBUFFER_SECTION_SIZE;
     };

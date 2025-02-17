@@ -85,14 +85,15 @@ namespace tdl
 
     void SixelMethode::draw(FrameBuffer &buffer) {
         std::vector<unsigned char> sixel;
-        Pixel p;
-        for (int y = 0; y < buffer.getSize().y(); y++) {
-            for (int x = 0; x < buffer.getSize().x(); x++) {
-                p = buffer.getPixel(x, y);
-                sixel.push_back(GET_R(p.color));
-                sixel.push_back(GET_G(p.color));
-                sixel.push_back(GET_B(p.color));
-            }
+        sixel.reserve(buffer.getSize().x() * buffer.getSize().y() * 3); // Reserve memory to avoid reallocations
+
+        char* rawData = buffer.getRawData();
+        size_t bufferSize = buffer.getSize().x() * buffer.getSize().y() * 4; // RGBA has 4 bytes per pixel
+
+        for (size_t i = 0; i < bufferSize; i += 4) {
+            sixel.push_back(rawData[i+ 2]);     // R
+            sixel.push_back(rawData[i + 1]); // G
+            sixel.push_back(rawData[i]); // B
         }
 
         SIXELSTATUS status = sixel_encode(

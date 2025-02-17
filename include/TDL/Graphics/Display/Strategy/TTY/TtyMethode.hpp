@@ -44,11 +44,13 @@ namespace tdl {
             private:
              	int _fd; /**< The file descriptor of the TTY. */
                 struct fb_var_screeninfo _vinfo; /**< The variable information of the framebuffer. */
+                struct fb_var_screeninfo _vinfo_old; /**< The variable information of the framebuffer. */
                 struct fb_fix_screeninfo _finfo; /**< The fixed information of the framebuffer. */
                 long int _screensize; /*!< the size of the screen in bytes */
                 char *_fbp; /*!< the framebuffer pointer */
                 std::unique_ptr<char[]> _startScreen; /*!< the screen at the start of the program */
                 Vector2u _size; /*!< the terminal size */
+                int _ttyfd;
         };
     }
 

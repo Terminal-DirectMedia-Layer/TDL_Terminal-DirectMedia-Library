@@ -16,9 +16,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 ########################################### START DEBUG FLAGS ###########################################
 set(CMAKE_CXX_FLAGS_DEBUG           "${CMAKE_CXX_FLAGS_DEBUG} -g3 ")
-set(CMAKE_C_FLAGS_DEBUG             "${CMAKE_C_FLAGS_DEBUG} -g3")
-set(CMAKE_EXE_LINKER_FLAGS_DEBUG    "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -g3")
-############################################ END DEBUG FLAGS ############################################
+set(CMAKE_C_FLAGS_DEBUG             "${CMAKE_C_FLAGS_DEBUG} -g3 ")
+set(CMAKE_EXE_LINKER_FLAGS_DEBUG    "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -g3 ")
+set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} -g3")############################################ END DEBUG FLAGS ############################################
 
 ########################################### START SOURCE PATH ##########################################
 set(TDL_EXAMPLES_DIR            ${CMAKE_CURRENT_SOURCE_DIR}/example)
@@ -42,7 +42,7 @@ set(CMAKE_EXTERNAL_DIR           ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 ########################################### START CUSTOM TARGETS ########################################
 add_custom_target(install_libs
-        COMMAND sudo ${CMAKE_COMMAND} --build . --target install
+        COMMAND sudo ${CMAKE_COMMAND} --build . --target install -j
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
@@ -58,8 +58,14 @@ add_custom_target(build_demo
 )
 
 add_custom_target(configure_examples
-        COMMAND ${CMAKE_COMMAND} -S ${TDL_EXAMPLES_DIR} -B ${TDL_EXAMPLES_BUILD_DIR}
+        COMMAND ${CMAKE_COMMAND} -S ${TDL_EXAMPLES_DIR} -B ${TDL_EXAMPLES_BUILD_DIR} -DCMAKE_BUILD_TYPE=Debug
         COMMENT "Configuring example project"
+)
+
+add_custom_target(run_with_asan
+        COMMAND LD_PRELOAD=$(shell $(CMAKE_C_COMPILER) -print-file-name=libasan.so) ../demo/demo 2> log
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        COMMENT "Running application with AddressSanitizer preloaded"
 )
 
 add_dependencies(build_demo install_libs)
@@ -159,7 +165,7 @@ add_subdirectory(${TDL_ASCII_DIR}) # install .so library for ascii
 ########################################### END INSTALLATION #############################################
 
 ########################################### START EXPORT CONFIG ##########################################
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/tdl
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/TDL
         DESTINATION include
         FILES_MATCHING PATTERN "*.hpp")
 
