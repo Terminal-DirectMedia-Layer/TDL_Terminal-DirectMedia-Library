@@ -79,10 +79,21 @@ You can find more examples in the [examples](examples) folder. If you want to bu
 ```
 mkdir build
 cd build
-cmake .. -DBUILD_DEMO=ON -DBUILD_SHARED_LIBS=OFF
-cmake --build .
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build .  --target build_demo  
 ```
 The examples will be built in the `demo folder at the root of the repository.
+
+### Run the demo
+
+if you want to try all the display method: 
+ - run the demo binary on a gnome terminal (ASCII Method)
+```bash
+sudo ./demo 2> log
+```
+- run the demo as the same way on a sixel-supported terminal like Konsole
+- finaly switch to TTY and run the demo for the Pixel method 
+
 
 ### Display a window
 
