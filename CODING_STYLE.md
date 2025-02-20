@@ -37,7 +37,7 @@ The coding style is inspired by the [Google C++ Style Guide](https://google.gith
 
 ### Namespaces
 
-- Each class ùust be in the `tdl` namespace.
+- Each class must be in the `tdl` namespace.
 - The namespace must be in lowercase. (e.g. `namespace tdl`).
 - Do not use any `using namespace` statement in header or source files.
 
