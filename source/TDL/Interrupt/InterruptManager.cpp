@@ -50,7 +50,6 @@ namespace tdl {
             _running = false;
         }
         _keyboardQueue.read = false;
-
         _keyboardThread.join();
         _cv.notify_all();
         _mouseQueue.read = false;
@@ -105,10 +104,10 @@ namespace tdl {
 
     void changeFocusOnMouse(tdl::Event &event) {
         std::vector<Window *> &windows = tdl::Display::getInstance().getWindowsList();
-        if (event.type == TDL_MOUSEPRESSED && !windows.back()->isClickIn(Vector2i(event.mouseButton.x, event.mouseButton.y), ClickRegion::NONE)) {
+        if (event.type == TDL_MOUSEPRESSED && windows.back()->isClickIn(Vector2i(event.mouseButton.x, event.mouseButton.y), ClickRegion::OUTSIDE)) {
             for (auto it = windows.rbegin(); it != windows.rend(); ++it) {
                 Window *win = *it;
-                if (win->isClickIn(Vector2i(event.mouseButton.x, event.mouseButton.y), ClickRegion::OUTSIDE)) {
+                if (!win->isClickIn(Vector2i(event.mouseButton.x, event.mouseButton.y), ClickRegion::OUTSIDE)) {
                     Window *new_focus = win;
                     windows.erase(std::find(windows.begin(), windows.end(), win));
                     windows.push_back(new_focus);
