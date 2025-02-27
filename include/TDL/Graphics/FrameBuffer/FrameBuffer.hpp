@@ -18,7 +18,6 @@
 #include <sys/mman.h>
 #include <string.h>
 
-
 extern int framebuffer_count;
 
 #define TDL_FRAMEBUFFER_SECTION_SIZE 10
@@ -52,7 +51,7 @@ namespace tdl
             }
             framebuffer_count++;
             if (ftruncate(_frameBufferFD, 1 * sizeof(Pixel)) == -1) {
-                throw std::runtime_error("Error resizing framebuffer file");
+                throw std::runtime_error("Error wresizing framebuffer file");
             }
             _frameBufferMap = (char *)mmap(NULL, 1 * sizeof(Pixel), PROT_READ | PROT_WRITE, MAP_SHARED, _frameBufferFD, 0);
 			if (_frameBufferMap == MAP_FAILED) {
