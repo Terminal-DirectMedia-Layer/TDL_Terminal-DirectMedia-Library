@@ -39,7 +39,7 @@ The instructions describe the main tdl repository `but it works the same way for
 
 ### Commit message format
 
-The commit messages format is inspired from [Angular commit message convention]( https://gist.github.com/brianclements/841ea7bffdb01346392c)
+The commit messages format is inspired from [Angular commit message convention](https://www.conventionalcommits.org/en/v1.0.0-beta.4/)
 
 When commiting changes, the following structure should be used in the title and associated description of said commit:
 
